@@ -7,14 +7,13 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
             text-align: center;
-            background-image: url("https://i.postimg.cc/NjPVw2m1/IMG-9609.jpg");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            transition: background-image 1s ease-in-out;
         }
         h1 {
             background-color: rgba(0, 0, 0, 0.7);
@@ -71,5 +70,27 @@
             <li><a href="https://www.google.com" target="_blank">Google</a></li>
         </ul>
     </div>
+
+    <script>
+        function updateBackground() {
+            var hour = new Date().getHours();
+            var imageUrl = "";
+
+            if (hour >= 6 && hour < 12) {
+                imageUrl = "https://i.imgur.com/QdGZxQi.jpg"; // Bình minh
+            } else if (hour >= 12 && hour < 18) {
+                imageUrl = "https://i.imgur.com/Kl3Xwfc.jpg"; // Ban ngày
+            } else if (hour >= 18 && hour < 24) {
+                imageUrl = "https://i.imgur.com/xTdfJm6.jpg"; // Hoàng hôn
+            } else {
+                imageUrl = "https://i.imgur.com/jbV1XjT.jpg"; // Ban đêm
+            }
+
+            document.body.style.backgroundImage = "url(" + imageUrl + ")";
+        }
+
+        updateBackground();
+    </script>
+
 </body>
 </html>
