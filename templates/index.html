@@ -4,25 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tdcutis1tg</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         body { 
             text-align: center; 
             font-family: Arial, sans-serif; 
-            background: url("https://i.postimg.cc/Tp1kjq4M/IMG-9752.jpg") no-repeat center center fixed; 
-            background-size: cover; 
+            background: #f4f4f4; 
             margin: 0; 
             padding: 0; 
         }
+
+        h1 {
+            font-family: "Pacifico", cursive;
+            font-size: 48px;
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            to {
+                text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
+            }
+        }
+
         .container { 
             margin-top: 20px; 
-            background: white; /* Không làm mờ */
+            background: white;
             padding: 20px; 
             border-radius: 10px; 
             display: inline-block; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .search-box { margin-bottom: 20px; }
-        input { padding: 10px; width: 200px; }
-        button { padding: 10px; }
+        input { padding: 10px; width: 200px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
     </style>
 </head>
 <body>
