@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tdcutis1tg</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <title>thaiduongsite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
     <style>
         body { 
             text-align: center; 
@@ -15,20 +15,10 @@
         }
 
         h1 {
-            font-family: "Pacifico", cursive;
-            font-size: 48px;
+            font-family: "Lobster", cursive;
+            font-size: 50px;
             color: #333;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            animation: glow 2s infinite alternate;
-        }
-
-        @keyframes glow {
-            from {
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            }
-            to {
-                text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
-            }
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
         }
 
         .container { 
@@ -40,58 +30,57 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .search-box { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            background: white;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+        .search-box { margin-bottom: 20px; }
+        input { padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
 
-        input { 
-            padding: 12px; 
-            width: 220px; 
-            border: none; 
-            outline: none; 
-            font-size: 16px;
-            border-radius: 10px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        button { 
-            padding: 12px 20px; 
-            margin-left: 10px; 
-            background: linear-gradient(to right, #007BFF, #0056b3);
-            color: white; 
-            border: none; 
-            border-radius: 10px; 
-            cursor: pointer; 
-            font-size: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        button:hover { 
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
+        .links { display: none; margin-top: 10px; text-align: left; }
+        .links a { display: block; padding: 8px; background: #fff; margin: 5px; border-radius: 5px; text-decoration: none; color: #007BFF; border: 1px solid #ddd; }
+        .links a:hover { background: #007BFF; color: white; }
     </style>
 </head>
 <body>
-    <h1>tdcutis1tg</h1>
+    <h1>thaiduongsite</h1>
     <div>Copyright 2025 By Phạm Thái Dương</div>
     
     <div class="container">
         <div class="search-box">
-            <input type="text" id="search" placeholder="Nhập nội dung tìm kiếm...">
-            <button onclick="searchFunction()">Tìm kiếm</button>
+            <input type="text" id="search" onkeyup="searchFunction()" placeholder="Nhập nội dung tìm kiếm...">
+            <button onclick="searchGoogle()">Tìm kiếm</button>
         </div>
+        <div id="result" class="links"></div>
     </div>
 
     <script>
+        var links = [
+            { name: "facebook", url: "https://www.facebook.com/lnisx14" },
+            { name: "youtube", url: "https://www.youtube.com/PhamThaiDuongOfficial" },
+            { name: "tiktok", url: "https://www.tiktok.com/@lnisx14" }
+        ];
+
         function searchFunction() {
+            var query = document.getElementById("search").value.toLowerCase();
+            var resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "";
+
+            if (query.length > 0) {
+                links.forEach(link => {
+                    if (link.name.includes(query)) {
+                        var a = document.createElement("a");
+                        a.href = link.url;
+                        a.textContent = link.name.charAt(0).toUpperCase() + link.name.slice(1);
+                        a.target = "_blank";
+                        resultDiv.appendChild(a);
+                    }
+                });
+                resultDiv.style.display = resultDiv.innerHTML ? "block" : "none";
+            } else {
+                resultDiv.style.display = "none";
+            }
+        }
+
+        function searchGoogle() {
             var query = document.getElementById("search").value;
             window.open("https://www.google.com/search?q=" + encodeURIComponent(query));
         }
