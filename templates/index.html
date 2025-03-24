@@ -5,22 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PhamThaiDuong Site</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; margin: 0; padding: 0; }
-        h1 { background-color: #333; color: white; padding: 20px; margin: 0; }
-        ul { list-style: none; padding: 0; margin-top: 20px; }
-        li { margin: 10px 0; }
-        a { text-decoration: none; color: #007bff; font-size: 18px; }
-        a:hover { text-decoration: underline; }
-        .container { margin-top: 50px; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        h1 {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+        }
+        .link-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .link-list li {
+            margin: 10px 0;
+        }
+        .link-list a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            background-color: #e8f0fe;
+            transition: 0.3s;
+        }
+        .link-list a:hover {
+            background-color: #d0e0fc;
+        }
     </style>
 </head>
 <body>
     <h1>PhamThaiDuong Site</h1>
     <div class="container">
-        <ul>
-            <li><a href="https://www.facebook.com/lnisx14">Link 1</a></li>
-            <li><a href="https://www.youtube.com">Link 2</a></li>
-            <li><a href="https://www.google.com">Link 3</a></li>
+        <h2>Danh sách liên kết</h2>
+        <ul class="link-list">
+            <li><a href="https://www.facebook.com/lnisx14" target="_blank">Facebook</a></li>
+            <li><a href="https://www.youtube.com" target="_blank">YouTube</a></li>
+            <li><a href="https://www.google.com" target="_blank">Google</a></li>
         </ul>
     </div>
 </body>
