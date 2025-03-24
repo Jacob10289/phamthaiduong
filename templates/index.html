@@ -5,33 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThaiDuongSite</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #f8f9fa; }
-        h1 { margin-top: 20px; font-size: 32px; }
-        p { font-size: 18px; color: #555; }
-        .search-box { margin-top: 20px; }
-        input[type="text"] { padding: 10px; width: 60%; border: 1px solid #ccc; border-radius: 5px; }
-        button { padding: 10px 20px; border: none; background-color: #007bff; color: white; font-size: 16px; border-radius: 5px; cursor: pointer; }
-        button:hover { background-color: #0056b3; }
-        .link-container { margin-top: 20px; }
-        .link-container a { display: block; margin: 10px auto; font-size: 18px; text-decoration: none; padding: 10px; border-radius: 5px; width: 200px; }
-        .facebook { background-color: blue; color: white; }
-        .youtube { background-color: red; color: white; }
-        .google { background-color: green; color: white; }
+        body { text-align: center; font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { margin-top: 20px; background: white; padding: 20px; border-radius: 10px; display: inline-block; }
+        .search-box { margin-bottom: 20px; }
+        input { padding: 10px; width: 200px; }
+        button { padding: 10px; }
     </style>
 </head>
 <body>
     <h1>ThaiDuongSite</h1>
-    <p>Copyright 2025 By Phạm Thái Dương</p>
-
-    <div class="search-box">
-        <input type="text" placeholder="Tìm kiếm...">
-        <button>Tìm kiếm</button>
+    <div>Copyright 2025 By Phạm Thái Dương</div>
+    
+    <div class="container">
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Nhập nội dung tìm kiếm...">
+            <button onclick="searchFunction()">Tìm kiếm</button>
+        </div>
     </div>
 
-    <div class="link-container">
-        <a href="https://www.facebook.com" target="_blank" class="facebook">Facebook</a>
-        <a href="https://www.youtube.com" target="_blank" class="youtube">YouTube</a>
-        <a href="https://www.google.com" target="_blank" class="google">Google</a>
-    </div>
+    <script>
+        function searchFunction() {
+            var query = document.getElementById("search").value;
+            window.open("https://www.google.com/search?q=" + encodeURIComponent(query));
+        }
+    </script>
 </body>
 </html>
