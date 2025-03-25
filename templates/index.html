@@ -3,87 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>thaiduongsite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <title>ThaiDuongSite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            text-align: center; 
-            font-family: Arial, sans-serif; 
-            background: #f4f4f4; 
-            margin: 0; 
-            padding: 0; 
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f8f9fa;
+            text-align: center;
+            padding: 50px;
         }
-
-        h1 {
-            font-family: "Lobster", cursive;
-            font-size: 50px;
-            color: #333;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .container { 
-            margin-top: 20px; 
+        .container {
+            max-width: 600px;
+            margin: auto;
             background: white;
-            padding: 20px; 
-            border-radius: 10px; 
-            display: inline-block; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-
-        .search-box { margin-bottom: 20px; }
-        input { padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 5px; }
-        button { padding: 10px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-
-        .links { display: none; margin-top: 10px; text-align: left; }
-        .links a { display: block; padding: 8px; background: #fff; margin: 5px; border-radius: 5px; text-decoration: none; color: #007BFF; border: 1px solid #ddd; }
-        .links a:hover { background: #007BFF; color: white; }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #007BFF;
+        }
+        h1 {
+            font-size: 28px;
+            margin-top: 15px;
+            color: #333;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+        }
+        .social-links {
+            margin-top: 20px;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            text-decoration: none;
+            font-size: 20px;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .facebook { background: #3b5998; }
+        .youtube { background: #ff0000; }
+        .tiktok { background: #000000; }
     </style>
 </head>
 <body>
-    <h1>thaiduongsite</h1>
-    <div>Copyright 2025 By Phạm Thái Dương</div>
-    
     <div class="container">
-        <div class="search-box">
-            <input type="text" id="search" onkeyup="searchFunction()" placeholder="Nhập nội dung tìm kiếm...">
-            <button onclick="searchGoogle()">Tìm kiếm</button>
+        <img src="https://i.postimg.cc/QHXjmkYS/mountainlake.jpg" class="avatar" alt="Avatar">
+        <h1>Phạm Thái Dương</h1>
+        <p>Nhà phát triển web | Sáng tạo nội dung | Đam mê công nghệ</p>
+        
+        <div class="social-links">
+            <a href="https://www.facebook.com/lnisx14" class="facebook">F</a>
+            <a href="https://www.youtube.com/PhamThaiDuongOfficial" class="youtube">Y</a>
+            <a href="https://www.tiktok.com/@lnisx14" class="tiktok">T</a>
         </div>
-        <div id="result" class="links"></div>
     </div>
-
-    <script>
-        var links = [
-            { name: "facebook", url: "https://www.facebook.com/lnisx14" },
-            { name: "youtube", url: "https://www.youtube.com/PhamThaiDuongOfficial" },
-            { name: "tiktok", url: "https://www.tiktok.com/@lnisx14" }
-        ];
-
-        function searchFunction() {
-            var query = document.getElementById("search").value.toLowerCase();
-            var resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = "";
-
-            if (query.length > 0) {
-                links.forEach(link => {
-                    if (link.name.includes(query)) {
-                        var a = document.createElement("a");
-                        a.href = link.url;
-                        a.textContent = link.name.charAt(0).toUpperCase() + link.name.slice(1);
-                        a.target = "_blank";
-                        resultDiv.appendChild(a);
-                    }
-                });
-                resultDiv.style.display = resultDiv.innerHTML ? "block" : "none";
-            } else {
-                resultDiv.style.display = "none";
-            }
-        }
-
-        function searchGoogle() {
-            var query = document.getElementById("search").value;
-            window.open("https://www.google.com/search?q=" + encodeURIComponent(query));
-        }
-    </script>
 </body>
 </html>
