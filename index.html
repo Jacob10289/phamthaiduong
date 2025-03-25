@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThaiDuongSite</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         body {
             font-family: "Poppins", sans-serif;
-            background: linear-gradient(to right, #141e30, #243b55);
+            background: #f8f9fa;
             text-align: center;
             padding: 50px;
-            color: white;
         }
         .container {
             max-width: 600px;
             margin: auto;
-            background: rgba(255, 255, 255, 0.1);
+            background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .avatar {
             width: 120px;
@@ -30,54 +30,58 @@
         h1 {
             font-size: 28px;
             margin-top: 15px;
+            color: #333;
         }
         p {
             font-size: 16px;
+            color: #666;
         }
         .social-links {
             margin-top: 20px;
             display: flex;
-            justify-content: center;
-            gap: 10px;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 50px;
         }
         .social-links a {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            justify-content: center;
-            width: 120px;
-            height: 40px;
-            border-radius: 10px;
-            font-weight: bold;
-            color: white;
             text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            padding: 10px;
+            width: 250px;
+            border-radius: 10px;
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+        .social-links a:hover {
+            transform: scale(1.05);
+        }
+        .social-links i {
+            font-size: 28px;
+            margin-right: 15px;
         }
         .facebook { background: #3b5998; }
         .youtube { background: #ff0000; }
         .tiktok { background: #000000; }
-
-        /* Logo Icon */
-        .social-links img {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://i.postimg.cc/rKgn0NB0" class="avatar" alt="Avatar">
+        <img src="https://i.postimg.cc/52WZrPp3/1-D4-D8-F59-3-E07-4900-9-AA5-2-C3-F5-CF2082-C.jpg" class="avatar" alt="Avatar">
         <h1>Phạm Thái Dương</h1>
         <p>Nhà phát triển web | Sáng tạo nội dung | Đam mê công nghệ</p>
         
         <div class="social-links">
             <a href="https://www.facebook.com/lnisx14" class="facebook">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Facebook_Logo_2023.png" alt="Facebook"> Facebook
+                <i class="fab fa-facebook-f"></i> Facebook
             </a>
             <a href="https://www.youtube.com/PhamThaiDuongOfficial" class="youtube">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube"> YouTube
+                <i class="fab fa-youtube"></i> YouTube
             </a>
             <a href="https://www.tiktok.com/@lnisx14" class="tiktok">
-                <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok"> TikTok
+                <i class="fab fa-tiktok"></i> TikTok
             </a>
         </div>
     </div>
