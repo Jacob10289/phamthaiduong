@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlogThaiDuong</title>
+    <title>PhamThaiDuong</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
    <style>
@@ -50,7 +50,7 @@
     vertical-align: middle;
 }
     p {
-        font-size: 14px;
+        font-size: 16px;
         color: #ffffff;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
@@ -102,19 +102,22 @@
         </div>
     </div>
 
-    <script>
-        const text = " Chào Mọi Người Mình Là Dương . Một Người Có Niềm Yêu Thích Với IT . Cảm Ơn Vì Mọi Người Đã Ghé Qua Trang ♥️";
-        let index = 0;
+<script>
+    const text = "Chào Mọi Người ! Mình Là Một Người Có Niềm Yêu Thích Với IT. Cảm Ơn Vì Mọi Người Đã Ghé Qua Trang 😚";
+    let index = 0;
+    const introElement = document.getElementById("intro");
 
-        function typeEffect() {
-            if (index < text.length) {
-                document.getElementById("intro").innerHTML += text.charAt(index);
-                index++;
-                setTimeout(typeEffect, 50);
-            }
+    function typeEffect() {
+        if (index < text.length) {
+            introElement.innerHTML = text.substring(0, index + 1) + '<span class="cursor">|</span>';
+            index++;
+            setTimeout(typeEffect, Math.random() * (100 - 50) + 50); // Tốc độ gõ không đều để trông tự nhiên hơn
+        } else {
+            document.querySelector(".cursor").style.display = "none"; // Ẩn con trỏ khi hoàn thành
         }
+    }
 
-        window.onload = typeEffect;
-    </script>
+    window.onload = typeEffect;
+</script>
 </body>
 </html>
