@@ -8,71 +8,87 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
       body {
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(to right, #1b1f3b, #4a5d94);
-    text-align: center;
-    padding: 50px;
-}
-.container {
-    max-width: 600px;
-    margin: auto;
-    background: rgba(255, 255, 255, 0.2); /* Nền trắng mờ */
-    backdrop-filter: blur(10px); /* Hiệu ứng mờ */
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Viền nhẹ */
-}
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 4px solid #007BFF;
-        }
-        h1 {
-            font-size: 28px;
-            margin-top: 15px;
-            color: #333;
-        }
+          font-family: "Poppins", sans-serif;
+          background: linear-gradient(to right, #1b1f3b, #4a5d94);
+          text-align: center;
+          padding: 50px;
+          margin: 0;
+          overflow: hidden; /* Ngăn cuộn trang */
+      }
+      .container {
+          max-width: 600px;
+          margin: auto;
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          padding: 30px;
+          border-radius: 15px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          position: relative;
+          z-index: 10;
+      }
+      .avatar {
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          border: 4px solid #007BFF;
+      }
+      h1 {
+          font-size: 28px;
+          margin-top: 15px;
+          color: #333;
+      }
       p {
-    font-size: 16px;
-    color: #ffffff; /* Màu trắng */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Đổ bóng */
-}
-        .social-links {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            width: 100%; /* Đảm bảo căn giữa */
-        }
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 18px;
-            color: white;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 300px; /* Giới hạn chiều rộng */
-            padding: 15px;
-            font-weight: bold;
-        }
-        .social-links a i {
-            margin-right: 10px;
-            font-size: 20px;
-        }
-        .facebook { background: #3b5998; }
-        .youtube { background: #ff0000; }
-        .tiktok { background: #000000; }
+          font-size: 16px;
+          color: #ffffff;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      .social-links {
+          margin-top: 20px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          width: 100%;
+      }
+      .social-links a {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          font-size: 18px;
+          color: white;
+          border-radius: 8px;
+          width: 80%;
+          max-width: 300px;
+          padding: 15px;
+          font-weight: bold;
+      }
+      .social-links a i {
+          margin-right: 10px;
+          font-size: 20px;
+      }
+      .facebook { background: #3b5998; }
+      .youtube { background: #ff0000; }
+      .tiktok { background: #000000; }
+
+      /* Hiệu ứng mưa */
+      canvas {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          pointer-events: none;
+      }
     </style>
 </head>
 <body>
+    <canvas id="rainCanvas"></canvas>
+
     <div class="container">
         <img src="https://i.postimg.cc/52WZrPp3/1-D4-D8-F59-3-E07-4900-9-AA5-2-C3-F5-CF2082-C.jpg" class="avatar" alt="Avatar">
         <h1>Phạm Thái Dương</h1>
@@ -84,73 +100,37 @@
             <a href="https://www.tiktok.com/lnisx14" class="tiktok"><i class="fab fa-tiktok"></i> TikTok</a>
         </div>
     </div>
-</body>
-</html>
-<script>
-const numberOfDrops = 50; // Số giọt mưa
-function createRain() {
-    const rainContainer = document.createElement("div");
-    rainContainer.classList.add("rain-container");
-    document.body.appendChild(rainContainer);
 
-    for (let i = 0; i < numberOfDrops; i++) {
-        let drop = document.createElement("div");
-        drop.classList.add("raindrop");
-        drop.style.left = Math.random() * 100 + "vw"; // Ngẫu nhiên vị trí ngang
-        drop.style.animationDuration = (Math.random() * 1.5 + 0.5) + "s"; // Tốc độ rơi khác nhau
-        rainContainer.appendChild(drop);
-    }
-}
+    <script>
+        let canvas = document.getElementById("rainCanvas");
+        let ctx = canvas.getContext("2d");
 
-createRain();
-</script>
-<canvas id="rainCanvas"></canvas>
-<script>
-    const canvas = document.getElementById("rainCanvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const raindrops = [];
-    class Raindrop {
-        constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.length = Math.random() * 20 + 10;
-            this.speed = Math.random() * 3 + 2;
-        }
-        fall() {
-            this.y += this.speed;
-            if (this.y > canvas.height) {
-                this.y = 0;
-                this.x = Math.random() * canvas.width;
-            }
-        }
-        draw() {
-            ctx.beginPath();
-            ctx.moveTo(this.x, this.y);
-            ctx.lineTo(this.x, this.y + this.length);
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-        }
-    }
-    function createRaindrops(num) {
-        for (let i = 0; i < num; i++) {
-            raindrops.push(new Raindrop());
-        }
-    }
-    function animateRain() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        raindrops.forEach(drop => {
-            drop.fall();
-            drop.draw();
-        });
-        requestAnimationFrame(animateRain);
-    }
-    createRaindrops(100);
-    animateRain();
-    window.addEventListener("resize", () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-    });
-</script>
+
+        let drops = Array.from({ length: 100 }).map(() => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            speed: Math.random() * 5 + 2,
+        }));
+
+        function drawRain() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(174,194,224,0.6)";
+            drops.forEach((drop) => {
+                ctx.fillRect(drop.x, drop.y, 2, 10);
+                drop.y += drop.speed;
+                if (drop.y > canvas.height) drop.y = 0;
+            });
+            requestAnimationFrame(drawRain);
+        }
+
+        drawRain();
+
+        window.addEventListener("resize"() => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
