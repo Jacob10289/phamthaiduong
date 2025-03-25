@@ -86,3 +86,71 @@
     </div>
 </body>
 </html>
+<script>
+const numberOfDrops = 50; // Số giọt mưa
+function createRain() {
+    const rainContainer = document.createElement("div");
+    rainContainer.classList.add("rain-container");
+    document.body.appendChild(rainContainer);
+
+    for (let i = 0; i < numberOfDrops; i++) {
+        let drop = document.createElement("div");
+        drop.classList.add("raindrop");
+        drop.style.left = Math.random() * 100 + "vw"; // Ngẫu nhiên vị trí ngang
+        drop.style.animationDuration = (Math.random() * 1.5 + 0.5) + "s"; // Tốc độ rơi khác nhau
+        rainContainer.appendChild(drop);
+    }
+}
+
+createRain();
+</script>
+<canvas id="rainCanvas"></canvas>
+<script>
+    const canvas = document.getElementById("rainCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const raindrops = [];
+    class Raindrop {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.length = Math.random() * 20 + 10;
+            this.speed = Math.random() * 3 + 2;
+        }
+        fall() {
+            this.y += this.speed;
+            if (this.y > canvas.height) {
+                this.y = 0;
+                this.x = Math.random() * canvas.width;
+            }
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x, this.y + this.length);
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+    }
+    function createRaindrops(num) {
+        for (let i = 0; i < num; i++) {
+            raindrops.push(new Raindrop());
+        }
+    }
+    function animateRain() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        raindrops.forEach(drop => {
+            drop.fall();
+            drop.draw();
+        });
+        requestAnimationFrame(animateRain);
+    }
+    createRaindrops(100);
+    animateRain();
+    window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+</script>
