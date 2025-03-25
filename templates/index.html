@@ -38,24 +38,33 @@
         }
         .social-links {
             margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 50px;
         }
         .social-links a {
-            display: inline-block;
-            margin: 5px;
-            padding: 10px;
-            text-decoration: none;
-            font-size: 24px;
-            color: white;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            padding: 10px;
+            width: 250px;
+            border-radius: 10px;
+            margin: 5px 0;
+            transition: 0.3s;
         }
-        .facebook { background: #3b5998; }
-        .youtube { background: #ff0000; }
-        .tiktok { background: #000000; }
+        .social-links a:hover {
+            transform: scale(1.05);
+        }
+        .social-links i {
+            font-size: 28px;
+            margin-right: 15px;
+        }
+        .facebook { background: #3b5998; color: white; }
+        .youtube { background: #ff0000; color: white; }
+        .tiktok { background: #000000; color: white; }
     </style>
 </head>
 <body>
@@ -65,9 +74,15 @@
         <p>Nhà phát triển web | Sáng tạo nội dung | Đam mê công nghệ</p>
         
         <div class="social-links">
-            <a href="https://www.facebook.com/lnisx14" class="facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.youtube.com/PhamThaiDuongOfficial" class="youtube"><i class="fab fa-youtube"></i></a>
-            <a href="https://www.tiktok.com/@lnisx14" class="tiktok"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/lnisx14" class="facebook">
+                <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+            <a href="https://www.youtube.com/PhamThaiDuongOfficial" class="youtube">
+                <i class="fab fa-youtube"></i> YouTube
+            </a>
+            <a href="https://www.tiktok.com/@lnisx14" class="tiktok">
+                <i class="fab fa-tiktok"></i> TikTok
+            </a>
         </div>
     </div>
 </body>
