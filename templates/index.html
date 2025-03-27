@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TramVeUocMo</title>
+    <title>PhamThaiDuong</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
    <style>
     body {
         font-family: "Poppins", sans-serif;
-        background: linear-gradient(to right, #1b1f3b, #4a5d94);
+     background: linear-gradient(135deg, #8E44AD, #D35400, #C0392B, #B9770E);
         text-align: center;
         padding: 50px;
     }
+
     .container {
         max-width: 600px;
         margin: auto;
@@ -20,91 +21,95 @@
         backdrop-filter: blur(10px);
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         display: flex;
         flex-direction: column;
         align-items: center;
         border: 1px solid rgba(255, 255, 255, 0.3);
     }
+
     .avatar {
         width: 120px;
         height: 120px;
         border-radius: 50%;
-        border: 4px solid #007BFF;
+        border: 4px solid #FFC312;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+
     .avatar:hover {
         transform: scale(1.05);
-        box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
+        box-shadow: 0 0 15px rgba(255, 195, 18, 0.6);
     }
+
     h1 {
         font-size: 28px;
         margin-top: 15px;
         color: #ffffff;
         text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
     }
-   .verified-icon {
-    color: #1DA1F2;
-    margin-left: 5px;
-    font-size: 20px; /* Giảm kích thước */
-    vertical-align: middle;
-}
+
+    .verified-icon {
+        color: #FFD700;
+        margin-left: 5px;
+        font-size: 20px;
+        vertical-align: middle;
+    }
+
     p {
         font-size: 16px;
         color: #ffffff;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
-    .social-links {
+
+    .university-icons {
         margin-top: 20px;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        width: 100%;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
     }
-    .social-links a {
+
+    .university-icons a {
         display: flex;
         align-items: center;
         justify-content: center;
-        text-decoration: none;
-        font-size: 18px;
-        color: white;
+        padding: 10px;
         border-radius: 8px;
-        width: 80%;
-        max-width: 300px;
-        padding: 15px;
-        font-weight: bold;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .social-links a:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+    .university-icons a:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
-    .social-links a i {
-        margin-right: 10px;
-        font-size: 20px;
+
+    .university-icons img {
+        width: 50px;
+        border-radius: 5px;
     }
 </style>
 </head>
 <body>
    <div class="container">
     <img src="https://i.ibb.co/S4ZjZQHg/1-D4-D8-F59-3-E07-4900-9-AA5-2-C3-F5-CF2082-C.jpg" class="avatar" alt="Avatar">
-    <h1>Trạm Vé Ước Mơ <i class="fas fa-check-circle verified-icon"></i></h1>
-    <p id="intro"></p>
-   <a href="https://m.facebook.com/VNU.DHQG/">
-    <img src="https://i.ibb.co/PvjVKLK5/image.png" width="50" alt="Avatar">
-</a>
-<a href="https://m.facebook.com/dhbkhanoi/">
-    <img src="https://i.ibb.co/S7rgpbFs/C2-A09-AEF-1716-451-A-BB32-FA12-DD4-E0-ED1.jpg" width="50" alt="Avatar">
-</a>
-<a href="https://m.facebook.com/ktqdNEU/">
-    <img src="https://i.ibb.co/Z66cfGR0/335506-D2-5-B0-A-4-ED7-9-D07-507-E76551089.png" width="50" alt="Avatar">
-</a>
-<a href="https://m.facebook.com/dhsphnhnue/">
-    <img src="https://i.ibb.co/ch5LN6q4/E46373-DE-FEDB-43-E5-8-AA0-C78879467906.png" width="50" alt="Avatar">
-</a>
-</div>
-    <script>
+    <h1>2007 Cùng Nhau Vào Đại Học <i class="fas fa-check-circle verified-icon"></i></h1>
+    <div class="university-icons">
+        <a href="https://m.facebook.com/VNU.DHQG/">
+            <img src="https://i.ibb.co/PvjVKLK5/image.png" alt="VNU">
+        </a>
+        <a href="https://m.facebook.com/dhbkhanoi/">
+            <img src="https://i.ibb.co/S7rgpbFs/C2-A09-AEF-1716-451-A-BB32-FA12-DD4-E0-ED1.jpg" alt="Bách Khoa">
+        </a>
+        <a href="https://m.facebook.com/ktqdNEU/">
+            <img src="https://i.ibb.co/Z66cfGR0/335506-D2-5-B0-A-4-ED7-9-D07-507-E76551089.png" alt="Kinh Tế Quốc Dân">
+        </a>
+        <a href="https://m.facebook.com/dhsphnhnue/">
+            <img src="https://i.ibb.co/ch5LN6q4/E46373-DE-FEDB-43-E5-8-AA0-C78879467906.png" alt="Sư Phạm Hà Nội">
+<script>
         const text = "Hãy Biến Nguyện Vọng 1 Trở Thành Sự Thật Nhé Các Bạn 📚";
         let index = 0;
         function typeEffect() {
@@ -117,5 +122,8 @@
 
         window.onload = typeEffect;
     </script>
+        </a>
+    </div>
+   </div>
 </body>
 </html>
