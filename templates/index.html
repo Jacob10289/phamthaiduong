@@ -61,28 +61,34 @@
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
-.social-icons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-}
+.social-links a {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: 0.3s;
+            color: white;
+        }
 
-.social-icons a {
-    font-size: 30px;
-    color: white;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+        .facebook { background: #1877F2; }
+        .youtube { background: #FF0000; }
+        .tiktok { background: #000000; }
+        .instagram { background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5); }
 
-.social-icons a:hover {
-    transform: scale(1.2);
-    color: #1DA1F2;
-}
+        .social-links a:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        .social-links i {
+            margin-right: 10px;
+        }
+
 </style>
 </head>
 <body>
@@ -90,22 +96,12 @@
     <img src="https://i.ibb.co/DHcD5ksy/3-E40-F0-BA-6-E7-B-4646-B0-F7-0-EB36-B9-FDA9-E.jpg" class="avatar" alt="Avatar">
     <h1>PhamThaiDuong<i class="fas fa-check-circle verified-icon"></i></h1>
     <p>Never Give Up !</p>
-   <div class="social-icons">
-    <a href="https://facebook.com/lnisx14" target="_blank">
-        <i class="fab fa-facebook"></i>
-    </a>
-    <a href="https://instagram.com/lnisx14" target="_blank">
-        <i class="fab fa-instagram"></i>
-    </a>
-    <a href="https://tiktok.com/@lnisx14" target="_blank">
-        <i class="fab fa-tiktok"></i>
-    </a>
-    <a href="https://youtube.com/lnisx14" target="_blank">
-        <i class="fab fa-youtube"></i>
-    </a>
-    <a href="https://github.com/Jacob10289" target="_blank">
-        <i class="fab fa-github"></i>
-    </a>
+  <div class="social-links">
+            <a href="https://www.facebook.com/lnisx14" class="facebook"><i class="fab fa-facebook"></i> Facebook</a>
+            <a href="https://www.
+youtube.com/lnisx14 ="youtube"><i class="fab fa-youtube"></i> YouTube</a>
+            <a href="https://www.tiktok.com/@lnisx14" class="tiktok"><i class="fab fa-tiktok"></i> TikTok</a>
+            <a href="https://www.instagram.com/lnisx14" class="instagram"><i class="fab fa-instagram"></i> Instagram</a>
     </div>
    </div>
 </body>
