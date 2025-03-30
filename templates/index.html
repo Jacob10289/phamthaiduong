@@ -61,33 +61,42 @@
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
+.social-links {
+    width: 100%;
+    max-width: 400px; /* Giới hạn chiều rộng để tránh quá lớn trên màn hình rộng */
+    margin: 0 auto; /* Căn giữa */
+}
+
 .social-links a {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            text-align: center;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 8px;
-            transition: 0.3s;
-            color: white;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: 0.3s;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng nhẹ */
+}
 
-        .facebook { background: #1877F2; }
-        .youtube { background: #FF0000; }
-        .tiktok { background: #000000; }
-        .instagram { background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5); }
+.facebook { background: #1877F2; }
+.youtube { background: #FF0000; }
+.tiktok { background: #000000; }
+.instagram { background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5); }
 
-        .social-links a:hover {
-            opacity: 0.8;
-            transform: scale(1.05);
-        }
+.social-links a:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
 
-        .social-links i {
-            margin-right: 10px;
-        }
+.social-links i {
+    margin-right: 10px;
+}
 
 </style>
 </head>
