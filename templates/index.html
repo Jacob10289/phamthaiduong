@@ -68,9 +68,9 @@
 }
 
 .social-links a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; /* Chuyển sang flexbox để dễ căn chỉnh */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
     width: 100%;
     padding: 15px;
     margin: 10px 0;
@@ -81,7 +81,11 @@
     border-radius: 8px;
     transition: 0.3s;
     color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng nhẹ */
+}
+
+.social-links i {
+    margin-right: 8px; /* Giữ khoảng cách nhỏ giữa icon và text */
+    font-size: 20px; /* Đảm bảo icon có kích thước phù hợp */
 }
 
 .facebook { background: #1877F2; }
