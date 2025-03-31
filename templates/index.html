@@ -62,18 +62,19 @@
     }
 
 .social-links {
-    width: 100%;
-    max-width: 200px; /* Giới hạn chiều rộng để tránh quá lớn trên màn hình rộng */
-    margin: 0 auto; /* Căn giữa */
+    width: 100%; /* Đảm bảo phần cha chiếm toàn bộ chiều rộng */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Căn giữa các nút */
 }
 
 .social-links a {
-    display: flex; /* Chuyển sang flexbox để dễ căn chỉnh */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    justify-content: center; /* Căn giữa theo chiều ngang */
-    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Căn giữa icon và chữ */
+    width: 90%; /* Điều chỉnh để phần khung đầy hơn */
     padding: 15px;
-    margin: 10px 0;
+    margin: 10px auto; /* Đảm bảo căn giữa theo chiều ngang */
     text-align: center;
     text-decoration: none;
     font-size: 18px;
@@ -84,8 +85,8 @@
 }
 
 .social-links i {
-    margin-right: 8px; /* Giữ khoảng cách nhỏ giữa icon và text */
-    font-size: 20px; /* Đảm bảo icon có kích thước phù hợp */
+    font-size: 20px;
+    margin-right: 10px; /* Giữ khoảng cách đều giữa icon và chữ */
 }
 
 .facebook { background: #1877F2; }
