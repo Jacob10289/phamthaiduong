@@ -116,20 +116,20 @@ background: linear-gradient(135deg, #001F3F, #0F52BA, #FFD700);
     <h1>Phạm Thái Dương<i class="fas fa-check-circle verified-icon"></i></h1>
   <p id="typed-text"></p>
 <script>
-    const text = "Welcome to my bio 😋";
-    let index = 0;
+   const text = "<span style='color: #FFD700; text-shadow: 2px 2px 5px rgba(255, 215, 0, 0.8);'>Welcome to my bio 😋</span>";
+let index = 0;
 
-    function typeEffect() {
-        if (index < text.length) {
-            document.getElementById("typed-text").innerHTML += text.charAt(index);
-            index++;
-            setTimeout(typeEffect, 100); //
-        }
+function typeEffect() {
+    if (index < text.length) {
+        document.getElementById("typed-text").innerHTML += text.charAt(index);
+        index++;
+        setTimeout(typeEffect, 100);
     }
+}
 
-    window.onload = function() {
-        typeEffect();
-    };
+window.onload = function() {
+    typeEffect();
+};
 </script>
   <div class="social-links">
             <a href="https://www.facebook.com/lnisx14" class="facebook"><i class="fab fa-facebook"></i> Facebook</a>
