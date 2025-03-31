@@ -98,8 +98,24 @@
 <body>
    <div class="container">
     <img src="https://i.ibb.co/DHcD5ksy/3-E40-F0-BA-6-E7-B-4646-B0-F7-0-EB36-B9-FDA9-E.jpg" class="avatar" alt="Avatar">
-    <h1>PhamThaiDuong<i class="fas fa-check-circle verified-icon"></i></h1>
-    <p>Never Give Up !</p>
+    <h1>Pham Thai Duong<i class="fas fa-check-circle verified-icon"></i></h1>
+   <p id="Welcome !"></p>
+<script>
+    const text = "Welcome !";
+    let index = 0;
+
+    function typeEffect() {
+        if (index < text.length) {
+            document.getElementById("typed-text").innerHTML += text.charAt(index);
+            index++;
+            setTimeout(typeEffect, 100); // Tốc độ gõ chữ (đơn vị: ms)
+        }
+    }
+
+    window.onload = function() {
+        typeEffect();
+    };
+</script>
   <div class="social-links">
             <a href="https://www.facebook.com/lnisx14" class="facebook"><i class="fab fa-facebook"></i> Facebook</a>
             <a href="https://www.tiktok.com/@lnisx14" class="tiktok"><i class="fab fa-tiktok"></i> TikTok</a>
