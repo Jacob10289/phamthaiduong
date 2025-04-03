@@ -73,7 +73,7 @@ background: linear-gradient(135deg, #001F3F, #0F52BA, #FFD700);
     align-items: center;
     justify-content: center;
     width: 200px;
-    min-height: 50px; /* Đảm bảo chiều cao đồng đều */
+    min-height: 50px;
     padding: 10px;
     margin: 10px auto;
     text-align: center;
@@ -95,13 +95,11 @@ background: linear-gradient(135deg, #001F3F, #0F52BA, #FFD700);
 .instagram { background: linear-gradient(135deg, #FF9F4D, #E1306C, #833AB4); }
 .spotify { background: linear-gradient(135deg, #1DB954, #1ED760, #A7F432); }
 
-/* Hiệu ứng hover */
 .social-links a:hover {
     opacity: 0.8;
     transform: scale(1.05);
 }
 
-/* Hiệu ứng nút chung */
 .button {
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
@@ -120,7 +118,7 @@ background: linear-gradient(135deg, #001F3F, #0F52BA, #FFD700);
 </head>
 <body>
    <div class="container">
-    <img src="https://i.ibb.co/PGrgnW4N/IMG-8050.jpg" class="avatar" alt="Avatar">
+    <img src="https://i.ibb.co/TsLH2M6/601-FBE55-8314-4263-A711-D53-F6-B6-FA0-EE.jpg" class="avatar" alt="Avatar">
     <h1>Phạm Thái Dương<i class="fas fa-check-circle verified-icon"></i></h1>
   <p id="typed-text"></p>
 <script>
@@ -129,7 +127,7 @@ background: linear-gradient(135deg, #001F3F, #0F52BA, #FFD700);
 
     function typeEffect() {
         if (index < text.length) {
-            document.getElementById("typed-text").innerHTML += text.charAt(index);
+           document.getElementById("typed-text").innerHTML += text.charAt(index);
             index++;
             setTimeout(typeEffect, 100); //
         }
