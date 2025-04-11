@@ -1,31 +1,178 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="container">
-  <img src="https://i.ibb.co/LdYd5rks/4-A545758-9-E70-40-BB-A4-FA-36-CE631-B395-C.jpg" class="avatar" alt="Avatar">
-  <h1>1iniux268<i class="fas fa-check-circle verified-icon"></i></h1>
-  <p id="typed-text"></p>
-
-  <script>
-    const text = "Thanks for visiting my site ! I'm Pham Thai Duong . All contact information is below .";
-    let index = 0;
-
-    function typeEffect() {
-      if (index < text.length) {
-        document.getElementById("typed-text").innerHTML += text.charAt(index);
-        index++;
-        setTimeout(typeEffect, 100);
-      }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Designed By Pham Thai Duong</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(270deg, 
+        #FF5F6D, #FFC371, #47E6C1, #5B86E5, #D76D77, #FF6CAB, #FFB347);
+      background-size: 500% 500%;
+      animation: gradientShift 6s ease-in-out infinite;
+      text-align: center;
+      padding: 50px;
     }
 
-    window.onload = function () {
-      typeEffect();
-    };
-  </script>
-   <!-- Audio & Toggle Button -->
-<audio id="myAudio" loop>
-  <source src="https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/dunghenkiepsau.mp3" type="audio/mpeg">
-</audio>
-<button class="play-btn" onclick="toggleMusic()">Music</button>
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .container:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(255,255,255,0.3),
+                  0 0 40px rgba(255,255,255,0.2);
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid #ffffff;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 195, 18, 0.6);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-top: 15px;
+      color: #ffffff;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .verified-icon {
+      color: #1877F2;
+      margin-left: 5px;
+      font-size: 20px;
+      vertical-align: middle;
+    }
+
+    p {
+      font-size: 16px;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    .social-links {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 200px;
+      min-height: 50px;
+      padding: 10px;
+      margin: 10px auto;
+      text-align: center;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: 0.3s;
+      color: white;
+    }
+
+    .social-links i {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+
+    .facebook { background: #1877F2; }
+    .tiktok { background: #000000; }
+    .instagram { background: linear-gradient(135deg, #FF9F4D, #E1306C, #833AB4); }
+    .spotify { background: linear-gradient(135deg, #1DB954, #1ED760, #A7F432); }
+
+    .social-links a:hover {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+
+    .button {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .button:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .button:active {
+      transform: scale(0.95);
+      transition: 0.1s;
+    }
+
+    .play-btn {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .play-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://i.ibb.co/LdYd5rks/4-A545758-9-E70-40-BB-A4-FA-36-CE631-B395-C.jpg" class="avatar" alt="Avatar">
+    <h1>1iniux268<i class="fas fa-check-circle verified-icon"></i></h1>
+    <p id="typed-text"></p>
+
+    <script>
+      const text = "Thanks for visiting my site ! I'm Pham Thai Duong . All contact information is below .";
+      let index = 0;
+
+      function typeEffect() {
+        if (index < text.length) {
+          document.getElementById("typed-text").innerHTML += text.charAt(index);
+          index++;
+          setTimeout(typeEffect, 100);
+        }
+      }
+
+      window.onload = function () {
+        typeEffect();
+      };
+    </script>
+    <!-- Audio & Toggle Button -->
+    <audio id="myAudio" loop>
+      <source src="https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/dunghenkiepsau.mp3" type="audio/mpeg">
+    </audio>
+    <button class="play-btn" onclick="toggleMusic()">Play Music</button>
+
     <div class="social-links">
       <a href="https://www.facebook.com/1iniux268" class="facebook">
         <i class="fab fa-facebook"></i> Facebook
@@ -41,6 +188,7 @@
       </a>
     </div>
   </div>
+
   <script>
     function toggleMusic() {
       var audio = document.getElementById("myAudio");
