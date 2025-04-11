@@ -3,41 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Test Gradient Motion</title>
+  <title>Color Party</title>
   <style>
     body {
       margin: 0;
       font-family: sans-serif;
-      background: linear-gradient(135deg, #001F3F, #3399FF, #FFD700);
-      background-size: 600% 600%;
-      animation: gradientMove 8s ease-in-out infinite;
+      background: linear-gradient(270deg, 
+        #FF5F6D, #FFC371, #47E6C1, #5B86E5, #D76D77, #FF6CAB, #FFB347);
+      background-size: 2000% 2000%;
+      animation: gradientShift 5s ease infinite;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
 
-    @keyframes gradientMove {
+    @keyframes gradientShift {
       0%   { background-position: 0% 50%; }
       50%  { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
-      padding: 30px 40px;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      color: #fff;
-      font-size: 18px;
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      color: white;
+      font-size: 20px;
       text-align: center;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    Hello! This is a moving gradient background.
+    Welcome to the colorful zone!
   </div>
 </body>
 </html>
