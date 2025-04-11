@@ -1,119 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Sporty Cool Profile</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Gradient Motion</title>
   <style>
     body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #80d8ff, #82b1ff, #b388ff, #f3e5f5);
-      background-size: 400% 400%;
-      animation: gradientMove 15s ease infinite;
-      text-align: center;
-      padding: 50px;
+      margin: 0;
+      font-family: sans-serif;
+      background: linear-gradient(135deg, #001F3F, #3399FF, #FFD700);
+      background-size: 600% 600%;
+      animation: gradientMove 8s ease-in-out infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
     @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
     .container {
-      max-width: 600px;
-      margin: auto;
       background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(10px);
-      padding: 30px;
+      padding: 30px 40px;
       border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 4px solid #80d8ff;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .avatar:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(0, 200, 255, 0.6);
-    }
-
-    h1 {
-      font-size: 28px;
-      margin-top: 15px;
-      color: #ffffff;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-    }
-
-    p {
-      font-size: 16px;
-      color: #ffffff;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    }
-
-    .social-links {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .social-links a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 200px;
-      min-height: 50px;
-      padding: 10px;
-      margin: 10px auto;
-      text-align: center;
-      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      color: #fff;
       font-size: 18px;
-      font-weight: bold;
-      border-radius: 8px;
-      transition: 0.3s;
-      color: white;
-    }
-
-    .social-links i {
-      font-size: 20px;
-      margin-right: 10px;
-    }
-
-    .facebook { background: #1877F2; }
-    .tiktok { background: #000000; }
-    .instagram { background: linear-gradient(135deg, #FF9F4D, #E1306C, #833AB4); }
-    .spotify { background: linear-gradient(135deg, #1DB954, #1ED760, #A7F432); }
-
-    .social-links a:hover {
-      opacity: 0.8;
-      transform: scale(1.05);
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img class="avatar" src="https://via.placeholder.com/120" alt="Avatar">
-    <h1>Your Name</h1>
-    <p>Welcome to my sporty cool page!</p>
-    <div class="social-links">
-      <a href="#" class="facebook"><i class="fab fa-facebook"></i> Facebook</a>
-      <a href="#" class="instagram"><i class="fab fa-instagram"></i> Instagram</a>
-      <a href="#" class="tiktok"><i class="fab fa-tiktok"></i> TikTok</a>
-      <a href="#" class="spotify"><i class="fab fa-spotify"></i> Spotify</a>
-    </div>
+    Hello! This is a moving gradient background.
   </div>
-
-  <!-- Font Awesome CDN for icons -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
