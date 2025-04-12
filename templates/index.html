@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Designed By Pham Thai Duong</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+
   <style>
     body {
       font-family: "Poppins", sans-serif;
-      background: linear-gradient(270deg, 
-        #FF5F6D, #FFC371, #47E6C1, #5B86E5, #D76D77, #FF6CAB, #FFB347);
+      background: linear-gradient(270deg, #FF5F6D, #FFC371, #47E6C1, #5B86E5, #D76D77, #FF6CAB, #FFB347);
       background-size: 500% 500%;
       animation: gradientShift 6s ease-in-out infinite;
       text-align: center;
       padding: 50px;
+      overflow: hidden;
     }
 
     @keyframes gradientShift {
@@ -40,8 +41,7 @@
 
     .container:hover {
       transform: scale(1.02);
-      box-shadow: 0 0 20px rgba(255,255,255,0.3),
-                  0 0 40px rgba(255,255,255,0.2);
+      box-shadow: 0 0 20px rgba(255,255,255,0.3), 0 0 40px rgba(255,255,255,0.2);
     }
 
     .avatar {
@@ -76,137 +76,152 @@
       color: #ffffff;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
+    .social-links {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 200px;
+      min-height: 50px;
+      padding: 10px;
+      margin: 10px auto;
+      text-align: center;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: 0.3s;
+      color: white;
+    }
+
+    .social-links i {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+
+    .facebook { background: #1877F2; }
+    .tiktok { background: #000000; }
+    .instagram { background: linear-gradient(135deg, #FF9F4D, #E1306C, #833AB4); }
+    .spotify { background: linear-gradient(135deg, #1DB954, #1ED760, #A7F432); }
+
+    .social-links a:hover {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+
+    .button {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .button:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .button:active {
+      transform: scale(0.95);
+      transition: 0.1s;
+    }
+
+    .play-btn {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .play-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .click-dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: pop 0.6s ease-out forwards;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(4);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="https://i.ibb.co/LdYd5rks/4-A545758-9-E70-40-BB-A4-FA-36-CE631-B395-C.jpg" class="avatar" alt="Avatar">
+    <img src="https://i.ibb.co/LdYd5rks/4-A545758-9-E70-40-BB-A4-FA-36-CE631-B395-C.jpg" class="avatar" alt="Avatar" />
     <h1>1iniux268<i class="fas fa-check-circle verified-icon"></i></h1>
     <p id="typed-text"></p>
-
-    <script>
-      const text = "Thanks for visiting my site ! I'm Pham Thai Duong . All contact information is below .";
-      let index = 0;
-
-      function typeEffect() {
-        if (index < text.length) {
-          document.getElementById("typed-text").innerHTML += text.charAt(index);
-          index++;
-          setTimeout(typeEffect, 100);
-        }
-      }
-
-      window.onload = function () {
-        typeEffect();
-      };
-    </script>
-    <style>
-      .social-links {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .social-links a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 200px;
-        min-height: 50px;
-        padding: 10px;
-        margin: 10px auto;
-        text-align: center;
-        text-decoration: none;
-        font-size: 18px;
-        font-weight: bold;
-        border-radius: 8px;
-        transition: 0.3s;
-        color: white;
-      }
-
-      .social-links i {
-        font-size: 20px;
-        margin-right: 10px;
-      }
-
-      .facebook { background: #1877F2; }
-      .tiktok { background: #000000; }
-      .instagram { background: linear-gradient(135deg, #FF9F4D, #E1306C, #833AB4); }
-      .spotify { background: linear-gradient(135deg, #1DB954, #1ED760, #A7F432); }
-
-      .social-links a:hover {
-        opacity: 0.8;
-        transform: scale(1.05);
-      }
-
-      .button {
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-      }
-
-      .button:hover {
-        transform: scale(1.05);
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-      }
-
-      .button:active {
-        transform: scale(0.95);
-        transition: 0.1s;
-      }
-
-      .play-btn {
-        background: rgba(255,255,255,0.2);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: bold;
-        margin-top: 20px;
-        cursor: pointer;
-        border: none;
-      }
-
-      .play-btn:hover {
-        background: rgba(255,255,255,0.3);
-      }
-    </style>
     <audio id="myAudio" loop>
-      <source src="https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/TTANE.mp3" type="audio/mpeg">
+      <source src="https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/dunghenkiepsau.mp3" type="audio/mpeg"/>
     </audio>
 
     <div class="social-links">
-      <a href="https://www.facebook.com/1iniux268" class="facebook">
-        <i class="fab fa-facebook"></i> Facebook
-      </a>
-      <a href="https://www.tiktok.com/@1iniux268" class="tiktok">
-        <i class="fab fa-tiktok"></i> TikTok
-      </a>
-     <a href="https://www.instagram.com/1iniux268" class="instagram">
-        <i class="fab fa-instagram"></i> Instagram
-      </a>
-      <a href="https://open.spotify.com/artist/1UTyk1oFxOsRsrD82gIZK5" class="spotify">
-        <i class="fab fa-spotify"></i> Spotify
-      </a>
+      <a href="https://www.facebook.com/1iniux268" class="facebook"><i class="fab fa-facebook"></i> Facebook</a>
+      <a href="https://www.tiktok.com/@1iniux268" class="tiktok"><i class="fab fa-tiktok"></i> TikTok</a>
+      <a href="https://www.instagram.com/1iniux268" class="instagram"><i class="fab fa-instagram"></i> Instagram</a>
+      <a href="https://open.spotify.com/artist/1UTyk1oFxOsRsrD82gIZK5" class="spotify"><i class="fab fa-spotify"></i> Spotify</a>
     </div>
   </div>
 
   <script>
-    window.addEventListener("load", function () {
+    const text = "Thanks for visiting my site ! I'm Pham Thai Duong . All contact information is below .";
+    let index = 0;
+
+    function typeEffect() {
+      if (index < text.length) {
+        document.getElementById("typed-text").innerHTML += text.charAt(index);
+        index++;
+        setTimeout(typeEffect, 100);
+      }
+    }
+
+    window.onload = function () {
+      typeEffect();
+
       const audio = document.getElementById("myAudio");
       const playPromise = audio.play();
 
       if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            console.log("Autoplay started!");
-          })
-          .catch(error => {
-            console.log("Autoplay block!");
-            document.addEventListener("click", function playAudioOnce() {
-              audio.play();
-              document.removeEventListener("click", playAudioOnce);
-            });
+        playPromise.catch(() => {
+          document.addEventListener("click", function playAudioOnce() {
+            audio.play();
+            document.removeEventListener("click", playAudioOnce);
           });
+        });
       }
+    };
+
+    document.addEventListener("click", function (e) {
+      const dot = document.createElement("div");
+      dot.className = "click-dot";
+      dot.style.left = e.pageX + "px";
+      dot.style.top = e.pageY + "px";
+      document.body.appendChild(dot);
+
+      setTimeout(() => {
+        dot.remove();
+      }, 600);
     });
   </script>
 </body>
