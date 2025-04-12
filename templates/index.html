@@ -200,7 +200,7 @@
             console.log("Autoplay started!");
           })
           .catch(error => {
-            console.log("Autoplay block!");})
+            console.log("Autoplay block!");
             document.addEventListener("click", function playAudioOnce() {
               audio.play();
               document.removeEventListener("click", playAudioOnce);
