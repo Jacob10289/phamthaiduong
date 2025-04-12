@@ -76,73 +76,6 @@
       color: #ffffff;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
-    .social-links {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .social-links a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 200px;
-      min-height: 50px;
-      padding: 10px;
-      margin: 10px auto;
-      text-align: center;
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: bold;
-      border-radius: 8px;
-      transition: 0.3s;
-      color: white;
-    }
-
-    .social-links i {
-      font-size: 20px;
-      margin-right: 10px;
-    }
-
-    .facebook { background: #1877F2; }
-    .tiktok { background: #000000; }
-    .instagram { background: linear-gradient(135deg, #FF9F4D, #E1306C, #833AB4); }
-    .spotify { background: linear-gradient(135deg, #1DB954, #1ED760, #A7F432); }
-
-    .social-links a:hover {
-      opacity: 0.8;
-      transform: scale(1.05);
-    }
-
-    .button {
-      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    }
-
-    .button:hover {
-      transform: scale(1.05);
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .button:active {
-      transform: scale(0.95);
-      transition: 0.1s;
-    }
-
-    .play-btn {
-      background: rgba(255,255,255,0.2);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: bold;
-      margin-top: 20px;
-      cursor: pointer;
-      border: none;
-    }
-
-    .play-btn:hover {
-      background: rgba(255,255,255,0.3);
-    }
   </style>
 </head>
 <body>
@@ -167,11 +100,79 @@
         typeEffect();
       };
     </script>
-    <!-- Audio & Toggle Button -->
-    <audio id="myAudio" autoplay loop>
+    <style>
+      .social-links {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .social-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 200px;
+        min-height: 50px;
+        padding: 10px;
+        margin: 10px auto;
+        text-align: center;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: 0.3s;
+        color: white;
+      }
+
+      .social-links i {
+        font-size: 20px;
+        margin-right: 10px;
+      }
+
+      .facebook { background: #1877F2; }
+      .tiktok { background: #000000; }
+      .instagram { background: linear-gradient(135deg, #FF9F4D, #E1306C, #833AB4); }
+      .spotify { background: linear-gradient(135deg, #1DB954, #1ED760, #A7F432); }
+
+      .social-links a:hover {
+        opacity: 0.8;
+        transform: scale(1.05);
+      }
+
+      .button {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+
+      .button:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .button:active {
+        transform: scale(0.95);
+        transition: 0.1s;
+      }
+
+      .play-btn {
+        background: rgba(255,255,255,0.2);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        margin-top: 20px;
+        cursor: pointer;
+        border: none;
+      }
+
+      .play-btn:hover {
+        background: rgba(255,255,255,0.3);
+      }
+    </style>
+n & liC*n ka:?t MXH -->
+    <audio id="myAudio" loop>
       <source src="https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/dunghenkiepsau.mp3" type="audio/mpeg">
     </audio>
-    <button class="play-btn" onclick="toggleMusic()">Play Music</button>
 
     <div class="social-links">
       <a href="https://www.facebook.com/1iniux268" class="facebook">
@@ -190,14 +191,24 @@
   </div>
 
   <script>
-    function toggleMusic() {
-      var audio = document.getElementById("myAudio");
-      if (audio.paused) {
-        audio.play();
-      } else {
-        audio.pause();
+    window.addEventListener("load", function () {
+      const audio = document.getElementById("myAudio");
+      const playPromise = audio.play();
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log("Autoplay started!");
+          })
+          .catch(error => {
+ cha:7n. Sa:= phC!t khi ngF0a;i dC9ng tF0F!ng tC!c.");
+            document.addEventListener("click", function playAudioOnce() {
+              audio.play();
+              document.removeEventListener("click", playAudioOnce);
+            });
+          });
       }
-    }
+    });
   </script>
 </body>
 </html>
