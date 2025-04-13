@@ -6,179 +6,95 @@
   <title>Designed By Pham Thai Duong</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
-
   <style>
     body {
       font-family: "Poppins", sans-serif;
       background: linear-gradient(270deg, #0c0f1a, #1a2430, #1e2b39, #121a25, #101820);
       background-size: 500% 500%;
       animation: gradientShift 12s ease-in-out infinite;
-      text-align: center;
-      padding: 50px;
-      overflow: hidden;
-      margin: 0;
       color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
+      margin: 0;
+      padding: 0 20px;
     }
-
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    .light-glow, .sparkle, .rain {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .sparkle {
-      animation: sparkleEffect 1.5s ease-in-out infinite;
-    }
-
-    .raindrop {
-      position: absolute;
-      width: 2px;
-      height: 15px;
-      background: rgba(255, 255, 255, 0.1);
-      animation: rainFall linear infinite;
-    }
-
-    @keyframes glowEffect {
-      0%, 100% { background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 30%, transparent 70%); }
-      50% { background: radial-gradient(circle, rgba(0, 0, 0, 0.6) 30%, transparent 70%); }
-    }
-
-    @keyframes sparkleEffect {
-      0%, 100% { opacity: 0.5; transform: scale(1) rotate(0deg); }
-      50% { opacity: 1; transform: scale(1.1) rotate(90deg); }
-    }
-
-    @keyframes rainFall {
-      to { transform: translateY(100vh); }
-    }
-
-    #clock {
-      font-size: 26px;
-      color: #ffffff;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-      letter-spacing: 2px;
-      position: fixed;
-      top: 20px;
-      right: 25px;
-    }
-
-    .typing-box {
-      max-width: 700px;
-      font-size: 24px;
-      line-height: 1.8;
-      white-space: pre-line;
-      color: white;
-      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.6);
-      text-align: center;
-    }
-
-    .signature {
-      font-size: 18px;
-      margin-top: 20px;
-      font-style: italic;
-    }
-
     .music-player {
-      margin-top: 40px;
-      padding: 20px;
+      margin-top: 20px;
+      padding: 15px;
       background: rgba(255, 255, 255, 0.05);
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
       backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
     }
-
     .song-title {
-      font-size: 20px;
-      margin-bottom: 15px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
+      gap: 8px;
     }
-
-    .song-title i {
-      color: #1DB954;
-      font-size: 24px;
-      opacity: 0.85;
-    }
-
     .controls {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      margin-top: 10px;
+      gap: 15px;
+      margin: 10px 0;
     }
-
     .controls button {
-      background: transparent;
+      background: none;
       border: none;
       color: white;
-      font-size: 22px;
-      padding: 6px;
+      font-size: 20px;
       cursor: pointer;
-      transition: transform 0.2s ease;
     }
-
-    .controls button:hover {
-      transform: scale(1.2);
+    .search-bar {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .search-bar input {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .vocab-list {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .vocab-item {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 15px;
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+    }
+    .vocab-item h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
       color: #1DB954;
     }
-
-    .progress-container {
-      margin-top: 15px;
-      width: 100%;
-      max-width: 300px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .vocab-item p {
+      margin: 4px 0;
+      font-size: 14px;
     }
-
-    .progress-container span {
-      font-size: 12px;
-    }
-
-    #progressBar {
-      flex-grow: 1;
-      appearance: none;
-      height: 6px;
-      background: #444;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #progressBar::-webkit-slider-thumb {
-      appearance: none;
-      width: 10px;
-      height: 10px;
-      background: #1DB954;
-      border-radius: 50%;
-      cursor: pointer;
+    #clock {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      font-size: 18px;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
-<div class="light-glow"></div>
-  <div class="sparkle"></div>
-  <div class="rain" id="rain"></div>
+
   <div id="clock"></div>
-  <div class="typing-box">
-    <div id="message"></div>
-    <div class="signature">- 1liniux268</div>
-  </div>
 
   <div class="music-player">
     <div class="song-title"><i class="fab fa-spotify"></i><span id="songTitle">Loading...</span></div>
@@ -187,16 +103,16 @@
       <button onclick="togglePlayPause()" id="playPauseBtn"><i class="fas fa-play"></i></button>
       <button onclick="nextSong()"><i class="fas fa-forward"></i></button>
     </div>
-    <div class="progress-container">
-      <span id="currentTime">0:00</span>
-      <input type="range" id="progressBar" value="0">
-      <span id="duration">0:00</span>
-    </div>
+    <audio id="myAudio">
+      <source id="audioSource" src="" type="audio/mpeg"/>
+    </audio>
   </div>
 
-  <audio id="myAudio">
-    <source id="audioSource" src="" type="audio/mpeg"/>
-  </audio>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Tìm kiếm từ vựng hoặc chủ đề..." oninput="filterWords()"/>
+  </div>
+
+  <div class="vocab-list" id="vocabList"></div>
 
   <script>
     const playlist = [
@@ -206,26 +122,18 @@
     ];
     let currentIndex = 0;
     let isPlaying = false;
-
     const audio = document.getElementById("myAudio");
     const source = document.getElementById("audioSource");
     const title = document.getElementById("songTitle");
     const playBtn = document.getElementById("playPauseBtn");
-    const progressBar = document.getElementById("progressBar");
-    const currentTimeDisplay = document.getElementById("currentTime");
-    const durationDisplay = document.getElementById("duration");
 
     function loadSong(index) {
       source.src = playlist[index].url;
       title.textContent = playlist[index].title;
       audio.load();
-      if (isPlaying) {
-        audio.play();
-        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-      }
+      if (isPlaying) audio.play();
     }
-
-    function togglePlayPause() {
+function togglePlayPause() {
       if (audio.paused) {
         audio.play();
         isPlaying = true;
@@ -247,77 +155,63 @@
       loadSong(currentIndex);
     }
 
-    function updateClock() {
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById("clock").textContent = `${hours}:${minutes}:${seconds}`;
-    }
+    audio.addEventListener("ended", nextSong);
 
-    const messages = [
-      "A Person With Good Heart Always Unlucky In Relationship",
-      "Never Cry For The Person Who Hurts You . Just Smile And Say Thank You For Giving Me A Chance To Find Someone Better Than You",
+    const vocab = [
+      { word: "activity", meaning: "hoạt động", example: "", topic: "Leisure" },
+      { word: "art gallery", meaning: "phòng trưng bày tranh", example: "", topic: "Leisure" },
+      { word: "exhibition", meaning: "buổi triển lãm, trưng bày", example: "", topic: "Leisure" },
+      { word: "museum", meaning: "bảo tàng", example: "", topic: "Leisure" },
+      { word: "concert", meaning: "buổi hòa nhạc", example: "", topic: "Leisure" },
+      { word: "ballet", meaning: "ba lê, kịch múa", example: "", topic: "Leisure" },
+      { word: "opera", meaning: "nhạc kịch", example: "", topic: "Leisure" },
+      { word: "bar", meaning: "quán rượu", example: "", topic: "Leisure" },
+      { word: "nightclub", meaning: "hộp đêm", example: "", topic: "Leisure" },
+      { word: "library", meaning: "thư viện", example: "", topic: "Study" },
+      { word: "hiking", meaning: "leo núi", example: "", topic: "Outdoor" },
+      { word: "gardening", meaning: "làm vườn", example: "", topic: "Outdoor" },
+      { word: "reading", meaning: "đọc sách", example: "", topic: "Hobby" },
+      { word: "music", meaning: "âm nhạc", example: "", topic: "Hobby" },
+      { word: "poetry", meaning: "thơ ca", example: "", topic: "Hobby" }
     ];
 
-    function getRandomMessage() {
-      const randomIndex = Math.floor(Math.random() * messages.length);
-      return messages[randomIndex];
+    function displayWords(words) {
+      const list = document.getElementById("vocabList");
+      list.innerHTML = "";
+      words.forEach(item => {
+        list.innerHTML += `
+          <div class="vocab-item">
+            <h3>${item.word}</h3>
+            <p><strong>Meaning:</strong> ${item.meaning}</p>
+            <p><strong>Topic:</strong> ${item.topic}</p>
+          </div>
+        `;
+      });
     }
 
-    function typeMessage(text, elementId, delay = 60) {
-      const element = document.getElementById(elementId);
-      let index = 0;
-      function type() {
-        if (index < text.length) {
-          element.innerHTML += text.charAt(index);
-          index++;
-          setTimeout(type, delay);
-        }
-      }
-      type();
+    function filterWords() {
+      const keyword = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = vocab.filter(item =>
+        item.word.toLowerCase().includes(keyword) ||
+        item.meaning.toLowerCase().includes(keyword) ||
+        item.topic.toLowerCase().includes(keyword)
+      );
+      displayWords(filtered);
     }
 
-    audio.addEventListener("timeupdate", () => {
-      const current = audio.currentTime;
-      const duration = audio.duration;
-      progressBar.value = (current / duration) * 100 || 0;
-      currentTimeDisplay.textContent = formatTime(current);
-      durationDisplay.textContent = formatTime(duration);
-    });
-progressBar.addEventListener("input", () => {
-      const percent = progressBar.value;
-      audio.currentTime = (percent / 100) * audio.duration;
-    });
-
-    audio.addEventListener("ended", () => {
-      nextSong();
-    });
-
-    function formatTime(seconds) {
-      const mins = Math.floor(seconds / 60);
-      const secs = Math.floor(seconds % 60);
-      return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, "0");
+      const m = String(now.getMinutes()).padStart(2, "0");
+      const s = String(now.getSeconds()).padStart(2, "0");
+      document.getElementById("clock").textContent = `${h}:${m}:${s}`;
     }
 
-    window.onload = function () {
-      setInterval(updateClock, 1000);
-      updateClock();
-
-      const randomMessage = getRandomMessage();
-      typeMessage(randomMessage, "message");
-
+    window.onload = () => {
       loadSong(currentIndex);
-
-      const rainContainer = document.getElementById("rain");
-      for (let i = 0; i < 200; i++) {
-        const drop = document.createElement("div");
-        drop.classList.add("raindrop");
-        drop.style.left = `${Math.random() * 100}%`;
-        drop.style.animationDuration = `${0.5 + Math.random() * 1.5}s`;
-        drop.style.animationDelay = `${Math.random() * 5}s`;
-        rainContainer.appendChild(drop);
-      }
+      displayWords(vocab);
+      updateClock();
+      setInterval(updateClock, 1000);
     };
   </script>
 </body>
