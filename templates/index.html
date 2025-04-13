@@ -6,21 +6,28 @@
   <title>Designed By Pham Thai Duong</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: "Poppins", sans-serif;
-      background: linear-gradient(270deg, #0c0f1a, #1a2430, #1e2b39, #121a25, #101820);
-      background-size: 500% 500%;
-      animation: gradientShift 12s ease-in-out infinite;
-      color: #fff;
       margin: 0;
       padding: 0 20px;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      overflow-x: hidden;
+      color: #fff;
     }
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
     }
+
     .music-player {
       margin-top: 20px;
       padding: 15px;
@@ -29,6 +36,7 @@
       backdrop-filter: blur(10px);
       box-shadow: 0 0 10px rgba(255,255,255,0.1);
     }
+
     .song-title {
       font-size: 18px;
       font-weight: bold;
@@ -37,12 +45,14 @@
       align-items: center;
       gap: 8px;
     }
+
     .controls {
       display: flex;
       justify-content: center;
       gap: 15px;
       margin: 10px 0;
     }
+
     .controls button {
       background: none;
       border: none;
@@ -50,10 +60,12 @@
       font-size: 20px;
       cursor: pointer;
     }
+
     .search-bar {
       margin-top: 30px;
       text-align: center;
     }
+
     .search-bar input {
       width: 90%;
       max-width: 400px;
@@ -62,37 +74,49 @@
       border-radius: 5px;
       font-size: 16px;
     }
-    .vocab-list {
+.vocab-list {
       margin-top: 30px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
     }
+
     .vocab-item {
       background: rgba(255, 255, 255, 0.08);
       padding: 15px;
       border-radius: 10px;
       backdrop-filter: blur(6px);
     }
+
     .vocab-item h3 {
       margin: 0 0 8px;
       font-size: 18px;
       color: #1DB954;
     }
+
     .vocab-item p {
       margin: 4px 0;
       font-size: 14px;
     }
-    #clock {
-      position: fixed;
-      top: 15px;
-      right: 20px;
-      font-size: 18px;
-      font-weight: 600;
-    }
+
+   #clock {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1DB954;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 14px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0,255,127,0.4);
+  z-index: 9999;
+}
   </style>
 </head>
 <body>
+
+  <canvas id="stars"></canvas>
 
   <div id="clock"></div>
 
@@ -113,8 +137,59 @@
   </div>
 
   <div class="vocab-list" id="vocabList"></div>
+<script>
+    // Nền sao băng
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let w, h;
+    let shootingStars = [];
 
-  <script>
+    function resizeCanvas() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+
+    function createShootingStar() {
+      return {
+        x: Math.random() * w,
+        y: 0,
+        len: Math.random() * 80 + 10,
+        speed: Math.random() * 10 + 6,
+        size: Math.random() * 1.5 + 0.5,
+        angle: Math.PI / 3
+      };
+    }
+
+    function drawShootingStars() {
+      ctx.clearRect(0, 0, w, h);
+      for (let i = 0; i < shootingStars.length; i++) {
+        let star = shootingStars[i];
+        ctx.beginPath();
+        ctx.moveTo(star.x, star.y);
+        ctx.lineTo(star.x - star.len * Math.cos(star.angle), star.y - star.len * Math.sin(star.angle));
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = star.size;
+        ctx.stroke();
+        star.x += star.speed * Math.cos(star.angle);
+        star.y += star.speed * Math.sin(star.angle);
+
+        if (star.x < 0 || star.y > h) {
+          shootingStars[i] = createShootingStar();
+        }
+      }
+    }
+
+    function animate() {
+      drawShootingStars();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    shootingStars = Array.from({length: 8}, createShootingStar);
+    animate();
+
+    // Trình phát nhạc + Từ vựng
     const playlist = [
       { title: "Canh Dong Yeu Thuong", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/CanhDongYeuThuong.mp3" },
       { title: "Tinh Yeu Dep Nhat", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/TinhYeuDepNhat.mp3" },
@@ -156,26 +231,27 @@ function togglePlayPause() {
     }
 
     audio.addEventListener("ended", nextSong);
-
-    const vocab = [
-      { word: "activity", meaning: "hoạt động", example: "", topic: "Leisure" },
-      { word: "art gallery", meaning: "phòng trưng bày tranh", example: "", topic: "Leisure" },
-      { word: "exhibition", meaning: "buổi triển lãm, trưng bày", example: "", topic: "Leisure" },
-      { word: "museum", meaning: "bảo tàng", example: "", topic: "Leisure" },
-      { word: "concert", meaning: "buổi hòa nhạc", example: "", topic: "Leisure" },
-      { word: "ballet", meaning: "ba lê, kịch múa", example: "", topic: "Leisure" },
-      { word: "opera", meaning: "nhạc kịch", example: "", topic: "Leisure" },
-      { word: "bar", meaning: "quán rượu", example: "", topic: "Leisure" },
-      { word: "nightclub", meaning: "hộp đêm", example: "", topic: "Leisure" },
-      { word: "library", meaning: "thư viện", example: "", topic: "Study" },
-      { word: "hiking", meaning: "leo núi", example: "", topic: "Outdoor" },
-      { word: "gardening", meaning: "làm vườn", example: "", topic: "Outdoor" },
-      { word: "reading", meaning: "đọc sách", example: "", topic: "Hobby" },
-      { word: "music", meaning: "âm nhạc", example: "", topic: "Hobby" },
-      { word: "poetry", meaning: "thơ ca", example: "", topic: "Hobby" }
+const vocab = [
+      { word: "mesmerized", meaning: "bị mê hoặc, bị cuốn hút", example: "She was mesmerized by the performance.", topic: "Cảm xúc" },
+      { word: "eliminate", meaning: "loại bỏ, loại ra", example: "Several teams were eliminated in the first round.", topic: "Cuộc thi" },
+      { word: "entire", meaning: "toàn bộ", example: "He spent the entire day reading.", topic: "Chung" },
+      { word: "capacity", meaning: "sức chứa, khả năng", example: "The stadium was filled to its capacity.", topic: "Đo lường" },
+      { word: "proportion", meaning: "tỉ lệ", example: "A large proportion of the population is unemployed.", topic: "Thống kê" },
+      { word: "stand out", meaning: "nổi bật", example: "Her bright dress made her stand out.", topic: "Cụm động từ" },
+      { word: "look up", meaning: "tra cứu", example: "You can look up the word in the dictionary.", topic: "Cụm động từ" },
+      { word: "among others", meaning: "trong số những người khác", example: "She invited John, Sarah, and Mike, among others.", topic: "Liên kết" },
+      { word: "quantity", meaning: "số lượng", example: "They ordered a large quantity of goods.", topic: "Đo lường" },
+      { word: "apart from", meaning: "ngoài ra", example: "Apart from math, he also teaches physics.", topic: "Liên kết" },
+      { word: "activity", meaning: "hoạt động", example: "Physical activity is good for your health.", topic: "Chung" },
+      { word: "art gallery", meaning: "phòng trưng bày", example: "We visited an art gallery in the city.", topic: "Nghệ thuật" },
+      { word: "exhibition", meaning: "buổi triển lãm, trưng bày", example: "The art exhibition was well attended.", topic: "Nghệ thuật" },
+      { word: "museum", meaning: "bảo tàng", example: "We saw ancient artifacts in the museum.", topic: "Lịch sử" },
+      { word: "concert", meaning: "buổi hòa nhạc", example: "She went to a concert last night.", topic: "Âm nhạc" },
+      { word: "ballet", meaning: "ba lê, kịch múa", example: "She danced ballet for years.", topic: "Múa" },
+      { word: "opera", meaning: "nhạc kịch", example: "We watched a beautiful opera last weekend.", topic: "Âm nhạc" },
+      { word: "bar", meaning: "quán rượu, quầy bán rượu", example: "He met his friends at the bar.", topic: "Đồ uống" }
     ];
-
-    function displayWords(words) {
+function displayWords(words) {
       const list = document.getElementById("vocabList");
       list.innerHTML = "";
       words.forEach(item => {
@@ -183,6 +259,7 @@ function togglePlayPause() {
           <div class="vocab-item">
             <h3>${item.word}</h3>
             <p><strong>Meaning:</strong> ${item.meaning}</p>
+            <p><strong>Example:</strong> ${item.example}</p>
             <p><strong>Topic:</strong> ${item.topic}</p>
           </div>
         `;
