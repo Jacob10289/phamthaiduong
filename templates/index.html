@@ -74,7 +74,8 @@
       border-radius: 5px;
       font-size: 16px;
     }
-.vocab-list {
+
+    .vocab-list {
       margin-top: 30px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -137,7 +138,8 @@
   </div>
 
   <div class="vocab-list" id="vocabList"></div>
-<script>
+
+  <script>
     // Nền sao băng
     const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
@@ -167,7 +169,7 @@
         ctx.beginPath();
         ctx.moveTo(star.x, star.y);
         ctx.lineTo(star.x - star.len * Math.cos(star.angle), star.y - star.len * Math.sin(star.angle));
-        ctx.strokeStyle = "white";
+ ctx.strokeStyle = "white";
         ctx.lineWidth = star.size;
         ctx.stroke();
         star.x += star.speed * Math.cos(star.angle);
@@ -189,11 +191,10 @@
     shootingStars = Array.from({length: 8}, createShootingStar);
     animate();
 
-    // Trình phát nhạc + Từ vựng
     const playlist = [
-      { title: "Canh Dong Yeu Thuong", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/CanhDongYeuThuong.mp3" },
-      { title: "Tinh Yeu Dep Nhat", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/TinhYeuDepNhat.mp3" },
-      { title: "Tu Lau Nuoc Mat", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/TuLauNuocMat.mp3" }
+      { title: "Cánh Đồng Yêu Thương", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/CanhDongYeuThuong.mp3" },
+      { title: "Tình Yêu Đẹp Nhất", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/TinhYeuDepNhat.mp3" },
+      { title: "Tự Lau Nước Mắt", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/TuLauNuocMat.mp3" }
     ];
     let currentIndex = 0;
     let isPlaying = false;
@@ -208,7 +209,8 @@
       audio.load();
       if (isPlaying) audio.play();
     }
-function togglePlayPause() {
+
+    function togglePlayPause() {
       if (audio.paused) {
         audio.play();
         isPlaying = true;
@@ -232,24 +234,24 @@ function togglePlayPause() {
 
     audio.addEventListener("ended", nextSong);
 const vocab = [
-      { word: "mesmerized", meaning: "bị mê hoặc, bị cuốn hút", example: "She was mesmerized by the performance.", topic: "Cảm xúc" },
-      { word: "eliminate", meaning: "loại bỏ, loại ra", example: "Several teams were eliminated in the first round.", topic: "Cuộc thi" },
-      { word: "entire", meaning: "toàn bộ", example: "He spent the entire day reading.", topic: "Chung" },
-      { word: "capacity", meaning: "sức chứa, khả năng", example: "The stadium was filled to its capacity.", topic: "Đo lường" },
-      { word: "proportion", meaning: "tỉ lệ", example: "A large proportion of the population is unemployed.", topic: "Thống kê" },
-      { word: "stand out", meaning: "nổi bật", example: "Her bright dress made her stand out.", topic: "Cụm động từ" },
-      { word: "look up", meaning: "tra cứu", example: "You can look up the word in the dictionary.", topic: "Cụm động từ" },
-      { word: "among others", meaning: "trong số những người khác", example: "She invited John, Sarah, and Mike, among others.", topic: "Liên kết" },
-      { word: "quantity", meaning: "số lượng", example: "They ordered a large quantity of goods.", topic: "Đo lường" },
-      { word: "apart from", meaning: "ngoài ra", example: "Apart from math, he also teaches physics.", topic: "Liên kết" },
-      { word: "activity", meaning: "hoạt động", example: "Physical activity is good for your health.", topic: "Chung" },
-      { word: "art gallery", meaning: "phòng trưng bày", example: "We visited an art gallery in the city.", topic: "Nghệ thuật" },
-      { word: "exhibition", meaning: "buổi triển lãm, trưng bày", example: "The art exhibition was well attended.", topic: "Nghệ thuật" },
-      { word: "museum", meaning: "bảo tàng", example: "We saw ancient artifacts in the museum.", topic: "Lịch sử" },
-      { word: "concert", meaning: "buổi hòa nhạc", example: "She went to a concert last night.", topic: "Âm nhạc" },
-      { word: "ballet", meaning: "ba lê, kịch múa", example: "She danced ballet for years.", topic: "Múa" },
-      { word: "opera", meaning: "nhạc kịch", example: "We watched a beautiful opera last weekend.", topic: "Âm nhạc" },
-      { word: "bar", meaning: "quán rượu, quầy bán rượu", example: "He met his friends at the bar.", topic: "Đồ uống" }
+      {Từ vựng: "Mesmerized",Nghĩa: "bị mê hoặc, bị cuốn hút",Ví dụ: "She was mesmerized by the performance.", topic: "Cảm xúc" },
+      {Từ vựng: "Eliminate",Nghĩa: "loại bỏ, loại ra",Ví dụ: "Several teams were eliminated in the first round.", topic: "Cuộc thi" },
+      { word: "Entire", meaning: "toàn bộ", example: "He spent the entire day reading.", topic: "Chung" },
+      { word: "Capacity", meaning: "sức chứa, khả năng", example: "The stadium was filled to its capacity.", topic: "Đo lường" },
+      { word: "Proportion", meaning: "tỉ lệ", example: "A large proportion of the population is unemployed.", topic: "Thống kê" },
+      { word: "Stand out", meaning: "nổi bật", example: "Her bright dress made her stand out.", topic: "Cụm động từ" },
+      { word: "Look up", meaning: "tra cứu", example: "You can look up the word in the dictionary.", topic: "Cụm động từ" },
+      { word: "Among others", meaning: "trong số những người khác", example: "She invited John, Sarah, and Mike, among others.", topic: "Liên kết" },
+      { word: "Quantity", meaning: "số lượng", example: "They ordered a large quantity of goods.", topic: "Đo lường" },
+      { word: "Apart from", meaning: "ngoài ra", example: "Apart from math, he also teaches physics.", topic: "Liên kết" },
+      { word: "Activity", meaning: "hoạt động", example: "Physical activity is good for your health.", topic: "Chung" },
+      { word: "Art gallery", meaning: "phòng trưng bày", example: "We visited an art gallery in the city.", topic: "Nghệ thuật" },
+      { word: "Exhibition", meaning: "buổi triển lãm, trưng bày", example: "The art exhibition was well attended.", topic: "Nghệ thuật" },
+      { word: "Museum", meaning: "bảo tàng", example: "We saw ancient artifacts in the museum.", topic: "Lịch sử" },
+      { word: "Concert", meaning: "buổi hòa nhạc", example: "She went to a concert last night.", topic: "Âm nhạc" },
+      { word: "Ballet", meaning: "ba lê, kịch múa", example: "She danced ballet for years.", topic: "Múa" },
+      { word: "Opera", meaning: "nhạc kịch", example: "We watched a beautiful opera last weekend.", topic: "Âm nhạc" },
+      { word: "Bar", meaning: "quán rượu, quầy bán rượu", example: "He met his friends at the bar.", topic: "Đồ uống" }
     ];
 function displayWords(words) {
       const list = document.getElementById("vocabList");
