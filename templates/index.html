@@ -1,510 +1,174 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Designed By Pham Thai Duong</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heart Animation</title>
   <style>
-    * { box-sizing: border-box; }
-
-    body {
-      font-family: "Poppins", sans-serif;
-      margin: 0;
-      padding: 0 20px;
-      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-      overflow-x: hidden;
-      color: #fff;
-    }
-
-    #particles-js {
-      position: fixed;
+    canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #000000, #0f0c29, #302b63, #24243e);
-      z-index: -1;
+      background-color: rgba(0, 0, 0, 0.2);
     }
-
-    .music-player {
-      margin-top: 20px;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 10px rgba(255,255,255,0.1);
-    }
-
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 10px 0;
-    }
-
-    .controls button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .progress-container {
-      width: 100%;
-      height: 8px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .progress {
-      height: 100%;
-      width: 0%;
-      background: #ffffff;
-      border-radius: 5px;
-    }
-
-    .time-info {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
-    .song-search-wrapper {
-      width: 100%;
-      max-width: 400px;
-      margin: 20px auto 0;
-    }
-
-    #songSearchInput {
-      width: 100%;
-      padding: 12px 16px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      outline: none;
-    }
-
-    #songListContainer div {
-      padding: 10px;
-      cursor: pointer;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    #songListContainer div:hover {
-      background: rgba(255,255,255,0.1);
-    }
-
-    .search-bar {
-      margin-top: 30px;
-      text-align: center;
-    }
-
-    .search-bar input {
-      width: 100%;
-      max-width: 400px;
-      padding: 12px 16px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      outline: none;
-    }
-
-    .vocab-list {
-      margin-top: 30px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .vocab-item {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 15px;
-      border-radius: 10px;
-      backdrop-filter: blur(6px);
-    }
-
-    .vocab-item h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      color: #00BFFF;
-    }
-
-    .vocab-item p {
-      margin: 4px 0;
-      font-size: 14px;
-    }
-
-.intro-section {
-  margin-top: 40px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 10px rgba(255,255,255,0.1);
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  color: #fff;
-}
-
-.intro-section h2 {
-  margin-top: 0;
-  color: #00BFFF;
-  font-size: 24px;
-}
-
-.music-box-title {
-  margin: 0 0 10px 0;
-  font-size: 20px;
-  color: #ffffff;
-  text-align: center;
-}
-
   </style>
 </head>
 <body>
+  <canvas id="heart"></canvas>
+  
+  <script>
+    window.requestAnimationFrame =
+        window.__requestAnimationFrame ||
+        window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        (function () {
+            return function (callback, element) {
+                var lastTime = element.__lastTime;
+                if (lastTime === undefined) {
+                    lastTime = 0;
+                }
+                var currTime = Date.now();
+                var timeToCall = Math.max(1, 33 - (currTime - lastTime));
+                window.setTimeout(callback, timeToCall);
+                element.__lastTime = currTime + timeToCall;
+            };
+        })();
 
-<div id="clock"></div>
-<div id="particles-js"></div>
-<div class="intro-section">
-  <h2>Lời Nhắn</h2>
-  <p>Cảm ơn mọi người đã ghé trang , mình là <strong>Phạm Thái Dương</strong> , người đã tạo ra nơi này . Hãy cùng nhau học thêm nhiều điều về Tiếng Anh nhé !</p>
-</div>
-<div class="music-player">
-  <div class="song-search-wrapper">
-<h3 class="music-box-title">Music Box</h3>
-    <input type="text" id="songSearchInput" placeholder="Tìm bài hát bạn muốn nghe" oninput="filterSongs()" />
-    <div id="songListContainer"></div>
-  </div>
+    window.isDevice = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(((navigator.userAgent || navigator.vendor || window.opera)).toLowerCase()));
 
-  <div id="musicControls" style="display: none;">
-    <div class="controls">
-      <button onclick="prevSong()"><i class="fas fa-backward"></i></button>
-      <button onclick="togglePlayPause()" id="playPauseBtn"><i class="fas fa-play"></i></button>
-      <button onclick="nextSong()"><i class="fas fa-forward"></i></button>
-    </div>
-    <div class="progress-container" onclick="seek(event)">
-      <div class="progress" id="progressBar"></div>
-    </div>
-    <div class="time-info">
-      <span id="currentTime">0:00</span>
-      <span id="totalTime">0:00</span>
-    </div>
-  </div>
-
-  <audio id="myAudio">
-    <source id="audioSource" src="" type="audio/mpeg"/>
-  </audio>
-</div>
-
-<!-- Vocabulary section -->
-<div class="search-bar">
-  <input type="text" id="searchInput" placeholder="Tìm kiếm từ vựng mà bạn muốn" oninput="filterWords()"/>
-</div>
-
-<div class="vocab-list" id="vocabList"></div>
-
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<script>
-  // Particle background
-  particlesJS("particles-js", {
-    particles: {
-      number: { value: 80, density: { enable: true, value_area: 800 } },
-      color: { value: "#ffffff" },
-      shape: { type: "circle" },
-      opacity: { value: 0.5 },
-      size: { value: 3, random: true },
-      line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
-      move: { enable: true, speed: 2 }
-    },
-    interactivity: {
-      detect_on: "canvas",
-      events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true },
-      modes: {
-        grab: { distance: 140, line_linked: { opacity: 1 } },
-        push: { particles_nb: 4 }
-      }
-    },
-    retina_detect: true
-  });
-
-  const playlist = [
-    { title: "Cánh Đồng Yêu Thương", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/CanhDongYeuThuong.mp3" },
-    { title: "Tình Yêu Đẹp Nhất", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/TinhYeuDepNhat.mp3" },
-    { title: "Tự Lau Nước Mắt", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/TuLauNuocMat.mp3" }
-  ];
-let currentIndex = 0;
-  let isPlaying = false;
-  const audio = document.getElementById("myAudio");
-  const source = document.getElementById("audioSource");
-  const playBtn = document.getElementById("playPauseBtn");
-  const progressBar = document.getElementById("progressBar");
-  const currentTimeEl = document.getElementById("currentTime");
-  const totalTimeEl = document.getElementById("totalTime");
-
-  function loadSong(index) {
-    source.src = playlist[index].url;
-    audio.load();
-    if (isPlaying) audio.play();
-  }
-
-  function togglePlayPause() {
-    if (audio.paused) {
-      audio.play();
-      isPlaying = true;
-      playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    } else {
-      audio.pause();
-      isPlaying = false;
-      playBtn.innerHTML = '<i class="fas fa-play"></i>';
-    }
-  }
-
-  function nextSong() {
-    currentIndex = (currentIndex + 1) % playlist.length;
-    loadSong(currentIndex);
-  }
-
-  function prevSong() {
-    currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-    loadSong(currentIndex);
-  }
-
-  audio.addEventListener("ended", nextSong);
-
-  function updateProgress() {
-    const progressPercent = (audio.currentTime / audio.duration) * 100;
-    progressBar.style.width = `${progressPercent}%`;
-    currentTimeEl.textContent = formatTime(audio.currentTime);
-    totalTimeEl.textContent = formatTime(audio.duration);
-  }
-
-  function seek(e) {
-    const width = e.currentTarget.clientWidth;
-    const clickX = e.offsetX;
-    audio.currentTime = (clickX / width) * audio.duration;
-  }
-
-  function formatTime(sec) {
-    const m = Math.floor(sec / 60);
-    const s = Math.floor(sec % 60);
-    return `${m}:${s.toString().padStart(2, "0")}`;
-  }
-
-  audio.addEventListener("timeupdate", updateProgress);
-function filterSongs() {
-    const keyword = document.getElementById("songSearchInput").value.toLowerCase();
-    const container = document.getElementById("songListContainer");
-    container.innerHTML = "";
-
-    playlist.forEach((song, index) => {
-      if (song.title.toLowerCase().includes(keyword)) {
-        const option = document.createElement("div");
-        option.innerHTML = `<i class="fas fa-music"></i> ${song.title}`;
-        option.onclick = () => {
-          currentIndex = index;
-          loadSong(currentIndex);
-          audio.play();
-          isPlaying = true;
-          playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-          document.getElementById("musicControls").style.display = "block";
-          document.getElementById("songSearchInput").value = song.title;
-          container.innerHTML = "";
+    var loaded = false;
+    var init = function () {
+        if (loaded) return;
+        loaded = true;
+        var mobile = window.isDevice;
+        var koef = mobile ? 0.7 : 1; 
+        var canvas = document.getElementById('heart');
+        var ctx = canvas.getContext('2d');
+        var width = canvas.width = koef * innerWidth;
+        var height = canvas.height = koef * innerHeight;
+        var rand = Math.random;
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        ctx.fillRect(0, 0, width, height);
+        var globalHue = 0;
+        setInterval(() => {
+            globalHue = (globalHue + 1) % 360;
+        }, 50);
+        
+        var heartPosition = function (rad) {
+            return [Math.pow(Math.sin(rad), 3), -(15 * Math.cos(rad) - 5 * Math.cos(2 * rad) - 2 * Math.cos(3 * rad) - Math.cos(4 * rad))];
         };
-        container.appendChild(option);
-      }
-    });
-  }
-const vocab = [
-    { word: "mesmerized", meaning: "bị mê hoặc, bị cuốn hút", example: "She was mesmerized by the performance.", topic: "Cảm xúc" },
-    { word: "eliminate", meaning: "loại bỏ", example: "Several teams were eliminated in the first round.", topic: "Cuộc thi" },
-    { word: "entire", meaning: "toàn bộ", example: "He spent the entire day reading.", topic: "Chung" },
-    { word: "capacity", meaning: "sức chứa", example: "The stadium was filled to its capacity.", topic: "Đo lường" },
-    { word: "proportion", meaning: "tỉ lệ", example: "A large proportion of the population is unemployed.", topic: "Thống kê" },
-    { word: "stand out", meaning: "nổi bật", example: "Her bright dress made her stand out.", topic: "Cụm động từ" },
-    { word: "look up", meaning: "tra cứu", example: "You can look up the word in the dictionary.", topic: "Cụm động từ" },
-    { word: "among others", meaning: "trong số những người khác", example: "She invited John, Sarah, and Mike, among others.", topic: "Liên kết" },
-    { word: "quantity", meaning: "số lượng", example: "They ordered a large quantity of goods.", topic: "Đo lường" },
-    { word: "apart from", meaning: "ngoài ra", example: "Apart from math, he also teaches physics.", topic: "Liên kết" },
-    { word: "abandon", meaning: "bỏ rơi", example: "They had to abandon the car.", topic: "Hành động" },
-    { word: "ability", meaning: "khả năng", example: "She has the ability to solve complex problems.", topic: "Khả năng" },
-    { word: "absence", meaning: "sự vắng mặt", example: "His absence was noted by the teacher.", topic: "Tình huống" },{ word: "absolute", meaning: "tuyệt đối", example: "He has absolute confidence in his team.", topic: "Đánh giá" },
-        { word: "abstract", meaning: "trừu tượng", example: "The concept is too abstract for young children.", topic: "Khái niệm" },
-        { word: "academic", meaning: "học thuật", example: "She is an academic in the field of biology.", topic: "Giáo dục" },
-        { word: "accept", meaning: "chấp nhận", example: "He accepted the job offer.", topic: "Hành động" },
-        { word: "access", meaning: "truy cập", example: "You need a password to access the system.", topic: "Công nghệ" },
-        { word: "accident", meaning: "tai nạn", example: "He was injured in a car accident.", topic: "Sự kiện" },
-        { word: "accompany", meaning: "đi cùng", example: "She will accompany him to the meeting.", topic: "Hành động" },
-        { word: "achieve", meaning: "đạt được", example: "He worked hard to achieve his goals.", topic: "Hành động" },
-        { word: "acquire", meaning: "đạt được", example: "She managed to acquire a new skill.", topic: "Hành động" },
-        { word: "adapt", meaning: "thích nghi", example: "He had to adapt to the new environment.", topic: "Hành động" },
-        { word: "advantage", meaning: "lợi thế", example: "Having a degree gives you an advantage in the job market.", topic: "Lợi ích" },
-        { word: "adventure", meaning: "cuộc phiêu lưu", example: "They went on an adventure in the mountains.", topic: "Trải nghiệm" },
-        { word: "advertise", meaning: "quảng cáo", example: "They plan to advertise the new product next week.", topic: "Kinh doanh" },
-        { word: "affect", meaning: "ảnh hưởng", example: "The weather can affect your mood.", topic: "Tình huống" },
-        { word: "afford", meaning: "có đủ khả năng", example: "I can't afford to buy a new car.", topic: "Khả năng" },
-        { word: "agree", meaning: "đồng ý", example: "They agreed to meet at noon.", topic: "Hành động" },
-        { word: "allow", meaning: "cho phép", example: "The teacher allowed the students to leave early.", topic: "Hành động" },
-        { word: "analyze", meaning: "phân tích", example: "We need to analyze the data carefully.", topic: "Hành động" },
-        { word: "annual", meaning: "hàng năm", example: "The annual report will be released next month.", topic: "Thời gian" },
-        { word: "anxiety", meaning: "lo âu", example: "She felt a lot of anxiety before the exam.", topic: "Cảm xúc" },
-        { word: "approach", meaning: "tiếp cận", example: "He decided to approach the problem differently.", topic: "Hành động" },
-        { word: "appropriate", meaning: "thích hợp", example: "Is this behavior appropriate for a formal event?", topic: "Đánh giá" },
-        { word: "approve", meaning: "phê duyệt", example: "The committee will approve the proposal next week.", topic: "Hành động" },
-        { word: "argue", meaning: "tranh luận", example: "They often argue about politics.", topic: "Hành động" },
-        { word: "arrange", meaning: "sắp xếp", example: "She will arrange the meeting for next week.", topic: "Hành động" },
-        { word: "assist", meaning: "hỗ trợ", example: "He was hired to assist with the project.", topic: "Hành động" },
-        { word: "assume", meaning: "giả định", example: "I assume you have completed the assignment.", topic: "Hành động" },
-        { word: "attempt", meaning: "cố gắng", example: "He made an attempt to fix the car.", topic: "Hành động" },
-        { word: "attract", meaning: "thu hút", example: "The advertisement is designed to attract customers.", topic: "Hành động" },
-        { word: "average", meaning: "trung bình", example: "The average temperature in July is high.", topic: "Đo lường" },
-        { word: "aware", meaning: "nhận thức", example: "She is aware of the risks involved.", topic: "Nhận thức" },
-        { word: "balance", meaning: "cân bằng",example: "It's important to balance work and life.", topic: "Đánh giá" },
-{ word: "benefit", meaning: "lợi ích", example: "Regular exercise has many health benefits.", topic: "Lợi ích" },
-        { word: "beyond", meaning: "vượt ra ngoài", example: "The truth lies beyond what we can see.", topic: "Khái niệm" },
-        { word: "breathe", meaning: "hít thở", example: "Take a moment to breathe deeply.", topic: "Hành động" },
-        { word: "calculate", meaning: "tính toán", example: "We need to calculate the total cost.", topic: "Hành động" },
-        { word: "capture", meaning: "bắt giữ", example: "The photographer managed to capture the moment perfectly.", topic: "Hành động" },
-        { word: "challenge", meaning: "thách thức", example: "She faced many challenges in her career.", topic: "Thử thách" },
-        { word: "change", meaning: "thay đổi", example: "Change is a part of life.", topic: "Hành động" },
-        { word: "character", meaning: "nhân vật", example: "The main character in the story is very relatable.", topic: "Nội dung" },
-        { word: "clarify", meaning: "làm rõ", example: "Can you clarify your statement?", topic: "Hành động" },
-        { word: "collaborate", meaning: "hợp tác", example: "They decided to collaborate on the project.", topic: "Hành động" },
-        { word: "communicate", meaning: "giao tiếp", example: "It's important to communicate effectively.", topic: "Hành động" },
-        { word: "compare", meaning: "so sánh", example: "Let's compare the two options.", topic: "Hành động" },
-        { word: "compete", meaning: "cạnh tranh", example: "Many companies compete for market share.", topic: "Kinh doanh" },
-        { word: "complete ", meaning: "hoàn thành", example: "Please complete the form before submitting.", topic: "Hành động" },
-        { word: "compose", meaning: "soạn thảo", example: "She will compose a letter to the manager.", topic: "Hành động" },
-        { word: "conclude", meaning: "kết luận", example: "We can conclude that the experiment was successful.", topic: "Hành động" },
-        { word: "conduct", meaning: "tiến hành", example: "They will conduct a survey next month.", topic: "Hành động" },
-        { word: "confirm", meaning: "xác nhận", example: "Please confirm your attendance at the meeting.", topic: "Hành động" },
-        { word: "connect", meaning: "kết nối", example: "You need to connect the device to the internet.", topic: "Công nghệ" },
-        { word: "contribute", meaning: "đóng góp", example: "Everyone can contribute to the discussion.", topic: "Hành động" },
-        { word: "create", meaning: "tạo ra", example: "She wants to create a new app.", topic: "Hành động" },
-        { word: "decide", meaning: "quyết định", example: "He needs to decide which option to choose.", topic: "Hành động" },
-        { word: "define", meaning: "định nghĩa", example: "Can you define what success means to you?", topic: "Khái niệm" },
-        { word: "demonstrate", meaning: "chứng minh", example: "The teacher will demonstrate the experiment.", topic: "Hành động" },
-        { word: "describe", meaning: "mô tả", example: "Please describe your experience in detail.", topic: "Hành động" },
-        { word: "develop", meaning: "phát triển", example: "They plan to develop a new product line.", topic: "Hành động" },
-        { word: "discuss", meaning: "thảo luận", example: "Let's discuss the project in our next meeting.", topic: "Hành động" },
-        { word: "distribute", meaning: "phân phối", example: "They will distribute the materials to all participants.", topic: "Hành động" },
-{ word: "educate", meaning: "giáo dục", example: "The program aims to educate young people about health.", topic: "Giáo dục" },
-        { word: "emphasize", meaning: "nhấn mạnh", example: "She wants to emphasize the importance of teamwork.", topic: "Hành động" },
-        { word: "encourage", meaning: "khuyến khích", example: "Teachers should encourage students to ask questions.", topic: "Hành động" },
-        { word: "evaluate", meaning: "đánh giá", example: "We need to evaluate the results of the study.", topic: "Hành động" },
-        { word: "examine", meaning: "kiểm tra", example: "The doctor will examine the patient.", topic: "Hành động" },
-        { word: "expand", meaning: "mở rộng", example: "The company plans to expand its operations.", topic: "Kinh doanh" },
-        { word: "explain", meaning: "giải thích", example: "Can you explain how this works?", topic: "Hành động" },
-        { word: "explore", meaning: "khám phá", example: "They want to explore new markets.", topic: "Hành động" },
-        { word: "express", meaning: "bày tỏ", example: "She expressed her feelings in a letter.", topic: "Cảm xúc" },
-        { word: "factor", meaning: "yếu tố", example: "There are many factors to consider.", topic: "Khái niệm" },
-        { word: "focus", meaning: "tập trung", example: "You need to focus on your studies.", topic: "Hành động" },
-        { word: "formulate", meaning: "hình thành", example: "They will formulate a new strategy.", topic: "Hành động" },
-        { word: "function", meaning: "chức năng", example: "What is the function of this button?", topic: "Công nghệ" },
-        { word: "generate", meaning: "tạo ra", example: "The program will generate a report.", topic: "Công nghệ" },
-        { word: "identify", meaning: "xác định", example: "We need to identify the main issues.", topic: "Hành động" },
-        { word: "impact", meaning: "tác động", example: "The new policy will have a significant impact on the community.", topic: "Kinh tế" },
-{ word: "implement", meaning: "thực hiện", example: "They will implement the new system next month.", topic: "Hành động" },
-        { word: "improve", meaning: "cải thiện", example: "She wants to improve her English skills.", topic: "Hành động" },
-        { word: "influence", meaning: "ảnh hưởng", example: "Social media can influence public opinion.", topic: "Xã hội" },
-        { word: "inform", meaning: "thông báo", example: "Please inform me of any changes.", topic: "Hành động" },
-        { word: "initiate", meaning: "khởi xướng", example: "They will initiate a new project next year.", topic: "Hành động" },
-        { word: "inspire", meaning: "truyền cảm hứng", example: "Her story inspired many people.", topic: "Cảm xúc" },
-        { word: "investigate", meaning: "điều tra", example: "The police will investigate the incident.", topic: "Hành động" },
-        { word: "maintain", meaning: "duy trì", example: "It's important to maintain a healthy lifestyle.", topic: "Sức khỏe" },
-        { word: "manage", meaning: "quản lý", example: "He will manage the team effectively.", topic: "Kinh doanh" },
-        { word: "motivate", meaning: "thúc đẩy", example: "Good leaders motivate their team.", topic: "Lãnh đạo" },
-        { word: "negotiate", meaning: "đàm phán", example: "They need to negotiate a better deal.", topic: "Kinh doanh" },
-        { word: "observe", meaning: "quan sát", example: "You should observe the behavior of the animals.", topic: "Khoa học" },
-        { word: "organize", meaning: "tổ chức", example: "They will organize a conference next month.", topic: "Hành động" },
-{ word: "participate", meaning: "tham gia", example: "Everyone is encouraged to participate in the discussion.", topic: "Hành động" },
-        { word: "perform", meaning: "thực hiện", example: "The team will perform well under pressure.", topic: "Hành động" },
-        { word: "persuade", meaning: "thuyết phục", example: "He tried to persuade her to join the team.", topic: "Hành động" },
-        { word: "predict", meaning: "dự đoán", example: "It's hard to predict the outcome of the game.", topic: "Khoa học" },
-        { word: "prepare", meaning: "chuẩn bị", example: "They need to prepare for the presentation.", topic: "Hành động" },
-        { word: "present", meaning: "trình bày", example: "She will present her findings at the conference.", topic: "Hành động" },
-        { word: "prioritize", meaning: "ưu tiên", example: "You need to prioritize your tasks.", topic: "Quản lý" },
-        { word: "propose", meaning: "đề xuất", example: "He will propose a new plan to the board.", topic: "Hành động" },
-        { word: "react", meaning: "phản ứng", example: "How will you react to the news?", topic: "Cảm xúc" },
-        { word: "recognize", meaning: "nhận ra", example: "I didn't recognize you at first.", topic: "Hành động" },
-{ word: "recommend", meaning: "gợi ý", example: "I recommend trying the new restaurant.", topic: "Hành động" },
-        { word: "reduce", meaning: "giảm", example: "We need to reduce waste in our operations.", topic: "Môi trường" },
-        { word: "reflect", meaning: "phản ánh", example: "The results reflect the hard work of the team.", topic: "Đánh giá" },
-        { word: "regulate", meaning: "quy định", example: "The government will regulate the industry.", topic: "Chính phủ" },
-        { word: "rely", meaning: "dựa vào", example: "You can rely on me for support.", topic: "Hành động" },
-        { word: "respond", meaning: "phản hồi", example: "Please respond to the email promptly.", topic: "Hành động" },
-        { word: "reveal", meaning: "tiết lộ", meaning: "The study aims to reveal new insights into the topic.", topic: "Nghiên cứu" },
-        { word: "satisfy", meaning: "thỏa mãn", example: "The results will satisfy the requirements.", topic: "Đánh giá" },
-        { word: "schedule", meaning: "lịch trình", example: "We need to schedule a meeting for next week.", topic: "Quản lý" },
-        { word: "search", meaning: "tìm kiếm", example: "I will search for the information online.", topic: "Hành động" },
-        { word: "select", meaning: "chọn", example: "Please select your preferred option.", topic: "Hành động" },
-{ word: "significant", meaning: "đáng kể", example: "There was a significant increase in sales.", topic: "Kinh doanh" },
-        { word: "simplify", meaning: "đơn giản hóa", example: "We need to simplify the process.", topic: "Hành động" },
-        { word: "suggest", meaning: "gợi ý", example: "I suggest we take a break.", topic: "Hành động" },
-        { word: "support", meaning: "hỗ trợ", example: "They provide support to local businesses.", topic: "Hành động" },
-        { word: "sustain", meaning: "duy trì", example: "We must sustain our efforts for long-term success.", topic: "Môi trường" },
-        { word: "target", meaning: "mục tiêu", example: "Our target is to increase customer satisfaction.", topic: "Kinh doanh" },
-        { word: "transform", meaning: "biến đổi", example: "The project aims to transform the community.", topic: "Hành động" },
-        { word: "understand", meaning: "hiểu", example: "It's important to understand the context.", topic: "Khái niệm" },
-        { word: "utilize", meaning: "sử dụng", example: "We need to utilize our resources effectively.", topic: "Hành động" },
-        { word: "validate", meaning: "xác thực", example: "We need to validate the findings of the research.", topic: "Nghiên cứu" },
-{ word: "vary", meaning: "thay đổi", example: "Prices may vary depending on the season.", topic: "Kinh doanh" },
-        { word: "visualize", meaning: "hình dung", example: "It's helpful to visualize the data.", topic: "Khoa học" },
-        { word: "witness", meaning: "chứng kiến", example: "He was a witness to the event.", topic: "Sự kiện" },
-        { word: "yield", meaning: "mang lại", example: "The investment will yield good returns.", topic: "Kinh doanh" },
-        { word: "zone", meaning: "khu vực", example: "This zone is designated for recreational use.", topic: "Địa lý" }
-];
-function displayWords(words) {
-    const list = document.getElementById("vocabList");
-    list.innerHTML = "";
-    words.forEach(item => {
-      list.innerHTML += `
-        <div class="vocab-item">
-          <h3>${item.word}</h3>
-          <p><strong>Meaning:</strong> ${item.meaning}</p>
-          <p><strong>Example:</strong> ${item.example}</p>
-          <p><strong>Topic:</strong> ${item.topic}</p>
-        </div>
-      `;
-    });
-  }
+        
+        var scaleAndTranslate = function (pos, sx, sy, dx, dy) {
+            return [dx + pos[0] * sx, dy + pos[1] * sy];
+        };
 
-  function filterWords() {
-    const keyword = document.getElementById("searchInput").value.toLowerCase();
-    const filtered = vocab.filter(item =>
-      item.word.toLowerCase().includes(keyword) ||
-      item.meaning.toLowerCase().includes(keyword) ||
-      item.topic.toLowerCase().includes(keyword)
-    );
-    displayWords(filtered);
-  }
+        window.addEventListener('resize', function () {
+            width = canvas.width = koef * innerWidth;
+            height = canvas.height = koef * innerHeight;
+            ctx.fillStyle = "rgba(0,0,0,1)";
+            ctx.fillRect(0, 0, width, height);
+        });
 
-  function updateClock() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, "0");
-    const m = String(now.getMinutes()).padStart(2, "0");
-    const s = String(now.getSeconds()).padStart(2, "0");
-    document.getElementById("clock").textContent = `${h}:${m}:${s}`;
-  }
+        var traceCount = mobile ? 15 : 40; 
+        var pointsOrigin = [];
+        var i;
+        var dr = mobile ? 0.2 : 0.1;
+        for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 180, 11, 0, 0)); 
+        for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 120, 7, 0, 0)); 
+        for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 70, 4, 0, 0)); 
+        var heartPointsCount = pointsOrigin.length;
 
-  window.onload = () => {
-    loadSong(currentIndex);
-    displayWords(vocab);
-    updateClock();
-    setInterval(updateClock, 1000);
-  };
-</script>
+        var targetPoints = [];
+        var pulse = function (kx, ky) {
+            for (i = 0; i < pointsOrigin.length; i++) {
+                targetPoints[i] = [];
+                targetPoints[i][0] = kx * pointsOrigin[i][0] + width / 2;
+                targetPoints[i][1] = ky * pointsOrigin[i][1] + height / 2;
+            }
+        };
+
+        var e = [];
+        for (i = 0; i < heartPointsCount; i++) {
+            var x = rand() * width;
+            var y = rand() * height;
+            e[i] = {
+                vx: 0,
+                vy: 0,
+                R: 2,
+                speed: rand() + 5,
+                q: ~~(rand() * heartPointsCount),
+                D: 2 * (i % 2) - 1,
+                force: 0.2 * rand() + 0.7,
+                f: "hsla(0, 100%, 50%, 0.35)", 
+                trace: []
+            };
+            for (var k = 0; k < traceCount; k++) e[i].trace[k] = {x: x, y: y};
+        }
+
+        var config = {
+            traceK: 0.4,
+     timeDelta: 0.01
+        };
+
+        var time = 0;
+        var loop = function () {
+            var n = -Math.cos(time);
+            pulse((1 + n) * .5, (1 + n) * .5);
+            time += ((Math.sin(time)) < 0 ? 9 : (n > 0.8) ? .2 : 1) * config.timeDelta;
+            ctx.fillStyle = "rgba(0,0,0,.1)";
+            ctx.fillRect(0, 0, width, height);
+            for (i = e.length; i--;) {
+                var u = e[i];
+                var q = targetPoints[u.q];
+                var dx = u.trace[0].x - q[0];
+                var dy = u.trace[0].y - q[1];
+                var length = Math.sqrt(dx * dx + dy * dy);
+                if (10 > length) {
+                    if (0.95 < rand()) {
+                        u.q = ~~(rand() * heartPointsCount);
+                    }
+                    else {
+                        if (0.99 < rand()) {
+                            u.D *= -1;
+                        }
+                        u.q += u.D;
+                        u.q %= heartPointsCount;
+                        if (0 > u.q) {
+                            u.q += heartPointsCount;
+                        }
+                    }
+                }
+                u.vx += -dx / length * u.speed;
+                u.vy += -dy / length * u.speed;
+                u.trace[0].x += u.vx;
+                u.trace[0].y += u.vy;
+                u.vx *= u.force;
+                u.vy *= u.force;
+                for (k = 0; k < u.trace.length - 1;) {
+                    var T = u.trace[k];
+                    var N = u.trace[++k];
+                    N.x -= config.traceK * (N.x - T.x);
+                    N.y -= config.traceK * (N.y - T.y);
+                }
+                ctx.fillStyle = u.f;
+                for (k = 0; k < u.trace.length; k++) {
+                    ctx.fillRect(u.trace[k].x, u.trace[k].y, 1, 1);
+                }
+            }
+
+            window.requestAnimationFrame(loop, canvas);
+        };
+        loop();
+    };
+
+    var s = document.readyState;
+    if (s === 'complete' || s === 'loaded' || s === 'interactive') init();
+    else document.addEventListener('DOMContentLoaded', init, false);
+  </script>
 </body>
 </html>
