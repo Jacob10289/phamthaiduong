@@ -1,174 +1,503 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Heart Animation</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Designed By Pham Thai Duong</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
   <style>
-    canvas {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.2);
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0 20px;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      overflow-x: hidden;
+      color: #fff;
     }
+
+.sky {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  overflow: hidden;
+  z-index: -1;
+pointer-events: none;
+}
+
+.stars::before {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  box-shadow:
+    50px 100px white,
+    150px 200px white,
+    250px 50px white,
+    300px 300px white,
+    400px 150px white,
+    600px 200px white,
+    800px 100px white,
+    900px 300px white,
+    1000px 50px white,
+    1100px 250px white;
+  animation: twinkle 2s infinite ease-in-out alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.shooting-star {
+  position: absolute;
+  top: 20%;
+  left: -200px;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(-45deg, white, rgba(255, 255, 255, 0));
+  transform: rotate(45deg);
+  animation: shoot 5s linear infinite;
+  opacity: 0;
+}
+
+.shooting-star.delay1 {
+  top: 40%;
+  animation-delay: 2s;
+}
+
+.shooting-star.delay2 {
+  top: 60%;
+  animation-delay: 4s;
+}
+
+@keyframes shoot {
+  0% {
+    transform: translateX(0) translateY(0) rotate(45deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(1200px) translateY(600px) rotate(45deg);
+    opacity: 0;
+  }
+}
+    .music-player {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 10px 0;
+    }
+
+    .controls button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: #ffffff;
+      border-radius: 5px;
+    }
+
+    .time-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .song-search-wrapper {
+      width: 100%;
+      max-width: 400px;
+      margin: 20px auto 0;
+    }
+
+    #songSearchInput {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      outline: none;
+    }
+
+    #songListContainer div {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #songListContainer div:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .search-bar {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .search-bar input {
+      width: 100%;
+      max-width: 400px;
+      padding: 12px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      outline: none;
+    }
+
+    .vocab-list {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .vocab-item {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 15px;
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+    }
+
+  .vocab-item h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: white;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  text-transform: capitalize;
+}
+
+    .vocab-item p {
+      margin: 4px 0;
+      font-size: 14px;
+    }
+
+.intro-section {
+  margin-top: 40px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(255,255,255,0.1);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #fff;
+}
+
+.intro-section h2 {
+  margin-top: 0;
+  color: #00BFFF;
+  font-size: 24px;
+}
+
+.music-box-title {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  color: #ffffff;
+  text-align: center;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.trail-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  animation: trailFade 0.5s ease-out forwards;
+  box-shadow: 0 0 8px 4px rgba(255, 255, 255, 0.5);
+}
+
+#songListContainer {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 10px;
+  border-radius: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #00BFFF rgba(255, 255, 255, 0.1);
+}
+
+#songListContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
   </style>
 </head>
 <body>
-  <canvas id="heart"></canvas>
-  
-  <script>
-    window.requestAnimationFrame =
-        window.__requestAnimationFrame ||
-        window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        (function () {
-            return function (callback, element) {
-                var lastTime = element.__lastTime;
-                if (lastTime === undefined) {
-                    lastTime = 0;
-                }
-                var currTime = Date.now();
-                var timeToCall = Math.max(1, 33 - (currTime - lastTime));
-                window.setTimeout(callback, timeToCall);
-                element.__lastTime = currTime + timeToCall;
-            };
-        })();
 
-    window.isDevice = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(((navigator.userAgent || navigator.vendor || window.opera)).toLowerCase()));
+<div class="sky">
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+  <div class="shooting-star"></div>
+</div>
+<div class="music-player" style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 30px;">
+  <img src="https://i.ibb.co/LdYd5rks/4-A545758-9-E70-40-BB-A4-FA-36-CE631-B395-C.jpg" alt="Avatar" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <span style="font-size: 18px; font-weight: bold;">Phạm Thái Dương</span>
+    <i class="fas fa-check-circle" style="color: #00BFFF;"></i>
+  </div>
+</div>
+<div class="intro-section">
+ <h2 style="color: white; text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);">From Owner</h2>
+  <p>Tạm Biệt !</p>
+</div>
+<div class="music-player">
+  <div class="song-search-wrapper">
+<h3 class="music-box-title">Vừa Nghe Nhạc Vừa Học Nhé 😋</h3>
+    <input type="text" id="songSearchInput" placeholder="Tìm bài hát bạn muốn nghe" oninput="filterSongs()" />
+    <div id="songListContainer"></div>
+  </div>
 
-    var loaded = false;
-    var init = function () {
-        if (loaded) return;
-        loaded = true;
-        var mobile = window.isDevice;
-        var koef = mobile ? 0.7 : 1; 
-        var canvas = document.getElementById('heart');
-        var ctx = canvas.getContext('2d');
-        var width = canvas.width = koef * innerWidth;
-        var height = canvas.height = koef * innerHeight;
-        var rand = Math.random;
-        ctx.fillStyle = "rgba(0,0,0,1)";
-        ctx.fillRect(0, 0, width, height);
-        var globalHue = 0;
-        setInterval(() => {
-            globalHue = (globalHue + 1) % 360;
-        }, 50);
-        
-        var heartPosition = function (rad) {
-            return [Math.pow(Math.sin(rad), 3), -(15 * Math.cos(rad) - 5 * Math.cos(2 * rad) - 2 * Math.cos(3 * rad) - Math.cos(4 * rad))];
+  <div id="musicControls" style="display: none;">
+    <div class="controls">
+      <button onclick="prevSong()"><i class="fas fa-backward"></i></button>
+      <button onclick="togglePlayPause()" id="playPauseBtn"><i class="fas fa-play"></i></button>
+      <button onclick="nextSong()"><i class="fas fa-forward"></i></button>
+    </div>
+    <div class="progress-container" onclick="seek(event)">
+      <div class="progress" id="progressBar"></div>
+    </div>
+<div class="time-info">
+      <span id="currentTime">0:00</span>
+      <span id="totalTime">0:00</span>
+    </div>
+  </div>
+
+  <audio id="myAudio">
+    <source id="audioSource" src="" type="audio/mpeg"/>
+  </audio>
+</div>
+
+<!-- Vocabulary section -->
+
+<div class="music-player">
+  <div class="search-bar">
+    <h3 class="music-box-title">Tra Cứu Từ Mới Ở Đây Nè 😆</h3>
+    <input type="text" id="searchInput" placeholder="Tìm từ vựng bạn muốn học" oninput="filterWords()"/>
+  </div>
+</div>
+
+<div class="vocab-list" id="vocabList"></div>
+<script>
+  const playlist = [
+    { title: "Cánh Đồng Yêu Thương", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/CanhDongYeuThuong.mp3" },
+    { title: "Tình Yêu Đẹp Nhất", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/TinhYeuDepNhat.mp3" },
+    { title: "Tự Lau Nước Mắt", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/TuLauNuocMat.mp3" },
+    { title: "Em Gái Mưa", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/emgaimua.mp3" },
+    { title: "Day Dứt Nỗi Đau", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/daydutnoidau.mp3" },
+    { title: "Sai Người Sai Thời Điểm", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/sainguoisaithoidiem.mp3" },
+{ title: "Em Muốn Tự Do Anh Ơi", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/EmMuonTuDoAnhOi.mp3" },
+{ title: "À Thì", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/athi.mp3" },
+{ title: "Chưa Từng Thương Ai Đến Vậy", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/chuatungthuongaidenvay.mp3" },
+{ title: "Ánh Trăng Nói Hộ Lòng Tôi", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/anhtrangnoiholongtoi.mp3" },
+];
+
+  let currentIndex = 0;
+  let isPlaying = false;
+  const audio = document.getElementById("myAudio");
+  const source = document.getElementById("audioSource");
+  const playBtn = document.getElementById("playPauseBtn");
+  const progressBar = document.getElementById("progressBar");
+  const currentTimeEl = document.getElementById("currentTime");
+  const totalTimeEl = document.getElementById("totalTime");
+
+  function loadSong(index) {
+    source.src = playlist[index].url;
+    audio.load();
+    if (isPlaying) audio.play();
+  }
+function togglePlayPause() {
+    if (audio.paused) {
+      audio.play();
+      isPlaying = true;
+      playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+      audio.pause();
+      isPlaying = false;
+      playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+  }
+
+  function nextSong() {
+    currentIndex = (currentIndex + 1) % playlist.length;
+    loadSong(currentIndex);
+  }
+
+  function prevSong() {
+    currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+    loadSong(currentIndex);
+  }
+
+  audio.addEventListener("ended", nextSong);
+
+  function updateProgress() {
+    const progressPercent = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = `${progressPercent}%`;
+    currentTimeEl.textContent = formatTime(audio.currentTime);
+    totalTimeEl.textContent = formatTime(audio.duration);
+  }
+
+  function seek(e) {
+    const width = e.currentTarget.clientWidth;
+    const clickX = e.offsetX;
+    audio.currentTime = (clickX / width) * audio.duration;
+  }
+
+  function formatTime(sec) {
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  }
+
+  audio.addEventListener("timeupdate", updateProgress);
+
+  function filterSongs() {
+    const keyword = document.getElementById("songSearchInput").value.toLowerCase();
+    const container = document.getElementById("songListContainer");
+    container.innerHTML = "";
+
+    playlist.forEach((song, index) => {
+      if (song.title.toLowerCase().includes(keyword)) {
+        const option = document.createElement("div");
+        option.innerHTML = `<i class="fas fa-music"></i> ${song.title}`;
+        option.onclick = () => {
+          currentIndex = index;
+          loadSong(currentIndex);
+          audio.play();
+          isPlaying = true;
+          playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+          document.getElementById("musicControls").style.display = "block";
+         
+          container.innerHTML = "";
         };
-        
-        var scaleAndTranslate = function (pos, sx, sy, dx, dy) {
-            return [dx + pos[0] * sx, dy + pos[1] * sy];
-        };
+        container.appendChild(option);
+      }
+    });
+  }
+const vocab = [
+    { word: "mesmerized", meaning: "bị mê hoặc, bị cuốn hút", example: "She was mesmerized by the performance.", topic: "Cảm xúc" },
+    { word: "eliminate", meaning: "loại bỏ", example: "Several teams were eliminated in the first round.", topic: "Cuộc thi" },
+    { word: "entire", meaning: "toàn bộ", example: "He spent the entire day reading.", topic: "Chung" },
+    { word: "capacity", meaning: "sức chứa", example: "The stadium was filled to its capacity.", topic: "Đo lường" },
+    { word: "proportion", meaning: "tỉ lệ", example: "A large proportion of the population is unemployed.", topic: "Thống kê" },
+    { word: "stand out", meaning: "nổi bật", example: "Her bright dress made her stand out.", topic: "Cụm động từ" },
+    { word: "look up", meaning: "tra cứu", example: "You can look up the word in the dictionary.", topic: "Cụm động từ" },
+    { word: "among others", meaning: "trong số những người khác", example: "She invited John, Sarah, and Mike, among others.", topic: "Liên kết" },
+    { word: "quantity", meaning: "số lượng", example: "They ordered a large quantity of goods.", topic: "Đo lường" },
+    { word: "apart from", meaning: "ngoài ra", example: "Apart from math, he also teaches physics.", topic: "Liên kết" },
+    { word: "abandon", meaning: "bỏ rơi", example: "They had to abandon the car.", topic: "Hành động" },
+    { word: "ability", meaning: "khả năng", example: "She has the ability to solve complex problems.", topic: "Khả năng" },
+    { word: "absence", meaning: "sự vắng mặt", example: "His absence was noted by the teacher.", topic: "Tình huống" },
+    { word: "absolute", meaning: "tuyệt đối", example: "He has absolute confidence in his team.", topic: "Đánh giá" },
+     { word: "abstract", meaning: "trừu tượng", example: "The concept is too abstract for young children.", topic: "Khái niệm" },
+];
 
-        window.addEventListener('resize', function () {
-            width = canvas.width = koef * innerWidth;
-            height = canvas.height = koef * innerHeight;
-            ctx.fillStyle = "rgba(0,0,0,1)";
-            ctx.fillRect(0, 0, width, height);
-        });
+  function displayWords(words) {
+    const list = document.getElementById("vocabList");
+    list.innerHTML = "";
+    words.forEach(item => {
+      list.innerHTML += `
+        <div class="vocab-item">
+          <h3>${item.word}</h3>
+          <p><strong>Meaning:</strong> ${item.meaning}</p>
+          <p><strong>Example:</strong> ${item.example}</p>
+          <p><strong>Topic:</strong> ${item.topic}</p>
+        </div>
+      `;
+    });
+  }
+function filterWords() {
+    const keyword = document.getElementById("searchInput").value.toLowerCase();
+    const filtered = vocab.filter(item =>
+      item.word.toLowerCase().includes(keyword) ||
+      item.meaning.toLowerCase().includes(keyword) ||
+      item.topic.toLowerCase().includes(keyword)
+    );
+    displayWords(filtered);
+  }
 
-        var traceCount = mobile ? 15 : 40; 
-        var pointsOrigin = [];
-        var i;
-        var dr = mobile ? 0.2 : 0.1;
-        for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 180, 11, 0, 0)); 
-        for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 120, 7, 0, 0)); 
-        for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 70, 4, 0, 0)); 
-        var heartPointsCount = pointsOrigin.length;
+document.addEventListener("click", function(event) {
+  const searchInput = document.getElementById("songSearchInput");
+  const suggestions = document.getElementById("songListContainer");
 
-        var targetPoints = [];
-        var pulse = function (kx, ky) {
-            for (i = 0; i < pointsOrigin.length; i++) {
-                targetPoints[i] = [];
-                targetPoints[i][0] = kx * pointsOrigin[i][0] + width / 2;
-                targetPoints[i][1] = ky * pointsOrigin[i][1] + height / 2;
-            }
-        };
+  if (!searchInput.contains(event.target) && !suggestions.contains(event.target)) {
+    suggestions.innerHTML = "";
+  }
+});
 
-        var e = [];
-        for (i = 0; i < heartPointsCount; i++) {
-            var x = rand() * width;
-            var y = rand() * height;
-            e[i] = {
-                vx: 0,
-                vy: 0,
-                R: 2,
-                speed: rand() + 5,
-                q: ~~(rand() * heartPointsCount),
-                D: 2 * (i % 2) - 1,
-                force: 0.2 * rand() + 0.7,
-                f: "hsla(0, 100%, 50%, 0.35)", 
-                trace: []
-            };
-            for (var k = 0; k < traceCount; k++) e[i].trace[k] = {x: x, y: y};
-        }
+function createTrailDot(x, y) {
+  const dot = document.createElement('div');
+  dot.className = 'trail-dot';
+  dot.style.left = `${x}px`;
+  dot.style.top = `${y}px`;
+  document.body.appendChild(dot);
+  setTimeout(() => dot.remove(), 500);
+}
 
-        var config = {
-            traceK: 0.4,
-     timeDelta: 0.01
-        };
+document.addEventListener('mousemove', (e) => {
+  createTrailDot(e.pageX, e.pageY);
+});
 
-        var time = 0;
-        var loop = function () {
-            var n = -Math.cos(time);
-            pulse((1 + n) * .5, (1 + n) * .5);
-            time += ((Math.sin(time)) < 0 ? 9 : (n > 0.8) ? .2 : 1) * config.timeDelta;
-            ctx.fillStyle = "rgba(0,0,0,.1)";
-            ctx.fillRect(0, 0, width, height);
-            for (i = e.length; i--;) {
-                var u = e[i];
-                var q = targetPoints[u.q];
-                var dx = u.trace[0].x - q[0];
-                var dy = u.trace[0].y - q[1];
-                var length = Math.sqrt(dx * dx + dy * dy);
-                if (10 > length) {
-                    if (0.95 < rand()) {
-                        u.q = ~~(rand() * heartPointsCount);
-                    }
-                    else {
-                        if (0.99 < rand()) {
-                            u.D *= -1;
-                        }
-                        u.q += u.D;
-                        u.q %= heartPointsCount;
-                        if (0 > u.q) {
-                            u.q += heartPointsCount;
-                        }
-                    }
-                }
-                u.vx += -dx / length * u.speed;
-                u.vy += -dy / length * u.speed;
-                u.trace[0].x += u.vx;
-                u.trace[0].y += u.vy;
-                u.vx *= u.force;
-                u.vy *= u.force;
-                for (k = 0; k < u.trace.length - 1;) {
-                    var T = u.trace[k];
-                    var N = u.trace[++k];
-                    N.x -= config.traceK * (N.x - T.x);
-                    N.y -= config.traceK * (N.y - T.y);
-                }
-                ctx.fillStyle = u.f;
-                for (k = 0; k < u.trace.length; k++) {
-                    ctx.fillRect(u.trace[k].x, u.trace[k].y, 1, 1);
-                }
-            }
+document.addEventListener('touchmove', (e) => {
+  const touch = e.touches[0];
+  if (touch) {
+    createTrailDot(touch.pageX, touch.pageY);
+  }
+}, { passive: true });
 
-            window.requestAnimationFrame(loop, canvas);
-        };
-        loop();
-    };
-
-    var s = document.readyState;
-    if (s === 'complete' || s === 'loaded' || s === 'interactive') init();
-    else document.addEventListener('DOMContentLoaded', init, false);
-  </script>
+  window.onload = () => {
+    loadSong(currentIndex);
+    displayWords(vocab);
+  };
+</script>
 </body>
 </html>
