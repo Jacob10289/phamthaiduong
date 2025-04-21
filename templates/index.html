@@ -269,6 +269,18 @@ html, body {
   width: 6px;
 }
 
+#topicSelect {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  outline: none;
+  appearance: none;
+}
   </style>
 </head>
 <body>
@@ -288,11 +300,11 @@ html, body {
 </div>
 <div class="intro-section">
  <h2 style="color: white; text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);">From Owner</h2>
-  <p>Cảm ơn bạn đã ghé thăm ! Hiện trang đang trong quá trình phát triển , mọi thông tin liên hệ p.duongtech01258@gmail.com</p>
+  <p><strong>Cảm Ơn Mọi Người Vì Đã Ghé Thăm Trang ❤️ Do Lượng Dữ Liệu Quá Lớn Nên Trang Cần Vài Phút Để Load Toàn Bộ Từ Vựng . Mình Khuyến Khích Mọi Người Chọn Topic Rồi Kiếm Từ Thay Vì Sử Dụng Thanh Tìm Kiếm Tránh Lag ! Hiện Mình Vẫn Còn Đang Phát Triển Trang Nên Mọi Đóng Góp Của Mọi Người Xin Liên Hệ p.duongtech01258@gmail.com</strong></p>
 </div>
 <div class="music-player">
   <div class="song-search-wrapper">
-<h3 class="music-box-title">Vừa Nghe Nhạc Vừa Học Nhé 😋</h3>
+<h3 class="music-box-title">Chỗ Này Để Vừa Nghe Nhạc Vừa Học 😋</h3>
     <input type="text" id="songSearchInput" placeholder="Tìm bài hát bạn muốn nghe" oninput="filterSongs()" />
     <div id="songListContainer"></div>
   </div>
@@ -319,8 +331,116 @@ html, body {
 
 <div class="music-player">
   <div class="search-bar">
-    <h3 class="music-box-title">Tra Cứu Từ Mới Ở Đây Nè 😆</h3>
+    <h3 class="music-box-title">Chỗ Này Để Tra Từ Vựng 😋</h3>
     <input type="text" id="searchInput" placeholder="Tìm từ vựng bạn muốn học" oninput="filterWords()"/>
+  </div>
+</div>
+
+ <div class="music-player">
+  <div class="search-bar">
+    <h3 class="music-box-title">Chủ Đề 📚</h3>
+    <select id="topicSelect" onchange="filterVocabByTopic()">
+      <option value="">Tất cả chủ đề</option>
+      <option value="Cảm xúc">Cảm xúc</option>
+      <option value="Cuộc thi">Cuộc thi</option>
+      <option value="Chung">Chung</option>
+      <option value="Đo lường">Đo lường</option>
+      <option value="Thống kê">Thống kê</option>
+      <option value="Cụm động từ">Cụm động từ</option>
+      <option value="Liên kết">Liên kết</option>
+      <option value="Hành động">Hành động</option>
+      <option value="Khả năng">Khả năng</option>
+      <option value="Tình huống">Tình huống</option>
+      <option value="Đánh giá">Đánh giá</option>
+      <option value="Khái niệm">Khái niệm</option>
+      <option value="Giáo dục">Giáo dục</option>
+      <option value="Công nghệ">Công nghệ</option>
+      <option value="Sự kiện">Sự kiện</option>
+      <option value="Trải nghiệm">Trải nghiệm</option>
+      <option value="Kinh doanh">Kinh doanh</option>
+      <option value="Lợi ích">Lợi ích</option>
+      <option value="Thời gian">Thời gian</option>
+      <option value="Nhận thức">Nhận thức</option>
+      <option value="Sức khỏe">Sức khỏe</option>
+      <option value="Môi trường">Môi trường</option>
+      <option value="Lãnh đạo">Lãnh đạo</option>
+      <option value="Khoa học">Khoa học</option>
+      <option value="Quản lý">Quản lý</option>
+      <option value="Chính phủ">Chính phủ</option>
+      <option value="Nghiên cứu">Nghiên cứu</option>
+      <option value="Địa lý">Địa lý</option>
+      <option value="Động từ">Động từ</option>
+      <option value="Danh từ">Danh từ</option>
+      <option value="Trạng từ">Trạng từ</option>
+      <option value="Tính từ">Tính từ</option>
+      <option value="Giới từ">Giới từ</option>
+      <option value="Mua sắm">Mua sắm</option>
+      <option value="Nhà cửa">Nhà cửa</option>
+      <option value="Đồ dùng">Đồ dùng</option>
+      <option value="Động vật">Động vật</option>
+      <option value="Vị trí">Vị trí</option>
+      <option value="Bổ sung">Bổ sung</option>
+      <option value="Quan điểm">Quan điểm</option>
+      <option value="Mua bán">Mua bán</option>
+      <option value="Sinh học">Sinh học</option>
+      <option value="Chiến tranh">Chiến tranh</option>
+      <option value="Dịch vụ">Dịch vụ</option>
+      <option value="Phát triển">Phát triển</option>
+      <option value="Trách nhiệm">Trách nhiệm</option>
+      <option value="Xây dựng">Xây dựng</option>
+      <option value="Tổng quát">Tổng quát</option>
+      <option value="Âm thanh">Âm thanh</option>
+      <option value="Điện tử">Điện tử</option>
+      <option value="Lịch sử">Lịch sử</option>
+      <option value="Sắp xếp">Sắp xếp</option>
+      <option value="Nghề nghiệp">Nghề nghiệp</option>
+      <option value="Kiến trúc">Kiến trúc</option>
+      <option value="Y tế">Y tế</option>
+      <option value="Ngẫu nhiên">Ngẫu nhiên</option>
+      <option value="Sở thích">Sở thích</option>
+      <option value="Truyền thông">Truyền thông</option>
+      <option value="Giải trí">Giải trí</option>
+      <option value="Quân đội">Quân đội</option>
+      <option value="Phạm vi">Phạm vi</option>
+      <option value="Thành phần">Thành phần</option>
+      <option value="Quy định">Quy định</option>
+      <option value="Kết quả">Kết quả</option>
+      <option value="Từ thiện">Từ thiện</option>
+      <option value="Thiên tai">Thiên tai</option>
+      <option value="Tâm lý">Tâm lý</option>
+      <option value="Giao tiếp">Giao tiếp</option>
+      <option value="Làm đẹp">Làm đẹp</option>
+      <option value="Quá trình">Quá trình</option>
+      <option value="Thương hiệu">Thương hiệu</option>
+      <option value="May mắn">May mắn</option>
+      <option value="Ngôn ngữ">Ngôn ngữ</option>
+      <option value="Số lượng">Số lượng</option>
+      <option value="Vật chất">Vật chất</option>
+      <option value="Kế hoạch">Kế hoạch</option>
+      <option value="Pháp luật">Pháp luật</option>
+      <option value="Tần suất">Tần suất</option>
+      <option value="Giá trị">Giá trị</option>
+      <option value="Trí nhớ">Trí nhớ</option>
+      <option value="Sách">Sách</option>
+      <option value="Dấu hiệu">Dấu hiệu</option>
+      <option value="Chính trị">Chính trị</option>
+      <option value="Giới tính">Giới tính</option>
+      <option value="Văn hóa">Văn hóa</option>
+      <option value="Ánh sáng">Ánh sáng</option>
+      <option value="So sánh">So sánh</option>
+      <option value="Hiểu biết">Hiểu biết</option>
+      <option value="Hóa học">Hóa học</option>
+      <option value="An toàn">An toàn</option>
+      <option value="Hy vọng">Hy vọng</option>
+      <option value="Nhu cầu">Nhu cầu</option>
+      <option value="Khảo cổ học">Khảo cổ học</option>
+      <option value="Biểu tượng">Biểu tượng</option>
+      <option value="Giấy tờ">Giấy tờ</option>
+      <option value="Ẩm thực">Ẩm thực</option>
+      <option value="Thiết kế">Thiết kế</option>
+      <option value="Nông nghiệp">Nông nghiệp</option>
+      <option value="Thời trang">Thời trang</option>
+    </select>
   </div>
 </div>
 
@@ -333,10 +453,14 @@ html, body {
     { title: "Em Gái Mưa", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/emgaimua.mp3" },
     { title: "Day Dứt Nỗi Đau", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/daydutnoidau.mp3" },
     { title: "Sai Người Sai Thời Điểm", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/sainguoisaithoidiem.mp3" },
-{ title: "Em Muốn Tự Do Anh Ơi", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/EmMuonTuDoAnhOi.mp3" },
+{ title: "", url: "" },
 { title: "À Thì", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/athi.mp3" },
 { title: "Chưa Từng Thương Ai Đến Vậy", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/chuatungthuongaidenvay.mp3" },
-{ title: "Ánh Trăng Nói Hộ Lòng Tôi", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/anhtrangnoiholongtoi.mp3" },
+{ title: "Gửi Anh Xa Nhớ", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/GuiAnhXaNho.mp3" },
+{ title: "Giấc Mơ Trưa", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/GiacMoTrua.mp3" },
+{ title: "Bèo Dạt Mây Trôi", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/BeoDatMayTroi.mp3" },
+{ title: "Quê Tôi", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/QueToi.mp3" },
+{ title: "Xe Đạp", url: "https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/XeDap.mp3" },
 ];
 
   let currentIndex = 0;
@@ -424,8 +548,8 @@ html, body {
   }
 
   const vocab = [
-   { word: "mesmerized", meaning: "bị mê hoặc, bị cuốn hút", example: "She was mesmerized by the performance.", topic: "Cảm xúc" },
-        { word: "eliminate", meaning: "loại bỏ", example: "Several teams were eliminated in the first round.", topic: "Cuộc thi" },
+  { word: "mesmerized", meaning: "bị mê hoặc, bị cuốn hút", example: "She was mesmerized by the performance.", topic: "Cảm xúc" },
+   { word: "eliminate", meaning: "loại bỏ", example: "Several teams were eliminated in the first round.", topic: "Cuộc thi" },
         { word: "entire", meaning: "toàn bộ", example: "He spent the entire day reading.", topic: "Chung" },
         { word: "capacity", meaning: "sức chứa", example: "The stadium was filled to its capacity.", topic: "Đo lường" },
         { word: "proportion", meaning: "tỉ lệ", example: "A large proportion of the population is unemployed.", topic: "Thống kê" },
@@ -1613,41 +1737,61 @@ html, body {
   { "word": "aircraft", "meaning": "máy bay", "example": "The aircraft took off on time.", "topic": "Giao thông" },
   { "word": "airline", "meaning": "hãng hàng không", "example": "Which airline are you flying with?", "topic": "Giao thông" },
   { "word": "aisle", "meaning": "lối đi (giữa các hàng)", "example": "Walk down the aisle.", "topic": "Địa điểm" },
-  { "word": "algebra", "meaning": "đại số", "example": "I struggled with algebra in school.", "topic": "Toán học" }, 
+  { "word": "algebra", "meaning": "đại số", "example": "I struggled with algebra in school.", "topic": "Toán học" },
 ];
 
-  function displayWords(words) {
-    const list = document.getElementById("vocabList");
-    list.innerHTML = "";
-    words.forEach(item => {
-      list.innerHTML += `
-        <div class="vocab-item">
-          <h3>${item.word}</h3>
-          <p><strong>Meaning:</strong> ${item.meaning}</p>
-          <p><strong>Example:</strong> ${item.example}</p>
-          <p><strong>Topic:</strong> ${item.topic}</p>
-        </div>
-      `;
-    });
-  }
+function displayWords(words) {
+  const list = document.getElementById("vocabList");
+  list.innerHTML = "";
+  words.forEach(item => {
+    const vocabItem = document.createElement("div");
+    vocabItem.classList.add("vocab-item");
+    vocabItem.setAttribute("data-topic", item.topic);
+    vocabItem.innerHTML = `
+      <h3>${item.word}</h3>
+      <p><strong>Meaning:</strong> ${item.meaning}</p>
+      <p><strong>Example:</strong> ${item.example}</p>
+      <p><strong>Topic:</strong> ${item.topic}</p>
+    `;
+    list.appendChild(vocabItem);
+  });
+}
 
-  function filterWords() {
-    const keyword = document.getElementById("searchInput").value.toLowerCase();
-    const filtered = vocab.filter(item =>
-      item.word.toLowerCase().includes(keyword) ||
-      item.meaning.toLowerCase().includes(keyword) ||
-      item.topic.toLowerCase().includes(keyword)
-    );
-    displayWords(filtered);
-  }
+function filterVocabByTopic() {
+  const selectedTopic = document.getElementById("topicSelect").value;
+  const vocabItems = document.querySelectorAll(".vocab-item");
 
-document.addEventListener("click", function(event) {
-  const searchInput = document.getElementById("songSearchInput");
-  const suggestions = document.getElementById("songListContainer");
+  vocabItems.forEach(item => {
+    const topic = item.getAttribute("data-topic");
+    if (selectedTopic === "" || topic === selectedTopic) {
+      item.style.display = "";
+    } else {
+      item.style.display = "none";
+    }
+  });
+}
 
-  if (!searchInput.contains(event.target) && !suggestions.contains(event.target)) {
-    suggestions.innerHTML = "";
-  }
+function filterWords() {
+  const keyword = document.getElementById("searchInput").value.toLowerCase();
+  const vocabItems = document.querySelectorAll(".vocab-item");
+
+  vocabItems.forEach(item => {
+    const word = item.querySelector("h3").textContent.toLowerCase();
+    const definition = item.querySelector("p").textContent.toLowerCase();
+    if (word.includes(keyword) || definition.includes(keyword)) {
+      item.style.display = "";
+    } else {
+      item.style.display = "none";
+    }
+  });
+}
+
+document.getElementById("topicSelect").addEventListener("change", function() {
+  filterVocabByTopic();
+});
+
+document.getElementById("searchInput").addEventListener("input", function() {
+  filterWords();
 });
 
 function createTrailDot(x, y) {
@@ -1670,10 +1814,22 @@ document.addEventListener('touchmove', (e) => {
   }
 }, { passive: true });
 
-  window.onload = () => {
-    loadSong(currentIndex);
-    displayWords(vocab);
-  };
+document.addEventListener("click", function(e) {
+  const songListContainer = document.getElementById("songListContainer");
+  const songSearchInput = document.getElementById("songSearchInput");
+  
+  if (!songListContainer.contains(e.target) && e.target !== songSearchInput) {
+    songListContainer.style.display = "none";
+  }
+});
+
+document.getElementById("songSearchInput").addEventListener("focus", function() {
+  document.getElementById("songListContainer").style.display = "block";
+});
+
+window.onload = () => {
+  displayWords(vocab);
+};
 </script>
 </body>
 </html>
