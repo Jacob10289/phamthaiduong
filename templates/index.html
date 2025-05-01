@@ -1,47 +1,113 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Diễn Đàn Văn Học</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #111;
-            color: #fff;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #f5c518;
-        }
-        .post {
-            border: 1px solid #444;
-            margin: 20px auto;
-            padding: 15px;
-            max-width: 600px;
-            background: #1e1e1e;
-            border-radius: 8px;
-        }
-        .post h2 {
-            color: #66fcf1;
-        }
-        .post p {
-            margin: 10px 0;
-        }
-        .author {
-            font-size: 0.9em;
-            color: #bbb;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Giới thiệu môn học THPT</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a2e);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    header h1 {
+      color: #ffcc00;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.2em;
+      color: #ccc;
+    }
+
+    .subjects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    .subject {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: left;
+      transition: 0.3s;
+    }
+
+    .subject:hover {
+      background-color: #222;
+      transform: translateY(-5px);
+    }
+
+    .subject h2 {
+      color: #00ffe0;
+      margin-bottom: 10px;
+    }
+
+    .subject p {
+      color: #ccc;
+    }
+  </style>
 </head>
 <body>
-    <h1>Diễn Đàn Văn Học</h1>
-    {% for post in posts %}
-    <div class="post">
-        <h2>{{ post.title }}</h2>
-        <p class="author">Tác giả: {{ post.author }}</p>
-        <p>{{ post.content }}</p>
+  <header>
+    <h1>Học Tốt THPT</h1>
+    <p>Giới thiệu các môn học chính trong chương trình Trung học Phổ thông</p>
+  </header>
+
+  <div class="subjects">
+    <div class="subject">
+      <h2>Toán học</h2>
+      <p>Môn rèn luyện tư duy logic, kỹ năng giải quyết vấn đề.</p>
     </div>
-    {% endfor %}
+    <div class="subject">
+      <h2>Ngữ văn</h2>
+      <p>Giúp phát triển tư duy ngôn ngữ, cảm nhận văn học.</p>
+    </div>
+    <div class="subject">
+      <h2>Tiếng Anh</h2>
+      <p>Công cụ mở ra thế giới, kỹ năng quan trọng trong thời đại mới.</p>
+    </div>
+    <div class="subject">
+      <h2>Vật lý</h2>
+      <p>Khám phá thế giới vật chất và các quy luật tự nhiên.</p>
+    </div>
+    <div class="subject">
+      <h2>Hóa học</h2>
+      <p>Nghiên cứu cấu tạo, tính chất và sự biến đổi của vật chất.</p>
+    </div>
+    <div class="subject">
+      <h2>Sinh học</h2>
+      <p>Tìm hiểu về thế giới sống, cơ thể người và môi trường.</p>
+    </div>
+    <div class="subject">
+      <h2>Lịch sử</h2>
+      <p>Hiểu về quá khứ, nguồn gốc dân tộc và thế giới.</p>
+    </div>
+    <div class="subject">
+      <h2>Địa lý</h2>
+      <p>Khám phá địa hình, tài nguyên và xã hội loài người.</p>
+    </div>
+    <div class="subject">
+      <h2>GDCD</h2>
+      <p>Giáo dục công dân - nền tảng đạo đức và pháp luật.</p>
+    </div>
+  </div>
 </body>
 </html>
