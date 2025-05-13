@@ -1,112 +1,178 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Giới thiệu môn học THPT</title>
+  <meta charset="UTF-8">
+  <title>Chúc Mừng Sinh Nhật!</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #0f0f0f, #1a1a2e);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    header {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #f6d365);
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
+      overflow-x: hidden;
       text-align: center;
-      padding: 40px 20px;
     }
 
-    header h1 {
-      color: #ffcc00;
-      font-size: 2.5em;
-      margin-bottom: 10px;
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    header p {
-      font-size: 1.2em;
-      color: #ccc;
+    h1 {
+      color: #d63384;
+      margin-top: 40px;
+      animation: sparkle 2s infinite alternate;
     }
 
-    .subjects {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 20px;
-      max-width: 1000px;
-      width: 100%;
+    @keyframes sparkle {
+      0% { text-shadow: 0 0 5px #fff; }
+      100% { text-shadow: 0 0 20px #ff69b4; }
     }
 
-    .subject {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid #333;
+    .gift-boxes {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+      gap: 30px;
+    }
+
+    .box {
+      width: 100px;
+      height: 100px;
+      background-color: #ff69b4;
+      border: 4px solid #fff;
       border-radius: 10px;
-      padding: 20px;
-      text-align: left;
-      transition: 0.3s;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.3s, opacity 0.5s;
+      box-shadow: 0 0 10px #ff99cc;
+      overflow: hidden;
     }
 
-    .subject:hover {
-      background-color: #222;
-      transform: translateY(-5px);
+    .box:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #ffccff;
     }
 
-    .subject h2 {
-      color: #00ffe0;
-      margin-bottom: 10px;
+    .box::before {
+      content: "🎁";
+      font-size: 50px;
+      position: absolute;
+      top: 20px;
+      left: 25px;
+      transition: transform 0.5s ease;
     }
 
-    .subject p {
-      color: #ccc;
+    .box.opened::before {
+      transform: scale(0);
+    }
+
+    .money {
+      font-size: 16px;
+      color: white;
+      margin-top: 38px;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .message {
+      font-size: 20px;
+      margin-top: 25px;
+      color: #6a0572;
+      font-weight: bold;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 20px;
+      animation: explode 1s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes explode {
+      0% {
+        transform: scale(0.5) translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.5) translateY(-150px);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Học Tốt THPT</h1>
-    <p>Giới thiệu các môn học chính trong chương trình Trung học Phổ thông</p>
-  </header>
-  <div class="subjects">
-    <div class="subject">
-      <h2>Toán học</h2>
-      <p>Môn rèn luyện tư duy logic, kỹ năng giải quyết vấn đề.</p>
-    </div>
-    <div class="subject">
-      <h2>Ngữ văn</h2>
-      <p>Giúp phát triển tư duy ngôn ngữ, cảm nhận văn học.</p>
-    </div>
-    <div class="subject">
-      <h2>Tiếng Anh</h2>
-      <p>Công cụ mở ra thế giới, kỹ năng quan trọng trong thời đại mới.</p>
-    </div>
-    <div class="subject">
-      <h2>Vật lý</h2>
-      <p>Khám phá thế giới vật chất và các quy luật tự nhiên.</p>
-    </div>
-    <div class="subject">
-      <h2>Hóa học</h2>
-      <p>Nghiên cứu cấu tạo, tính chất và sự biến đổi của vật chất.</p>
-    </div>
-    <div class="subject">
-      <h2>Sinh học</h2>
-      <p>Tìm hiểu về thế giới sống, cơ thể người và môi trường.</p>
-    </div>
-    <div class="subject">
-      <h2>Lịch sử</h2>
-      <p>Hiểu về quá khứ, nguồn gốc dân tộc và thế giới.</p>
-    </div>
-    <div class="subject">
-      <h2>Địa lý</h2>
-      <p>Khám phá địa hình, tài nguyên và xã hội loài người.</p>
-    </div>
-    <div class="subject">
-      <h2>GDCD</h2>
-      <p>Giáo dục công dân - nền tảng đạo đức và pháp luật.</p>
-    </div>
+
+  <h1>Secret Box</h1>
+
+  <div class="gift-boxes">
+    <div class="box" onclick="openBox(this)"></div>
+    <div class="box" onclick="openBox(this)"></div>
+    <div class="box" onclick="openBox(this)"></div>
   </div>
+
+  <div class="message" id="message"></div>
+
+  <audio id="birthdayAudio" src="https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/Happy%20Birthday%20(Piano%20Version)%20-%20Helmut%20Schenker.mp3" preload="auto"></audio>
+
+  <script>
+    let opened = false;
+    const audio = document.getElementById("birthdayAudio");
+
+    function openBox(selectedBox) {
+      if (opened) return;
+      opened = true;
+
+      selectedBox.classList.add("opened");
+      selectedBox.innerHTML = '<div class="money">100.000 VNĐ</div>';
+      document.getElementById("message").textContent =
+        "Mừng Ngày Nàng Thơ Ra Đời 🥳 Trộm Vía Hay Ăn Chóng Lớn Nhé =)";
+      audio.play();
+      createHearts(selectedBox);
+
+      const allBoxes = document.querySelectorAll(".box");
+      allBoxes.forEach(box => {
+        if (box !== selectedBox) {
+          box.style.opacity = 0;
+          box.style.pointerEvents = "none";
+        }
+      });
+    }
+
+    function createHearts(box) {
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.textContent = "❤️";
+        heart.style.left = Math.random() * 100 + "%";
+        heart.style.top = "50%";
+        heart.style.fontSize = Math.random() * 16 + 16 + "px";
+        heart.style.position = "absolute";
+        heart.style.animationDelay = (Math.random() * 0.5) + "s";
+        box.appendChild(heart);
+
+        setTimeout(() => {
+          heart.remove();
+        }, 1500);
+      }
+    }
+    document.body.addEventListener("click", function (e) {
+      if (!e.target.classList.contains("box")) {
+        if (audio.paused) {
+          audio.play();
+        } else {
+          audio.pause();
+        }
+      }
+    });
+  </script>
 </body>
 </html>
