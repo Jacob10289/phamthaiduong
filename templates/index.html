@@ -21,9 +21,19 @@
       100% { background-position: 0% 50%; }
     }
 
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
     h1 {
       color: #d63384;
-      margin-top: 40px;
+      margin-top: 20px;
       animation: sparkle 2s infinite alternate;
     }
 
@@ -37,6 +47,7 @@
       justify-content: center;
       margin-top: 30px;
       gap: 30px;
+      flex-wrap: wrap;
     }
 
     .box {
@@ -111,15 +122,17 @@
 </head>
 <body>
 
-  <h1>Secret Box</h1>
+  <div class="wrapper">
+    <h1>Secret Box</h1>
 
-  <div class="gift-boxes">
-    <div class="box" onclick="openBox(this)"></div>
-    <div class="box" onclick="openBox(this)"></div>
-    <div class="box" onclick="openBox(this)"></div>
+    <div class="gift-boxes">
+      <div class="box" onclick="openBox(this)"></div>
+      <div class="box" onclick="openBox(this)"></div>
+      <div class="box" onclick="openBox(this)"></div>
+    </div>
+
+    <div class="message" id="message"></div>
   </div>
-
-  <div class="message" id="message"></div>
 
   <audio id="birthdayAudio" src="https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/Happy%20Birthday%20(Piano%20Version)%20-%20Helmut%20Schenker.mp3" preload="auto"></audio>
 
@@ -164,6 +177,7 @@
         }, 1500);
       }
     }
+
     document.body.addEventListener("click", function (e) {
       if (!e.target.classList.contains("box")) {
         if (audio.paused) {
