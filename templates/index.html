@@ -8,17 +8,28 @@
       margin: 0;
       padding: 0;
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #f6d365);
+      background: linear-gradient(-45deg, #7b0a32, #b71c1c, #c2185b, #e53935);
       background-size: 400% 400%;
       animation: gradientShift 10s ease infinite;
       overflow-x: hidden;
       text-align: center;
+      position: relative;
     }
 
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
+    }
+
+    canvas#fireworks {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
     }
 
     .wrapper {
@@ -29,17 +40,20 @@
       min-height: 100vh;
       padding: 20px;
       box-sizing: border-box;
+      position: relative;
+      z-index: 1;
     }
 
     h1 {
-      color: #d63384;
+      color: #fff;
       margin-top: 20px;
       animation: sparkle 2s infinite alternate;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
     }
 
     @keyframes sparkle {
       0% { text-shadow: 0 0 5px #fff; }
-      100% { text-shadow: 0 0 20px #ff69b4; }
+      100% { text-shadow: 0 0 20px #ffcccc; }
     }
 
     .gift-boxes {
@@ -53,7 +67,7 @@
     .box {
       width: 100px;
       height: 100px;
-      background-color: #ff69b4;
+      background-color: #c2185b;
       border: 4px solid #fff;
       border-radius: 10px;
       cursor: pointer;
@@ -69,7 +83,7 @@
     }
 
     .box::before {
-      content: "🎁";
+      content: "♥️";
       font-size: 50px;
       position: absolute;
       top: 20px;
@@ -91,9 +105,12 @@
     .message {
       font-size: 20px;
       margin-top: 25px;
-      color: #6a0572;
+      color: #fff;
       font-weight: bold;
       animation: fadeIn 1s ease forwards;
+      text-shadow: 0 0 8px #000;
+      white-space: pre-wrap;
+      min-height: 40px;
     }
 
     @keyframes fadeIn {
@@ -122,71 +139,130 @@
 </head>
 <body>
 
-  <div class="wrapper">
-    <h1>Secret Box</h1>
+<canvas id="fireworks"></canvas>
 
-    <div class="gift-boxes">
-      <div class="box" onclick="openBox(this)"></div>
-      <div class="box" onclick="openBox(this)"></div>
-      <div class="box" onclick="openBox(this)"></div>
-    </div>
+<div class="wrapper">
+  <h1>🎊🎉Birthday Gift Box🎉🎊</h1>
 
-    <div class="message" id="message"></div>
+  <div class="gift-boxes">
+    <div class="box" onclick="openBox(this)"></div>
+    <div class="box" onclick="openBox(this)"></div>
+    <div class="box" onclick="openBox(this)"></div>
   </div>
 
-  <audio id="birthdayAudio" src="https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/Happy%20Birthday%20(Piano%20Version)%20-%20Helmut%20Schenker.mp3" preload="auto"></audio>
+  <div class="message" id="message"></div>
+</div>
 
-  <script>
-    let opened = false;
-    const audio = document.getElementById("birthdayAudio");
+<audio id="birthdayAudio" src="https://raw.githubusercontent.com/Jacob10289/phamthaiduong/refs/heads/main/Happy%20Birthday%20(Piano%20Version)%20-%20Helmut%20Schenker.mp3" preload="auto"></audio>
 
-    function openBox(selectedBox) {
-      if (opened) return;
-      opened = true;
+<script>
+let opened = false;
+const audio = document.getElementById("birthdayAudio");
+const messageText = "Nhân ngày nàng thơ ra đời , trộm vía hay ăn chóng lớn nhé 😁";
+const messageEl = document.getElementById("message");
 
-      selectedBox.classList.add("opened");
-      selectedBox.innerHTML = '<div class="money">100.000 VNĐ</div>';
-      document.getElementById("message").textContent =
-        "Mừng Ngày Nàng Thơ Ra Đời 🥳 Trộm Vía Hay Ăn Chóng Lớn Nhé =)";
+function openBox(selectedBox) {
+  if (opened) return;
+  opened = true;
+
+  selectedBox.classList.add("opened");
+  selectedBox.innerHTML = '<div class="money">100.000 VNĐ</div>';
+  typeWriter(messageText, 0);
+  audio.play();
+  createHearts(selectedBox);
+  startFireworks();
+
+  const allBoxes = document.querySelectorAll(".box");
+  allBoxes.forEach(box => {
+    if (box !== selectedBox) {
+      box.style.opacity = 0;
+      box.style.pointerEvents = "none";
+    }
+  });
+}
+
+function typeWriter(text, i) {
+  if (i < text.length) {
+    messageEl.textContent += text.charAt(i);
+    setTimeout(() => typeWriter(text, i + 1), 50);
+  }
+}
+
+function createHearts(box) {
+  for (let i = 0; i < 20; i++) {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.textContent = "❤️";
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.top = "50%";
+    heart.style.fontSize = Math.random() * 16 + 16 + "px";
+    heart.style.position = "absolute";
+    heart.style.animationDelay = (Math.random() * 0.5) + "s";
+    box.appendChild(heart);
+    setTimeout(() => heart.remove(), 1500);
+  }
+}
+
+document.body.addEventListener("click", function (e) {
+  if (!e.target.classList.contains("box")) {
+    if (audio.paused) {
       audio.play();
-      createHearts(selectedBox);
-
-      const allBoxes = document.querySelectorAll(".box");
-      allBoxes.forEach(box => {
-        if (box !== selectedBox) {
-          box.style.opacity = 0;
-          box.style.pointerEvents = "none";
-        }
-      });
+    } else {
+      audio.pause();
     }
+  }
+});
 
-    function createHearts(box) {
-      for (let i = 0; i < 20; i++) {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.textContent = "❤️";
-        heart.style.left = Math.random() * 100 + "%";
-        heart.style.top = "50%";
-        heart.style.fontSize = Math.random() * 16 + 16 + "px";
-        heart.style.position = "absolute";
-        heart.style.animationDelay = (Math.random() * 0.5) + "s";
-        box.appendChild(heart);
+function startFireworks() {
+  const canvas = document.getElementById("fireworks");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-        setTimeout(() => {
-          heart.remove();
-        }, 1500);
-      }
-    }
+  let particles = [];
 
-    document.body.addEventListener("click", function (e) {
-      if (!e.target.classList.contains("box")) {
-        if (audio.paused) {
-          audio.play();
-        } else {
-          audio.pause();
-        }
+  for (let i = 0; i < 100; i++) {
+    particles.push({
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      angle: Math.random() * 2 * Math.PI,
+      speed: Math.random() * 5 + 2,
+      radius: Math.random() * 2 + 1,
+      color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+      alpha: 1
+    });
+  }
+
+  function animateFireworks() {
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      p.x += Math.cos(p.angle) * p.speed;
+      p.y += Math.sin(p.angle) * p.speed;
+      p.alpha -= 0.015;
+
+      if (p.alpha > 0) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fill();
       }
     });
-  </script>
+
+    ctx.globalAlpha = 1;
+    particles = particles.filter(p => p.alpha > 0);
+
+    if (particles.length > 0) {
+      requestAnimationFrame(animateFireworks);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  animateFireworks();
+}
+
+</script>
 </body>
 </html>
