@@ -153,14 +153,26 @@ body{
 .btn:active{transform: translateY(1px)}
 .btn[disabled]{opacity:.55; cursor:not-allowed}
 
-/* Nút Quay: bỏ viền “xanh nhạt” gây cảm giác vòng bao quanh bị lệch */
+/* =========================
+   NÚT QUAY: PHÓNG TO + MASK
+   Mục tiêu: che/bọc trọn vòng nhạt xanh quanh chữ Quay
+   ========================= */
 .btn-primary{
-  width: 130px;
-  height: 130px;
+  /* tăng size theo viewport để iPhone không bị thiếu */
+  width: clamp(150px, 36vw, 178px);
+  height: clamp(150px, 36vw, 178px);
   border-radius: 999px;
 
-  border: 1px solid rgba(255,255,255,.14); /* viền nhẹ trung tính (không xanh) */
-  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.06), rgba(0,0,0,.28));
+  /* viền trung tính */
+  border: 1px solid rgba(255,255,255,.14);
+
+  /* nền đen rõ để "đè" vùng nhạt */
+  background: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.07) 0%,
+    rgba(0,0,0,.58) 58%,
+    rgba(0,0,0,.80) 100%
+  );
+
   box-shadow: 0 18px 55px rgba(0,0,0,.55);
 
   display:flex;
@@ -168,25 +180,49 @@ body{
   align-items:center;
   justify-content:center;
   gap:6px;
+
+  position:relative;
+  isolation:isolate;
+}
+
+/* Mask nở ra để che sạch "vòng nhạt" bị lệch */
+.btn-primary::before{
+  content:"";
+  position:absolute;
+  inset:-12px; /* tăng/giảm nếu muốn che nhiều/ít hơn */
+  border-radius:999px;
+  background: radial-gradient(circle,
+    rgba(0,0,0,.78) 0%,
+    rgba(0,0,0,.78) 64%,
+    rgba(0,0,0,0) 76%
+  );
+  pointer-events:none;
+  z-index:-1;
 }
 
 /* Tô đậm + giữ màu xanh biển chữ Quay */
 #spinBtn .btn-label{
-  font-weight: 900;
-  font-size: 22px;
+  font-weight: 950;
+  font-size: 24px;
   letter-spacing: .2px;
   color: var(--accent);
   text-shadow: 0 2px 10px rgba(0,0,0,.45);
 }
 #spinBtn .btn-sub{
-  font-weight: 700;
-  opacity: .95;
+  font-weight: 800;
+  opacity: .96;
 }
 
+/* màn rất nhỏ vẫn phải đủ to để che vòng nhạt */
 @media (max-width: 420px){
-  .btn-primary{ width: 112px; height:112px; }
-  #spinBtn .btn-label{ font-size:20px; }
+  .btn-primary{
+    width: clamp(145px, 42vw, 168px);
+    height: clamp(145px, 42vw, 168px);
+  }
+  #spinBtn .btn-label{ font-size:22px; }
 }
+
+/* ========================= */
 
 .btn-secondary{
   background: rgba(110,231,255,.08);
