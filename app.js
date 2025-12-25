@@ -31,20 +31,18 @@ prizeText.textContent = PRIZE_LABEL;
 
 /* ===== Render mini game (Rút thẻ) ===== */
 const wheelArea = document.querySelector(".wheel-area");
-const oldCenter = document.querySelector(".wheel-center");
-if (oldCenter) oldCenter.remove();
 wheelArea.innerHTML = `
   <div class="game" id="gameRoot">
     <div class="game-head">
       <div>
         <h3 class="game-title">Rút thẻ may mắn</h3>
-        <p class="game-sub">Mỗi email chỉ được 1 lần. Bấm <b>Gửi & Rút thẻ</b> để xem kết quả.</p>
+        <p class="game-sub">Mỗi email chỉ được 1 lần. Bấm <b>Gửi</b> hoặc <b>Gửi & Rút thẻ</b> để xem kết quả.</p>
       </div>
       <div class="pill" id="gameStatePill">READY</div>
     </div>
 
     <div class="deck">
-      <div class="card3d" id="card3d">
+      <div class="card3d" id="card3d" aria-label="Lucky card">
         <div class="card-face card-front">
           <div class="card-front-inner">
             <div class="card-badge"><span class="card-mark"></span> Lucky Card</div>
@@ -216,7 +214,7 @@ function tickConfetti() {
   requestAnimationFrame(tickConfetti);
 }
 
-/* ===== API (DEBUG DỨT ĐIỂM) ===== */
+/* ===== API ===== */
 async function callSpinAPI({ name, email, note }) {
   const body = { name, identifier: email, note: note || null };
 
@@ -234,7 +232,6 @@ async function callSpinAPI({ name, email, note }) {
     });
     raw = await res.text();
   } catch (err) {
-    // Đây là nơi CORS/Network sẽ rơi vào
     throw new Error(`NETWORK_OR_CORS: ${String(err?.message || err)}`);
   }
 
@@ -292,7 +289,7 @@ form.addEventListener("submit", async (ev) => {
 
     if (revealed) resetCard();
     renderBack(status, data?.prize || PRIZE_LABEL);
-    await new Promise(r => setTimeout(r, 250));
+    await new Promise(r => setTimeout(r, 220));
     flipCard();
 
     if (status === "WIN") {
@@ -317,7 +314,7 @@ form.addEventListener("submit", async (ev) => {
     setStatus("Lỗi server / cấu hình", "bad");
     setResult(
       `${badge("ERROR","bad")} ${String(e.message || e)}<br/>
-       <span class="muted">Debug: nếu thấy <b>NETWORK_OR_CORS</b> thì sửa CORS trong function Spin.</span>`
+       <span class="muted">Nếu thấy <b>NETWORK_OR_CORS</b>: kiểm tra CORS trong Supabase Function Spin.</span>`
     );
   } finally {
     setBusy(false);
