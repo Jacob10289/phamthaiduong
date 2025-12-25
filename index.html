@@ -1,1 +1,104 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Minigame Vòng Quay — GPT Plus 1 tháng</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg"></div>
 
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">⟡</div>
+      <div class="brand-text">
+        <div class="brand-title">Minigame Vòng Quay</div>
+        <div class="brand-sub">Quay số chọn người may mắn nhận <b>GPT Plus 1 tháng</b></div>
+      </div>
+    </div>
+    <div class="pill" id="envPill">Production</div>
+  </header>
+
+  <main class="wrap">
+    <section class="card wheel-card">
+      <div class="wheel-area">
+        <div class="pointer" aria-hidden="true"></div>
+
+        <canvas id="wheel" width="420" height="420" aria-label="Vòng quay"></canvas>
+
+        <div class="wheel-center">
+          <button id="spinBtn" class="btn btn-primary" type="button">
+            <span class="btn-label">Quay</span>
+            <span class="btn-sub" id="spinSub">1 lần / email</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="wheel-meta">
+        <div class="meta-row">
+          <div class="meta-title">Giải thưởng</div>
+          <div class="meta-value" id="prizeText">GPT Plus 1 tháng</div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-title">Trạng thái</div>
+          <div class="meta-value" id="statusText">Sẵn sàng</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card form-card">
+      <h2>Thông tin tham gia</h2>
+      <p class="muted">
+        Nhập tên và email. Mỗi email chỉ được quay 1 lần. Nếu trúng, hệ thống sẽ gửi thông báo về Telegram admin.
+      </p>
+
+      <form id="form" novalidate>
+        <label class="field">
+          <span class="field-label">Họ và tên</span>
+          <input id="name" type="text" placeholder="Nguyễn Văn A" autocomplete="name" required />
+          <span class="field-hint" id="nameHint"></span>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Email</span>
+          <input id="email" type="email" placeholder="example@gmail.com" autocomplete="email" required />
+          <span class="field-hint" id="emailHint"></span>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Ghi chú (tuỳ chọn)</span>
+          <input id="note" type="text" placeholder="Mã chiến dịch / nguồn traffic…" />
+        </label>
+
+        <div class="actions">
+          <button id="submitBtn" class="btn btn-secondary" type="submit">Gửi & Quay</button>
+          <button id="demoBtn" class="btn btn-ghost" type="button">Demo data</button>
+        </div>
+
+        <div class="result" id="result" role="status" aria-live="polite"></div>
+
+        <details class="dev" id="devBox">
+          <summary>Thông tin kỹ thuật</summary>
+          <div class="dev-grid">
+            <div><span class="k">Endpoint</span><span class="v" id="endpointText"></span></div>
+            <div><span class="k">Spin ID</span><span class="v" id="spinIdText">—</span></div>
+            <div><span class="k">Server status</span><span class="v" id="serverStatusText">—</span></div>
+          </div>
+        </details>
+      </form>
+
+      <footer class="footnote">
+        <span>©</span> <span id="year"></span>
+        <span class="sep">•</span>
+        <span>Powered by Supabase Edge Functions</span>
+      </footer>
+    </section>
+  </main>
+
+  <canvas id="confetti" class="confetti" aria-hidden="true"></canvas>
+
+  <script src="./app.js"></script>
+</body>
+</html>
