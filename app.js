@@ -1,5 +1,6 @@
+// ====== CẤU HÌNH (GIỮ NGUYÊN 2 DÒNG NÀY ĐÚNG PROJECT CỦA BẠN) ======
 const FUNCTION_URL = "https://wphojcbtmdtiifczfcqd.supabase.co/functions/v1/Spin";
-const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwaG9qY2J0bWR0aWlmY3pmY3FkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTY5NzksImV4cCI6MjA4MjE3Mjk3OX0.Afo6r6HzkapE1TUCGsFMmNXK5HGZUGxyPV79-sJgQzA";
+const ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE"; // <-- thay bằng anon key của bạn
 
 const $ = (id) => document.getElementById(id);
 
@@ -23,14 +24,12 @@ const emailHint = $("emailHint");
 const statusText = $("statusText");
 const prizeText = $("prizeText");
 const resultBox = $("result");
-const endpointText = $("endpointText");
-const spinIdText = $("spinIdText");
-const serverStatusText = $("serverStatusText");
 const envPill = $("envPill");
 
+// Footer year
 $("year").textContent = String(new Date().getFullYear());
-endpointText.textContent = FUNCTION_URL;
 
+// Env pill
 envPill.textContent = location.hostname.includes("localhost") ? "Local" : "Production";
 
 const PRIZE_LABEL = "GPT Plus 1 tháng";
@@ -179,6 +178,7 @@ function resizeConfetti() {
   confettiCtx.setTransform(dpr,0,0,dpr,0,0);
 }
 resizeConfetti();
+
 window.addEventListener("resize", () => {
   drawWheel(currentRotation);
   resizeConfetti();
@@ -333,17 +333,17 @@ async function callSpinAPI({ name, email, note }) {
   let json = null;
   try { json = JSON.parse(text); } catch { /* ignore */ }
 
-  serverStatusText.textContent = `${res.status} ${res.statusText}`;
-
   if (!res.ok) {
     const msg = (json && (json.detail || json.message || json.error))
       ? (json.detail || json.message || json.error)
       : text;
     throw new Error(`HTTP_${res.status}: ${msg}`);
   }
+
   return json;
 }
 
+// ====== INIT ======
 drawWheel(0);
 prizeText.textContent = PRIZE_LABEL;
 setStatus("Sẵn sàng");
@@ -387,8 +387,6 @@ form.addEventListener("submit", async (ev) => {
     const data = resp?.data || {};
     const status = data?.status;
 
-    spinIdText.textContent = data?.spin_id || "—";
-
     if (status === "ALREADY_SPUN") {
       setStatus("Đã quay trước đó", "bad");
       setResult(`${badge("ALREADY_SPUN", "bad")} Email này đã quay rồi. Hệ thống không ghi nhận thêm để tránh gian lận.`);
@@ -415,15 +413,13 @@ form.addEventListener("submit", async (ev) => {
       startConfetti();
       setResult(
         `${badge("WIN", "good")} Chúc mừng <b>${name}</b>! Bạn đã trúng <b>${data?.prize || PRIZE_LABEL}</b>.<br/>
-         <span class="muted">Hệ thống đã gửi thông báo về admin (Telegram) để liên hệ trao thưởng.</span><br/>
-         <span class="muted">Spin ID:</span> <b>${data?.spin_id || "—"}</b>`
+         <span class="muted">Hệ thống đã gửi thông báo về admin (Telegram) để liên hệ trao thưởng.</span>`
       );
     } else {
       setStatus("Chưa trúng lần này", "warn");
       setResult(
         `${badge("LOSE", "warn")} Rất tiếc <b>${name}</b>, bạn chưa trúng lần này.<br/>
-         <span class="muted">Hẹn gặp lại ở sự kiện tiếp theo.</span><br/>
-         <span class="muted">Spin ID:</span> <b>${data?.spin_id || "—"}</b>`
+         <span class="muted">Hẹn gặp lại ở sự kiện tiếp theo.</span>`
       );
     }
 
