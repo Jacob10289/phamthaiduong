@@ -1,6 +1,5 @@
-// ====== CẤU HÌNH (GIỮ NGUYÊN 2 DÒNG NÀY ĐÚNG PROJECT CỦA BẠN) ======
 const FUNCTION_URL = "https://wphojcbtmdtiifczfcqd.supabase.co/functions/v1/Spin";
-const ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE"; // <-- thay bằng anon key của bạn
+const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwaG9qY2J0bWR0aWlmY3pmY3FkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTY5NzksImV4cCI6MjA4MjE3Mjk3OX0.Afo6r6HzkapE1TUCGsFMmNXK5HGZUGxyPV79-sJgQzA";
 
 const $ = (id) => document.getElementById(id);
 
