@@ -61,9 +61,9 @@ function resizeCanvasForDPR(canvas, targetCssPx) {
 }
 
 function measureWheelCssSize() {
-  const max = 420;
-  const vw = Math.round(window.innerWidth * 0.82);
-  return Math.min(max, vw);
+  const rect = wheelCanvas.getBoundingClientRect();
+  const size = Math.floor(Math.min(rect.width || 0, rect.height || 0));
+  return size > 0 ? size : Math.min(420, Math.round(window.innerWidth * 0.82));
 }
 
 function drawWheel(rotationRad = 0) {
