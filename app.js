@@ -1,10 +1,17 @@
+/* =========================
+   CONFIG
+========================= */
 const FUNCTION_URL = "https://wphojcbtmdtiifczfcqd.supabase.co/functions/v1/Spin";
 const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwaG9qY2J0bWR0aWlmY3pmY3FkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTY5NzksImV4cCI6MjA4MjE3Mjk3OX0.Afo6r6HzkapE1TUCGsFMmNXK5HGZUGxyPV79-sJgQzA";
 
+/* =========================
+   DOM
+========================= */
 const $ = (id) => document.getElementById(id);
 
 const wheelCanvas = $("wheel");
 const ctx = wheelCanvas.getContext("2d");
+
 const confettiCanvas = $("confetti");
 const confettiCtx = confettiCanvas.getContext("2d");
 
@@ -25,15 +32,14 @@ const prizeText = $("prizeText");
 const resultBox = $("result");
 const envPill = $("envPill");
 
-// Footer year
 $("year").textContent = String(new Date().getFullYear());
-
-// Env pill
 envPill.textContent = location.hostname.includes("localhost") ? "Local" : "Production";
 
+/* =========================
+   DATA
+========================= */
 const PRIZE_LABEL = "GPT Plus 1 tháng";
 
-// ====== SEGMENTS (đổi toàn bộ ô thua thành 1 câu) ======
 const segments = [
   { label: PRIZE_LABEL, kind: "prize" },
   { label: "Chúc bạn may mắn lần sau", kind: "lose" },
@@ -45,43 +51,67 @@ const segments = [
   { label: "Chúc bạn may mắn lần sau", kind: "lose" },
 ];
 
-const prizeIndex = segments.findIndex(s => s.kind === "prize");
-const loseIndexes = segments.map((s, i) => s.kind === "lose" ? i : -1).filter(i => i >= 0);
+const prizeIndex = segments.findIndex((s) => s.kind === "prize");
+const loseIndexes = segments
+  .map((s, i) => (s.kind === "lose" ? i : -1))
+  .filter((i) => i >= 0);
 
-let currentRotation = 0; // radians
+let currentRotation = 0;
 let spinning = false;
 
+/* =========================
+   CANVAS HELPERS
+========================= */
 function resizeCanvasForDPR(canvas, targetCssPx) {
   const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-  const css = targetCssPx;
-  canvas.style.width = css + "px";
-  canvas.style.height = css + "px";
-  canvas.width = Math.round(css * dpr);
-  canvas.height = Math.round(css * dpr);
+  canvas.style.width = targetCssPx + "px";
+  canvas.style.height = targetCssPx + "px";
+  canvas.width = Math.round(targetCssPx * dpr);
+  canvas.height = Math.round(targetCssPx * dpr);
   return dpr;
 }
 
 function measureWheelCssSize() {
+  // Ưu tiên đúng size CSS mà #wheel đang hiển thị
   const rect = wheelCanvas.getBoundingClientRect();
-  const size = Math.floor(Math.min(rect.width || 0, rect.height || 0));
+  const w = rect.width || 0;
+  const h = rect.height || 0;
+  const size = Math.floor(Math.min(w, h));
+  // fallback nếu rect chưa có (mới load)
   return size > 0 ? size : Math.min(420, Math.round(window.innerWidth * 0.82));
 }
 
+function normalizeRad(r) {
+  const t = Math.PI * 2;
+  return ((r % t) + t) % t;
+}
+
+function segmentCenterAngle(index) {
+  const arc = (Math.PI * 2) / segments.length;
+  const start = index * arc - Math.PI / 2;
+  return start + arc / 2;
+}
+
+/* =========================
+   WHEEL DRAW (FIXED)
+========================= */
 function drawWheel(rotationRad = 0) {
   const sizeCss = measureWheelCssSize();
   const dpr = resizeCanvasForDPR(wheelCanvas, sizeCss);
 
   const w = wheelCanvas.width;
   const h = wheelCanvas.height;
-  const cx = w / 2, cy = h / 2;
+  const cx = w / 2;
+  const cy = h / 2;
 
+  // Bán kính vòng
   const r = Math.min(w, h) * 0.46;
 
-  // Hub (vòng đen giữa)
-  const innerR = r * 0.42;
+  // Hub nhỏ lại để không che chữ
+  const innerR = r * 0.40;
 
-  // Vị trí đặt chữ trong "vành"
-  const textR = innerR + (r - innerR) * 0.62;
+  // Vị trí text trong “vành”
+  const textR = innerR + (r - innerR) * 0.63;
 
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, w, h);
@@ -102,7 +132,7 @@ function drawWheel(rotationRad = 0) {
   ctx.fillStyle = grad;
   ctx.fill();
 
-  // Split text 2 dòng để không tràn
+  // Label 2 dòng để dứt điểm tràn chữ
   function labelLines(i) {
     const isPrize = i === prizeIndex;
     if (isPrize) return ["GPT Plus", "1 tháng"];
@@ -113,7 +143,7 @@ function drawWheel(rotationRad = 0) {
     const start = i * arc - Math.PI / 2;
     const end = start + arc;
 
-    // Vẽ lát
+    // Lát
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.arc(0, 0, r, start, end);
@@ -139,15 +169,15 @@ function drawWheel(rotationRad = 0) {
     ctx.lineWidth = Math.max(1, 1.2 * dpr);
     ctx.stroke();
 
-    // ====== clip donut: chữ không thể đè vào hub ======
+    // === CLIP donut để chữ không bao giờ đè vào hub ===
     ctx.save();
     ctx.beginPath();
     ctx.arc(0, 0, r * 0.99, start, end, false);
-    ctx.arc(0, 0, innerR * 1.06, end, start, true);
+    ctx.arc(0, 0, innerR * 1.08, end, start, true);
     ctx.closePath();
     ctx.clip();
 
-    // Vẽ chữ
+    // Vẽ chữ theo mid
     const mid = start + arc / 2;
     ctx.rotate(mid);
 
@@ -156,6 +186,7 @@ function drawWheel(rotationRad = 0) {
     ctx.fillStyle = isPrize ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.88)";
 
     const lines = labelLines(i);
+
     const baseFont = Math.round(12 * dpr);
     const font = isPrize ? baseFont + 1 : baseFont;
     ctx.font = `800 ${font}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
@@ -170,21 +201,21 @@ function drawWheel(rotationRad = 0) {
     }
     ctx.restore();
 
-    ctx.restore(); // restore clip
+    ctx.restore();
   }
 
-  // ====== Hub (vòng đen giữa) ======
+  // Hub
   ctx.beginPath();
   ctx.arc(0, 0, innerR, 0, Math.PI * 2);
   ctx.fillStyle = "rgba(8,12,24,0.90)";
   ctx.fill();
 
-  // viền hub nhẹ
+  // Viền hub nhẹ
   ctx.strokeStyle = "rgba(110,231,255,0.16)";
   ctx.lineWidth = Math.max(1, 1.2 * dpr);
   ctx.stroke();
 
-  // glow hub
+  // Glow hub
   const ig = ctx.createRadialGradient(
     -innerR * 0.35, -innerR * 0.45, innerR * 0.15,
     0, 0, innerR * 1.15
@@ -197,168 +228,9 @@ function drawWheel(rotationRad = 0) {
   ctx.fill();
 }
 
-    // Vẽ lát
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.arc(0, 0, r, start, end);
-    ctx.closePath();
-
-    const isPrize = i === prizeIndex;
-    const fill = isPrize
-      ? ctx.createLinearGradient(-r, -r, r, r)
-      : ctx.createLinearGradient(-r, r, r, -r);
-
-    if (isPrize) {
-      fill.addColorStop(0, "rgba(110,231,255,0.22)");
-      fill.addColorStop(1, "rgba(155,140,255,0.20)");
-    } else {
-      fill.addColorStop(0, "rgba(255,255,255,0.06)");
-      fill.addColorStop(1, "rgba(255,255,255,0.02)");
-    }
-
-    ctx.fillStyle = fill;
-    ctx.fill();
-
-    ctx.strokeStyle = "rgba(255,255,255,0.12)";
-    ctx.lineWidth = Math.max(1, 1.2 * dpr);
-    ctx.stroke();
-
-    // ====== DỨT ĐIỂM: clip vùng donut để chữ không thể đè vào hub ======
-    ctx.save();
-    ctx.beginPath();
-    // cung ngoài
-    ctx.arc(0, 0, r * 0.99, start, end, false);
-    // cung trong (ngược chiều) để tạo vành khuyên
-    ctx.arc(0, 0, innerR * 1.06, end, start, true);
-    ctx.closePath();
-    ctx.clip();
-
-    // Vẽ chữ
-    const mid = start + arc / 2;
-    ctx.rotate(mid);
-
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = isPrize ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.86)";
-
-    const lines = labelLines(i);
-
-    // font theo dpr + mobile
-    const baseFont = Math.round(12 * dpr);
-    const font = isPrize ? baseFont + 1 : baseFont;
-    ctx.font = `800 ${font}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
-
-    const lineGap = Math.round(13 * dpr);
-    const y0 = -(lines.length - 1) * lineGap / 2;
-
-    // đặt chữ ở textR (theo trục X sau khi rotate)
-    // (0,0) ở tâm; sau rotate(mid), trục X hướng ra mép lát
-    ctx.save();
-    ctx.translate(textR, 0);
-    for (let k = 0; k < lines.length; k++) {
-      ctx.fillText(lines[k], 0, y0 + k * lineGap);
-    }
-    ctx.restore();
-
-    ctx.restore(); // restore clip
-  }
-
-  // ====== Hub (vòng đen giữa) ======
-  ctx.beginPath();
-  ctx.arc(0, 0, innerR, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(8,12,24,0.90)";
-  ctx.fill();
-
-  // viền hub nhẹ
-  ctx.strokeStyle = "rgba(110,231,255,0.16)";
-  ctx.lineWidth = Math.max(1, 1.2 * dpr);
-  ctx.stroke();
-
-  // glow hub
-  const ig = ctx.createRadialGradient(-innerR * 0.35, -innerR * 0.45, innerR * 0.15, 0, 0, innerR * 1.15);
-  ig.addColorStop(0, "rgba(255,255,255,0.10)");
-  ig.addColorStop(1, "rgba(255,255,255,0.00)");
-  ctx.beginPath();
-  ctx.arc(0, 0, innerR, 0, Math.PI * 2);
-  ctx.fillStyle = ig;
-  ctx.fill();
-}
-
-  for (let i = 0; i < n; i++) {
-    const start = i * arc - Math.PI/2;
-    const end = start + arc;
-
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.arc(0,0,r,start,end);
-    ctx.closePath();
-
-    const isPrize = i === prizeIndex;
-    const fill = isPrize
-      ? ctx.createLinearGradient(-r, -r, r, r)
-      : ctx.createLinearGradient(-r, r, r, -r);
-
-    if (isPrize) {
-      fill.addColorStop(0, "rgba(110,231,255,0.22)");
-      fill.addColorStop(1, "rgba(155,140,255,0.20)");
-    } else {
-      fill.addColorStop(0, "rgba(255,255,255,0.06)");
-      fill.addColorStop(1, "rgba(255,255,255,0.02)");
-    }
-
-    ctx.fillStyle = fill;
-    ctx.fill();
-
-    ctx.strokeStyle = "rgba(255,255,255,0.12)";
-    ctx.lineWidth = Math.max(1, 1.2 * dpr);
-    ctx.stroke();
-
-    // ====== TEXT ======
-    ctx.save();
-    const mid = start + arc / 2;
-    ctx.rotate(mid);
-
-    ctx.textAlign = "right";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = isPrize ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.82)";
-
-    const text = segments[i].label;
-
-    // khoảng trống text (tránh đè vào hub)
-    const maxWidth = Math.max(40, textEndX - innerR * 1.08);
-
-    // auto giảm font nếu text dài (đặc biệt PRIZE_LABEL)
-    let fontPx = Math.round(14 * dpr);
-    ctx.font = `700 ${fontPx}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
-
-    while (fontPx > Math.round(10 * dpr) && ctx.measureText(text).width > maxWidth) {
-      fontPx -= 1;
-      ctx.font = `700 ${fontPx}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
-    }
-
-    ctx.fillText(text, textEndX, 0);
-    ctx.restore();
-  }
-
-  // ====== HUB (vòng đen) - nhỏ lại + có viền nhẹ ======
-  ctx.beginPath();
-  ctx.arc(0,0,innerR,0,Math.PI*2);
-  ctx.fillStyle = "rgba(8,12,24,0.88)";
-  ctx.fill();
-
-  ctx.strokeStyle = "rgba(110,231,255,0.18)";
-  ctx.lineWidth = Math.max(1, 1.2 * dpr);
-  ctx.stroke();
-
-  const ig = ctx.createRadialGradient(-innerR*0.35,-innerR*0.45, innerR*0.15, 0,0, innerR*1.15);
-  ig.addColorStop(0, "rgba(255,255,255,0.10)");
-  ig.addColorStop(1, "rgba(255,255,255,0.00)");
-  ctx.beginPath();
-  ctx.arc(0,0,innerR,0,Math.PI*2);
-  ctx.fillStyle = ig;
-  ctx.fill();
-}
-
+/* =========================
+   UI HELPERS
+========================= */
 function setStatus(text, tone = "neutral") {
   statusText.textContent = text;
   statusText.style.color =
@@ -375,6 +247,18 @@ function badge(text, kind) {
   return `<span class="badge ${kind}">${text}</span>`;
 }
 
+function setBusy(b) {
+  spinBtn.disabled = b;
+  submitBtn.disabled = b;
+  demoBtn.disabled = b;
+  nameEl.disabled = b;
+  emailEl.disabled = b;
+  noteEl.disabled = b;
+}
+
+/* =========================
+   CONFETTI
+========================= */
 let confettiParticles = [];
 let confettiActive = false;
 
@@ -384,18 +268,13 @@ function resizeConfetti() {
   confettiCanvas.height = Math.round(window.innerHeight * dpr);
   confettiCanvas.style.width = "100vw";
   confettiCanvas.style.height = "100vh";
-  confettiCtx.setTransform(dpr,0,0,dpr,0,0);
+  confettiCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 resizeConfetti();
 
-window.addEventListener("resize", () => {
-  drawWheel(currentRotation);
-  resizeConfetti();
-});
-
 function startConfetti() {
   resizeConfetti();
-  confettiParticles = Array.from({length: 120}, () => ({
+  confettiParticles = Array.from({ length: 120 }, () => ({
     x: Math.random() * window.innerWidth,
     y: -20 - Math.random() * 200,
     vx: (Math.random() - 0.5) * 3,
@@ -411,7 +290,7 @@ function startConfetti() {
 
 function tickConfetti() {
   if (!confettiActive) return;
-  confettiCtx.clearRect(0,0,window.innerWidth, window.innerHeight);
+  confettiCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
   for (const p of confettiParticles) {
     p.x += p.vx;
@@ -424,67 +303,22 @@ function tickConfetti() {
     confettiCtx.rotate(p.a);
     confettiCtx.globalAlpha = Math.max(0, Math.min(1, p.life / 90));
     confettiCtx.fillStyle = "rgba(255,255,255,0.90)";
-    confettiCtx.fillRect(-p.r, -p.r, p.r*2, p.r*2);
+    confettiCtx.fillRect(-p.r, -p.r, p.r * 2, p.r * 2);
     confettiCtx.restore();
   }
 
-  confettiParticles = confettiParticles.filter(p => p.life > 0 && p.y < window.innerHeight + 50);
+  confettiParticles = confettiParticles.filter((p) => p.life > 0 && p.y < window.innerHeight + 50);
   if (confettiParticles.length === 0) {
     confettiActive = false;
-    confettiCtx.clearRect(0,0,window.innerWidth, window.innerHeight);
+    confettiCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     return;
   }
   requestAnimationFrame(tickConfetti);
 }
 
-function normalizeRad(r) {
-  const t = Math.PI * 2;
-  return ((r % t) + t) % t;
-}
-
-function segmentCenterAngle(index) {
-  const arc = (Math.PI * 2) / segments.length;
-  const start = index * arc - Math.PI/2;
-  return start + arc/2;
-}
-
-function spinToIndex(targetIndex) {
-  if (spinning) return Promise.reject(new Error("SPINNING"));
-  spinning = true;
-
-  const arcCenter = segmentCenterAngle(targetIndex);
-  const desired = normalizeRad((-Math.PI/2) - arcCenter);
-
-  const extraTurns = 6 + Math.floor(Math.random() * 3); // 6..8
-
-  const base = currentRotation;
-  const baseNorm = normalizeRad(base);
-
-  let target = base - baseNorm + desired + extraTurns * Math.PI * 2;
-  if (target <= base) target += Math.PI * 2;
-
-  const duration = 4600 + Math.random() * 700; // ms
-  const startTime = performance.now();
-  const startRot = currentRotation;
-
-  return new Promise((resolve) => {
-    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
-    function frame(now) {
-      const t = Math.min(1, (now - startTime) / duration);
-      const k = easeOutCubic(t);
-      currentRotation = startRot + (target - startRot) * k;
-      drawWheel(currentRotation);
-
-      if (t < 1) requestAnimationFrame(frame);
-      else {
-        spinning = false;
-        resolve();
-      }
-    }
-    requestAnimationFrame(frame);
-  });
-}
-
+/* =========================
+   FORM VALIDATION
+========================= */
 function normalizeEmail(v) {
   return String(v || "").trim().toLowerCase();
 }
@@ -512,15 +346,9 @@ function validateForm() {
   return ok;
 }
 
-function setBusy(b) {
-  spinBtn.disabled = b;
-  submitBtn.disabled = b;
-  demoBtn.disabled = b;
-  nameEl.disabled = b;
-  emailEl.disabled = b;
-  noteEl.disabled = b;
-}
-
+/* =========================
+   API
+========================= */
 async function callSpinAPI({ name, email, note }) {
   const body = {
     name,
@@ -552,15 +380,70 @@ async function callSpinAPI({ name, email, note }) {
   return json;
 }
 
-// ====== INIT ======
-drawWheel(0);
+/* =========================
+   SPIN ANIMATION
+========================= */
+function spinToIndex(targetIndex) {
+  if (spinning) return Promise.reject(new Error("SPINNING"));
+  spinning = true;
+
+  const arcCenter = segmentCenterAngle(targetIndex);
+  const desired = normalizeRad((-Math.PI / 2) - arcCenter);
+
+  const extraTurns = 6 + Math.floor(Math.random() * 3); // 6..8
+
+  const base = currentRotation;
+  const baseNorm = normalizeRad(base);
+
+  let target = base - baseNorm + desired + extraTurns * Math.PI * 2;
+  if (target <= base) target += Math.PI * 2;
+
+  const duration = 4600 + Math.random() * 700;
+  const startTime = performance.now();
+  const startRot = currentRotation;
+
+  return new Promise((resolve) => {
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+    function frame(now) {
+      const t = Math.min(1, (now - startTime) / duration);
+      const k = easeOutCubic(t);
+      currentRotation = startRot + (target - startRot) * k;
+      drawWheel(currentRotation);
+
+      if (t < 1) requestAnimationFrame(frame);
+      else {
+        spinning = false;
+        resolve();
+      }
+    }
+    requestAnimationFrame(frame);
+  });
+}
+
+/* =========================
+   INIT + EVENTS
+========================= */
+function safeRedraw() {
+  try { drawWheel(currentRotation); } catch (e) {
+    console.error("drawWheel error:", e);
+    setStatus("Lỗi hiển thị vòng quay", "bad");
+    setResult(`${badge("JS ERROR", "bad")} Mở console để xem lỗi.`);
+  }
+}
+
+safeRedraw();
 prizeText.textContent = PRIZE_LABEL;
 setStatus("Sẵn sàng");
 setResult(`${badge("READY", "warn")} Nhập thông tin và bấm <b>Quay</b>.`);
 
+window.addEventListener("resize", () => {
+  safeRedraw();
+  resizeConfetti();
+});
+
 demoBtn.addEventListener("click", () => {
   nameEl.value = "Nguyễn Văn A";
-  emailEl.value = `demo${Math.floor(Math.random()*10000)}@example.com`;
+  emailEl.value = `demo${Math.floor(Math.random() * 10000)}@example.com`;
   noteEl.value = "Demo";
   setResult(`${badge("Demo", "warn")} Đã điền dữ liệu mẫu. Bấm <b>Gửi & Quay</b>.`);
 });
@@ -631,7 +514,6 @@ form.addEventListener("submit", async (ev) => {
          <span class="muted">Hẹn gặp lại ở sự kiện tiếp theo.</span>`
       );
     }
-
   } catch (e) {
     setStatus("Lỗi server / cấu hình", "bad");
     setResult(`${badge("ERROR", "bad")} ${String(e.message || e)}`);
