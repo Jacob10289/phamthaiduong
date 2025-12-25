@@ -107,7 +107,7 @@ body{
   padding: 18px 0 8px;
 }
 
-/* pointer luôn ở giữa */
+/* Pointer luôn ở giữa 100% */
 .pointer{
   position:absolute;
   top: 8px;
@@ -128,8 +128,6 @@ body{
   background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.10), rgba(255,255,255,.02));
   border:1px solid rgba(255,255,255,.12);
   box-shadow: 0 18px 60px rgba(0,0,0,.55);
-  display:block;              /* tránh baseline lệch của canvas */
-  aspect-ratio: 1 / 1;        /* giữ luôn vuông */
 }
 
 .wheel-center{
@@ -150,26 +148,19 @@ body{
   cursor:pointer;
   transition: transform .06s ease, background .18s ease, border-color .18s ease, opacity .18s ease;
   user-select:none;
-  touch-action: manipulation;
 }
 .btn:hover{background: rgba(255,255,255,.08)}
 .btn:active{transform: translateY(1px)}
 .btn[disabled]{opacity:.55; cursor:not-allowed}
 
+/* Nút Quay: bỏ viền “xanh nhạt” gây cảm giác vòng bao quanh bị lệch */
 .btn-primary{
   width: 130px;
   height: 130px;
   border-radius: 999px;
 
-  /* bỏ vòng mờ quanh nút */
-  border: none;
-
-  /* nền tối, đúng tâm */
-  background: radial-gradient(circle at 50% 50%,
-    rgba(12,18,38,.72),
-    rgba(0,0,0,.40)
-  );
-
+  border: 1px solid rgba(255,255,255,.14); /* viền nhẹ trung tính (không xanh) */
+  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.06), rgba(0,0,0,.28));
   box-shadow: 0 18px 55px rgba(0,0,0,.55);
 
   display:flex;
@@ -179,21 +170,22 @@ body{
   gap:6px;
 }
 
-.btn-label{font-weight:800; font-size:18px}
-.btn-sub{font-size:12px; color:rgba(255,255,255,.82)}
-
-/* giữ xanh cho chữ "Quay" */
-.btn-primary .btn-label{
+/* Tô đậm + giữ màu xanh biển chữ Quay */
+#spinBtn .btn-label{
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: .2px;
   color: var(--accent);
-  text-shadow: 0 1px 10px rgba(110,231,255,.12);
+  text-shadow: 0 2px 10px rgba(0,0,0,.45);
 }
-
-.btn-primary:focus{outline:none}
-.btn-primary:focus-visible{outline:none}
+#spinBtn .btn-sub{
+  font-weight: 700;
+  opacity: .95;
+}
 
 @media (max-width: 420px){
   .btn-primary{ width: 112px; height:112px; }
-  .btn-label{ font-size:16px; }
+  #spinBtn .btn-label{ font-size:20px; }
 }
 
 .btn-secondary{
@@ -239,7 +231,7 @@ body{
   background: rgba(0,0,0,.22);
   color: var(--text);
   outline:none;
-  font-size:16px; /* iOS: tránh tự zoom */
+  font-size:16px;
 }
 .field input:focus{
   border-color: rgba(110,231,255,.40);
@@ -273,6 +265,18 @@ body{
 .badge.good{border-color: rgba(74,222,128,.35); background: rgba(74,222,128,.10)}
 .badge.warn{border-color: rgba(251,191,36,.35); background: rgba(251,191,36,.10)}
 .badge.bad{border-color: rgba(251,113,133,.35); background: rgba(251,113,133,.10)}
+
+.dev{
+  margin-top: 12px;
+  border:1px solid var(--line2);
+  border-radius: 14px;
+  background: rgba(0,0,0,.14);
+  padding: 10px 12px;
+}
+.dev summary{cursor:pointer; color: var(--muted); font-size:12px}
+.dev-grid{margin-top:10px; display:grid; gap:8px}
+.dev-grid .k{display:inline-block; width:110px; color: var(--muted); font-size:12px}
+.dev-grid .v{font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px}
 
 .footnote{
   margin-top: 12px;
