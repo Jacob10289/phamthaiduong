@@ -26,7 +26,7 @@ const prizeText = $("prizeText");
 const resultBox = $("result");
 const envPill = $("envPill");
 
-// Optional elements (nếu bạn có giữ "Thông tin kỹ thuật" thì vẫn chạy)
+// Optional (nếu vẫn còn box “Thông tin kỹ thuật”)
 const endpointText = $("endpointText");
 const spinIdText = $("spinIdText");
 const serverStatusText = $("serverStatusText");
@@ -41,6 +41,7 @@ envPill.textContent = location.hostname.includes("localhost") ? "Local" : "Produ
 const PRIZE_LABEL = "GPT Plus 1 tháng";
 const LOSE_LABEL = "Chúc bạn may mắn lần sau";
 
+// 1 ô thưởng + 7 ô thua (đúng yêu cầu)
 const segments = [
   { label: PRIZE_LABEL, kind: "prize" },
   { label: LOSE_LABEL, kind: "lose" },
@@ -74,7 +75,7 @@ function measureWheelCssSize() {
   return size > 0 ? size : Math.min(420, Math.round(window.innerWidth * 0.82));
 }
 
-// ====== DRAW WHEEL (dứt điểm: chữ không đè vào tâm + chữ luôn đứng) ======
+// ====== DRAW WHEEL (FIX DỨT ĐIỂM) ======
 function drawWheel(rotationRad = 0) {
   const sizeCss = measureWheelCssSize();
   const dpr = resizeCanvasForDPR(wheelCanvas, sizeCss);
@@ -83,13 +84,13 @@ function drawWheel(rotationRad = 0) {
   const h = wheelCanvas.height;
   const cx = w / 2, cy = h / 2;
 
-  // bán kính ngoài (để còn viền highlight)
+  // bán kính bánh
   const r = Math.min(w, h) * 0.46;
 
-  // hub canvas (vòng đen nền phía sau nút) -> làm nhỏ + KHÔNG vẽ viền xanh
-  const innerR = r * 0.34;
+  // vùng cấm chữ (donut) – chỉ dùng để CLIP, không vẽ hub nữa
+  const innerR = r * 0.36;
 
-  // vị trí đặt chữ trong vành donut
+  // bán kính đặt chữ
   const textR = innerR + (r - innerR) * 0.62;
 
   ctx.setTransform(1,0,0,1,0,0);
@@ -111,7 +112,7 @@ function drawWheel(rotationRad = 0) {
   ctx.fillStyle = ringGrad;
   ctx.fill();
 
-  // label 2 dòng để không tràn
+  // label 2 dòng cố định cho đẹp + không tràn
   function labelLines(i) {
     const isPrize = i === prizeIndex;
     if (isPrize) return ["GPT Plus", "1 tháng"];
@@ -152,29 +153,29 @@ function drawWheel(rotationRad = 0) {
     ctx.save();
     ctx.beginPath();
     ctx.arc(0,0,r * 0.99, start, end, false);
-    ctx.arc(0,0,innerR * 1.10, end, start, true);
+    ctx.arc(0,0,innerR * 1.08, end, start, true);
     ctx.closePath();
     ctx.clip();
 
-    // ====== text upright ======
+    // ====== text upright (FIX: đổi dấu translate khi rotate 180) ======
     const mid = start + arc/2;
+
     ctx.save();
     ctx.rotate(mid);
 
-    // nếu chữ bị lộn ngược (nằm phía trái bánh xe), xoay 180° để luôn đứng
     const a = ((mid % (Math.PI*2)) + (Math.PI*2)) % (Math.PI*2);
-    if (a > Math.PI/2 && a < (Math.PI * 3)/2) {
-      ctx.rotate(Math.PI);
-    }
+    const upsideDown = (a > Math.PI/2 && a < (Math.PI * 3)/2);
 
-    ctx.translate(textR, 0);
+    if (upsideDown) ctx.rotate(Math.PI);
+
+    // QUAN TRỌNG: nửa trái sau khi rotate PI thì phải translate âm để vẫn ra phía ngoài
+    ctx.translate((upsideDown ? -textR : textR), 0);
 
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = isPrize ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.88)";
 
     const lines = labelLines(i);
-
     const baseFont = Math.round(12 * dpr);
     const fontPx = isPrize ? baseFont + 1 : baseFont;
     ctx.font = `800 ${fontPx}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
@@ -190,20 +191,7 @@ function drawWheel(rotationRad = 0) {
     ctx.restore(); // clip
   }
 
-  // ====== hub nền (không viền xanh) ======
-  const hubGrad = ctx.createRadialGradient(-innerR*0.25, -innerR*0.3, innerR*0.1, 0, 0, innerR*1.25);
-  hubGrad.addColorStop(0, "rgba(255,255,255,0.06)");
-  hubGrad.addColorStop(1, "rgba(0,0,0,0.00)");
-
-  ctx.beginPath();
-  ctx.arc(0,0,innerR,0,Math.PI*2);
-  ctx.fillStyle = "rgba(8,12,24,0.82)";
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.arc(0,0,innerR,0,Math.PI*2);
-  ctx.fillStyle = hubGrad;
-  ctx.fill();
+  // ====== BỎ HUB CANVAS (để khỏi có vòng mờ quanh nút Quay) ======
 }
 
 // ====== UI HELPERS ======
@@ -390,7 +378,7 @@ async function callSpinAPI({ name, email, note }) {
 
   const text = await res.text();
   let json = null;
-  try { json = JSON.parse(text); } catch { /* ignore */ }
+  try { json = JSON.parse(text); } catch {}
 
   if (serverStatusText) serverStatusText.textContent = `${res.status} ${res.statusText}`;
 
@@ -409,6 +397,7 @@ if (endpointText) endpointText.textContent = FUNCTION_URL;
 
 drawWheel(0);
 prizeText.textContent = PRIZE_LABEL;
+
 setStatus("Sẵn sàng");
 setResult(`${badge("READY", "warn")} Nhập thông tin và bấm <b>Quay</b>.`);
 
