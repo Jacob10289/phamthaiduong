@@ -168,10 +168,6 @@ function drawWheel(rotationRad = 0) {
     ctx.fillStyle = fill;
     ctx.fill();
 
-    ctx.strokeStyle = "rgba(255,255,255,0.12)";
-    ctx.lineWidth = Math.max(1, 1.2 * dpr);
-    ctx.stroke();
-
     // ===== TEXT: tangent + auto flip + auto fit =====
     const lines = labelLines(i);
 
