@@ -104,12 +104,16 @@ body{
   position:relative;
   display:grid;
   place-items:center;
-  padding: 18px 12px 8px;
+  /* tăng khoảng trống phía trên để pointer không “đè” */
+  padding: 18px 0 8px;
 }
 
+/* Quan trọng: ép pointer luôn ở giữa 100% */
 .pointer{
   position:absolute;
-  top: 12px;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
   width:0; height:0;
   border-left: 12px solid transparent;
   border-right: 12px solid transparent;
@@ -119,15 +123,14 @@ body{
 }
 
 #wheel{
-  width:min(420px, 82vw);
-  height:min(420px, 82vw);
-  aspect-ratio: 1 / 1;
+  /* để wheel “vuông” và luôn cân theo viewport */
+  width: min(420px, 82vw);
+  height: min(420px, 82vw);
   border-radius:999px;
   background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.10), rgba(255,255,255,.02));
   border:1px solid rgba(255,255,255,.12);
   box-shadow: 0 18px 60px rgba(0,0,0,.55);
 }
-
 .wheel-center{
   position:absolute;
   inset:0;
