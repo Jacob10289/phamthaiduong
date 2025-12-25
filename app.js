@@ -77,10 +77,10 @@ function drawWheel(rotationRad = 0) {
 
   const r = Math.min(w, h) * 0.46;
 
-  // Hub (vòng đen giữa) - giảm thêm chút để thoáng
+  // Hub (vòng đen giữa)
   const innerR = r * 0.42;
 
-  // Vị trí đặt chữ: nằm ở “vành” giữa hub và mép ngoài
+  // Vị trí đặt chữ trong "vành"
   const textR = innerR + (r - innerR) * 0.62;
 
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -102,7 +102,7 @@ function drawWheel(rotationRad = 0) {
   ctx.fillStyle = grad;
   ctx.fill();
 
-  // Helper: split label 2 dòng (dứt điểm vấn đề text dài)
+  // Split text 2 dòng để không tràn
   function labelLines(i) {
     const isPrize = i === prizeIndex;
     if (isPrize) return ["GPT Plus", "1 tháng"];
@@ -112,6 +112,90 @@ function drawWheel(rotationRad = 0) {
   for (let i = 0; i < n; i++) {
     const start = i * arc - Math.PI / 2;
     const end = start + arc;
+
+    // Vẽ lát
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, r, start, end);
+    ctx.closePath();
+
+    const isPrize = i === prizeIndex;
+    const fill = isPrize
+      ? ctx.createLinearGradient(-r, -r, r, r)
+      : ctx.createLinearGradient(-r, r, r, -r);
+
+    if (isPrize) {
+      fill.addColorStop(0, "rgba(110,231,255,0.22)");
+      fill.addColorStop(1, "rgba(155,140,255,0.20)");
+    } else {
+      fill.addColorStop(0, "rgba(255,255,255,0.06)");
+      fill.addColorStop(1, "rgba(255,255,255,0.02)");
+    }
+
+    ctx.fillStyle = fill;
+    ctx.fill();
+
+    ctx.strokeStyle = "rgba(255,255,255,0.12)";
+    ctx.lineWidth = Math.max(1, 1.2 * dpr);
+    ctx.stroke();
+
+    // ====== clip donut: chữ không thể đè vào hub ======
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 0.99, start, end, false);
+    ctx.arc(0, 0, innerR * 1.06, end, start, true);
+    ctx.closePath();
+    ctx.clip();
+
+    // Vẽ chữ
+    const mid = start + arc / 2;
+    ctx.rotate(mid);
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = isPrize ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.88)";
+
+    const lines = labelLines(i);
+    const baseFont = Math.round(12 * dpr);
+    const font = isPrize ? baseFont + 1 : baseFont;
+    ctx.font = `800 ${font}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
+
+    const lineGap = Math.round(13 * dpr);
+    const y0 = -(lines.length - 1) * lineGap / 2;
+
+    ctx.save();
+    ctx.translate(textR, 0);
+    for (let k = 0; k < lines.length; k++) {
+      ctx.fillText(lines[k], 0, y0 + k * lineGap);
+    }
+    ctx.restore();
+
+    ctx.restore(); // restore clip
+  }
+
+  // ====== Hub (vòng đen giữa) ======
+  ctx.beginPath();
+  ctx.arc(0, 0, innerR, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(8,12,24,0.90)";
+  ctx.fill();
+
+  // viền hub nhẹ
+  ctx.strokeStyle = "rgba(110,231,255,0.16)";
+  ctx.lineWidth = Math.max(1, 1.2 * dpr);
+  ctx.stroke();
+
+  // glow hub
+  const ig = ctx.createRadialGradient(
+    -innerR * 0.35, -innerR * 0.45, innerR * 0.15,
+    0, 0, innerR * 1.15
+  );
+  ig.addColorStop(0, "rgba(255,255,255,0.10)");
+  ig.addColorStop(1, "rgba(255,255,255,0.00)");
+  ctx.beginPath();
+  ctx.arc(0, 0, innerR, 0, Math.PI * 2);
+  ctx.fillStyle = ig;
+  ctx.fill();
+}
 
     // Vẽ lát
     ctx.beginPath();
