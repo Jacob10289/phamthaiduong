@@ -1,5 +1,5 @@
 const FUNCTION_URL = "https://wphojcbtmdtiifczfcqd.supabase.co/functions/v1/Spin";
-const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwaG9qY2J0bWR0bWR0aWlmY3pmY3FkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTY5NzksImV4cCI6MjA4MjE3Mjk3OX0.Afo6r6HzkapE1TUCGsFMmNXK5HGZUGxyPV79-sJgQzA";
+const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwaG9qY2J0bWR0aWlmY3pmY3FkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTY5NzksImV4cCI6MjA4MjE3Mjk3OX0.Afo6r6HzkapE1TUCGsFMmNXK5HGZUGxyPV79-sJgQzA";
 
 const $ = (id) => document.getElementById(id);
 
@@ -22,40 +22,29 @@ const prizeText = $("prizeText");
 const resultBox = $("result");
 const envPill = $("envPill");
 
-// Footer year
 $("year").textContent = String(new Date().getFullYear());
 envPill.textContent = location.hostname.includes("localhost") ? "Local" : "Production";
 
 const PRIZE_LABEL = "GPT Plus 1 tháng";
 const LOSE_LABEL = "Chúc bạn may mắn lần sau";
-
 prizeText.textContent = PRIZE_LABEL;
 
-/* ========= Render game UI into wheel-area ========= */
+/* ===== Render mini game (Rút thẻ) ===== */
 const wheelArea = document.querySelector(".wheel-area");
-
-// Nếu HTML cũ có wheel-center + nút spinBtn, ta bỏ đi để tránh trùng
 const oldCenter = document.querySelector(".wheel-center");
 if (oldCenter) oldCenter.remove();
-
-// Lưu lại nếu có canvas wheel cũ
-const oldWheel = $("wheel");
-if (oldWheel) {
-  // Ẩn bằng css rồi, ở đây không cần remove
-}
-
 wheelArea.innerHTML = `
   <div class="game" id="gameRoot">
     <div class="game-head">
       <div>
         <h3 class="game-title">Rút thẻ may mắn</h3>
-        <p class="game-sub">Mỗi email chỉ được 1 lần. Bấm <b>Rút thẻ</b> để xem kết quả.</p>
+        <p class="game-sub">Mỗi email chỉ được 1 lần. Bấm <b>Gửi & Rút thẻ</b> để xem kết quả.</p>
       </div>
       <div class="pill" id="gameStatePill">READY</div>
     </div>
 
     <div class="deck">
-      <div class="card3d" id="card3d" aria-label="Lucky card">
+      <div class="card3d" id="card3d">
         <div class="card-face card-front">
           <div class="card-front-inner">
             <div class="card-badge"><span class="card-mark"></span> Lucky Card</div>
@@ -65,9 +54,7 @@ wheelArea.innerHTML = `
         </div>
 
         <div class="card-face card-back">
-          <div class="card-back-inner" id="cardBackInner">
-            <!-- filled by JS -->
-          </div>
+          <div class="card-back-inner" id="cardBackInner"></div>
         </div>
       </div>
     </div>
@@ -88,11 +75,8 @@ const resetBtn = $("resetBtn");
 let busy = false;
 let revealed = false;
 
-function setGameState(text) {
-  gameStatePill.textContent = text;
-}
+function setGameState(t){ gameStatePill.textContent = t; }
 
-/* ========= UI helpers ========= */
 function setStatus(text, tone = "neutral") {
   statusText.textContent = text;
   statusText.style.color =
@@ -100,12 +84,80 @@ function setStatus(text, tone = "neutral") {
     tone === "warn" ? "var(--warn)" :
     tone === "bad"  ? "var(--bad)" : "var(--text)";
 }
+function setResult(html){ resultBox.innerHTML = html; }
+function badge(text, kind){ return `<span class="badge ${kind}">${text}</span>`; }
 
-function setResult(html) { resultBox.innerHTML = html; }
+function normalizeEmail(v){ return String(v || "").trim().toLowerCase(); }
+function isValidEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
 
-function badge(text, kind) { return `<span class="badge ${kind}">${text}</span>`; }
+function validateForm() {
+  let ok = true;
+  nameHint.textContent = "";
+  emailHint.textContent = "";
 
-/* ========= Confetti ========= */
+  const name = String(nameEl.value || "").trim();
+  const email = normalizeEmail(emailEl.value);
+
+  if (!name || name.length < 2) {
+    nameHint.textContent = "Vui lòng nhập họ tên (tối thiểu 2 ký tự).";
+    ok = false;
+  }
+  if (!email || !isValidEmail(email)) {
+    emailHint.textContent = "Email không hợp lệ.";
+    ok = false;
+  }
+  return ok;
+}
+
+function setBusy(b){
+  busy = b;
+  revealBtn.disabled = b;
+  resetBtn.disabled = b;
+  submitBtn.disabled = b;
+  demoBtn.disabled = b;
+  nameEl.disabled = b;
+  emailEl.disabled = b;
+  noteEl.disabled = b;
+}
+
+function renderBack(status, prizeMaybe) {
+  if (status === "WIN") {
+    cardBackInner.innerHTML = `
+      <div class="result-pill win">WIN</div>
+      <div class="result-title">Chúc mừng!</div>
+      <div class="result-desc">Bạn đã trúng <b>${prizeMaybe || PRIZE_LABEL}</b>.</div>
+    `;
+  } else {
+    cardBackInner.innerHTML = `
+      <div class="result-pill lose">LOSE</div>
+      <div class="result-title">Rất tiếc</div>
+      <div class="result-desc">${LOSE_LABEL}.<br/>Hẹn gặp lại ở sự kiện tiếp theo.</div>
+    `;
+  }
+}
+
+function flipCard(){ card3d.classList.add("is-flipped"); revealed = true; }
+function resetCard(){
+  card3d.classList.remove("is-flipped");
+  cardBackInner.innerHTML = "";
+  revealed = false;
+  setGameState("READY");
+  setStatus("Sẵn sàng");
+  setResult(`${badge("READY","warn")} Nhập thông tin và bấm <b>Gửi & Rút thẻ</b>.`);
+}
+
+resetBtn.addEventListener("click", () => { if (!busy) resetCard(); });
+
+demoBtn.addEventListener("click", () => {
+  nameEl.value = "Nguyễn Văn A";
+  emailEl.value = `demo${Math.floor(Math.random()*10000)}@example.com`;
+  noteEl.value = "Demo";
+  setResult(`${badge("Demo","warn")} Đã điền dữ liệu mẫu. Bấm <b>Gửi & Rút thẻ</b>.`);
+});
+
+revealBtn.addEventListener("click", () => form.requestSubmit());
+
+/* ===== Confetti ===== */
 let confettiParticles = [];
 let confettiActive = false;
 
@@ -164,123 +216,46 @@ function tickConfetti() {
   requestAnimationFrame(tickConfetti);
 }
 
-/* ========= Form validation ========= */
-function normalizeEmail(v) { return String(v || "").trim().toLowerCase(); }
-function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-
-function validateForm() {
-  let ok = true;
-  nameHint.textContent = "";
-  emailHint.textContent = "";
-
-  const name = String(nameEl.value || "").trim();
-  const email = normalizeEmail(emailEl.value);
-
-  if (!name || name.length < 2) {
-    nameHint.textContent = "Vui lòng nhập họ tên (tối thiểu 2 ký tự).";
-    ok = false;
-  }
-  if (!email || !isValidEmail(email)) {
-    emailHint.textContent = "Email không hợp lệ.";
-    ok = false;
-  }
-  return ok;
-}
-
-function setBusy(b) {
-  busy = b;
-  revealBtn.disabled = b;
-  resetBtn.disabled = b;
-  submitBtn.disabled = b;
-  demoBtn.disabled = b;
-  nameEl.disabled = b;
-  emailEl.disabled = b;
-  noteEl.disabled = b;
-}
-
-/* ========= API ========= */
+/* ===== API (DEBUG DỨT ĐIỂM) ===== */
 async function callSpinAPI({ name, email, note }) {
   const body = { name, identifier: email, note: note || null };
 
-  const res = await fetch(FUNCTION_URL, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "apikey": ANON_KEY,
-      "authorization": `Bearer ${ANON_KEY}`,
-    },
-    body: JSON.stringify(body),
-  });
+  let res;
+  let raw = "";
+  try {
+    res = await fetch(FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "apikey": ANON_KEY,
+        "authorization": `Bearer ${ANON_KEY}`,
+      },
+      body: JSON.stringify(body),
+    });
+    raw = await res.text();
+  } catch (err) {
+    // Đây là nơi CORS/Network sẽ rơi vào
+    throw new Error(`NETWORK_OR_CORS: ${String(err?.message || err)}`);
+  }
 
-  const text = await res.text();
   let json = null;
-  try { json = JSON.parse(text); } catch {}
+  try { json = JSON.parse(raw); } catch {}
 
   if (!res.ok) {
-    const msg = (json && (json.detail || json.message || json.error))
-      ? (json.detail || json.message || json.error)
-      : text;
+    const msg = json?.detail || json?.message || json?.error || raw || `${res.status} ${res.statusText}`;
     throw new Error(`HTTP_${res.status}: ${msg}`);
   }
 
   return json;
 }
 
-/* ========= Game logic ========= */
-function renderBack(status, prizeMaybe) {
-  if (status === "WIN") {
-    cardBackInner.innerHTML = `
-      <div class="result-pill win">WIN</div>
-      <div class="result-title">Chúc mừng!</div>
-      <div class="result-desc">Bạn đã trúng <b>${prizeMaybe || PRIZE_LABEL}</b>.</div>
-    `;
-  } else {
-    cardBackInner.innerHTML = `
-      <div class="result-pill lose">LOSE</div>
-      <div class="result-title">Rất tiếc</div>
-      <div class="result-desc">${LOSE_LABEL}.<br/>Hẹn gặp lại ở sự kiện tiếp theo.</div>
-    `;
-  }
-}
-
-function flipCard() {
-  card3d.classList.add("is-flipped");
-  revealed = true;
-}
-
-function resetCard() {
-  card3d.classList.remove("is-flipped");
-  cardBackInner.innerHTML = "";
-  revealed = false;
-  setGameState("READY");
-  setStatus("Sẵn sàng");
-  setResult(`${badge("READY","warn")} Nhập thông tin và bấm <b>Gửi & Rút thẻ</b>.`);
-}
-
-resetBtn.addEventListener("click", () => {
-  if (busy) return;
-  resetCard();
-});
-
-demoBtn.addEventListener("click", () => {
-  nameEl.value = "Nguyễn Văn A";
-  emailEl.value = `demo${Math.floor(Math.random()*10000)}@example.com`;
-  noteEl.value = "Demo";
-  setResult(`${badge("Demo","warn")} Đã điền dữ liệu mẫu. Bấm <b>Gửi & Rút thẻ</b>.`);
-});
-
-/* Nút reveal chính */
-revealBtn.addEventListener("click", () => {
-  form.requestSubmit();
-});
-
-/* Submit form giữ nguyên flow */
+/* ===== Submit ===== */
 form.addEventListener("submit", async (ev) => {
   ev.preventDefault();
   if (busy) return;
 
   if (!validateForm()) {
-    setResult(`${badge("Thiếu thông tin", "warn")} Vui lòng kiểm tra lại dữ liệu nhập.`);
+    setResult(`${badge("Thiếu thông tin","warn")} Vui lòng kiểm tra lại dữ liệu nhập.`);
     return;
   }
 
@@ -315,13 +290,9 @@ form.addEventListener("submit", async (ev) => {
     setGameState("REVEAL…");
     setStatus("Đang lật thẻ…", "warn");
 
-    // Nếu đã lật rồi thì reset trước cho mượt
     if (revealed) resetCard();
-
     renderBack(status, data?.prize || PRIZE_LABEL);
-
-    // Delay nhỏ cho cảm giác “đang rút”
-    await new Promise(r => setTimeout(r, 350));
+    await new Promise(r => setTimeout(r, 250));
     flipCard();
 
     if (status === "WIN") {
@@ -344,7 +315,10 @@ form.addEventListener("submit", async (ev) => {
   } catch (e) {
     setGameState("ERROR");
     setStatus("Lỗi server / cấu hình", "bad");
-    setResult(`${badge("ERROR","bad")} ${String(e.message || e)}`);
+    setResult(
+      `${badge("ERROR","bad")} ${String(e.message || e)}<br/>
+       <span class="muted">Debug: nếu thấy <b>NETWORK_OR_CORS</b> thì sửa CORS trong function Spin.</span>`
+    );
   } finally {
     setBusy(false);
   }
