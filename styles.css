@@ -16,12 +16,8 @@
   --warn:#FBBF24;
   --bad:#FB7185;
 
-  /* theme mới cho wheel */
-  --wheel-dark: rgba(255,255,255,.05);
-  --wheel-dark2: rgba(255,255,255,.03);
-  --wheel-line: rgba(255,255,255,.14);
-  --gold1: rgba(255, 215, 120, .30);
-  --gold2: rgba(255, 170,  90, .18);
+  --glass: rgba(255,255,255,.04);
+  --glass2: rgba(255,255,255,.02);
 }
 
 *{box-sizing:border-box}
@@ -95,67 +91,207 @@ body{
 }
 
 .card{
-  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  background: linear-gradient(180deg, var(--glass), var(--glass2));
   border:1px solid var(--line2);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   overflow:hidden;
 }
 
-/* ======================
-   WHEEL (GIAO DIỆN MỚI)
-   ====================== */
-
 .wheel-card{padding:18px}
+
+/* Khu game (đổi từ wheel sang card) */
 .wheel-area{
   position:relative;
   display:grid;
   place-items:center;
-  padding: 26px 0 14px;
+  padding: 18px 0 10px;
 }
 
-/* Pointer mới: gọn, sắc, không “đè” */
-.pointer{
-  position:absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width:0; height:0;
-  border-left: 14px solid transparent;
-  border-right: 14px solid transparent;
-  border-bottom: 22px solid rgba(255,255,255,.94);
-  filter:
-    drop-shadow(0 10px 18px rgba(0,0,0,.55))
-    drop-shadow(0 0 14px rgba(110,231,255,.14));
-  z-index: 10;
+/* Ẩn canvas wheel cũ nếu vẫn tồn tại trong HTML */
+#wheel{ display:none !important; }
+.pointer{ display:none !important; }
+
+/* ====== LUCKY CARD GAME ====== */
+.game{
+  width: min(520px, 92vw);
+  display:grid;
+  gap:14px;
+  place-items:center;
 }
 
-/* Canvas wheel: “casino ring / steel rim” */
-#wheel{
-  width: min(480px, 88vw);
-  height: min(480px, 88vw);
-  border-radius: 999px;
-
-  background:
-    radial-gradient(circle at 30% 20%, rgba(255,255,255,.10), rgba(255,255,255,.02) 60%, rgba(0,0,0,.12)),
-    radial-gradient(circle at 50% 120%, rgba(110,231,255,.12), transparent 55%);
-
-  border: 1px solid rgba(255,255,255,.10);
-
-  box-shadow:
-    0 30px 90px rgba(0,0,0,.62),
-    0 0 0 6px rgba(255,255,255,.04),
-    0 0 48px rgba(110,231,255,.08),
-    0 0 60px rgba(155,140,255,.06);
+.game-head{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:12px;
 }
 
-/* Layer nút quay nằm trên canvas */
-.wheel-center{
-  position:absolute;
-  inset:0;
+.game-title{
+  margin:0;
+  font-size:18px;
+  font-weight:850;
+  letter-spacing:.2px;
+}
+.game-sub{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+}
+
+.deck{
+  width:100%;
   display:grid;
   place-items:center;
-  z-index: 20;
+  padding: 16px 0 6px;
+}
+
+.card3d{
+  width: min(340px, 78vw);
+  aspect-ratio: 3 / 4;
+  border-radius: 22px;
+  position:relative;
+  transform-style: preserve-3d;
+  transition: transform 850ms cubic-bezier(.2,.8,.2,1);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.60),
+    0 0 0 1px rgba(255,255,255,.10) inset;
+}
+
+/* Mặt trước */
+.card-face{
+  position:absolute;
+  inset:0;
+  border-radius: 22px;
+  backface-visibility: hidden;
+  overflow:hidden;
+}
+
+.card-front{
+  background:
+    radial-gradient(500px 320px at 30% 20%, rgba(110,231,255,.20), transparent 60%),
+    radial-gradient(520px 340px at 100% 10%, rgba(155,140,255,.16), transparent 58%),
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.22));
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.card-front::after{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,.08) 0 10px,
+      rgba(255,255,255,.00) 10px 22px
+    );
+  transform: rotate(10deg);
+  opacity:.35;
+}
+
+.card-front-inner{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding: 18px;
+  text-align:center;
+}
+
+.card-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 6px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.22);
+  color: rgba(255,255,255,.90);
+  font-size:12px;
+  letter-spacing:.2px;
+}
+.card-mark{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 18px rgba(110,231,255,.35);
+}
+
+.card-front-title{
+  font-weight:950;
+  font-size: 34px;
+  color: var(--accent);
+  text-shadow: 0 10px 30px rgba(0,0,0,.55);
+}
+
+.card-front-sub{
+  font-size: 13px;
+  color: rgba(255,255,255,.82);
+  line-height:1.55;
+}
+
+/* Mặt sau (kết quả) */
+.card-back{
+  transform: rotateY(180deg);
+  background:
+    radial-gradient(500px 320px at 30% 20%, rgba(255,255,255,.08), transparent 60%),
+    linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.55));
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.card-back-inner{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding: 18px;
+  text-align:center;
+}
+
+.result-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 8px 14px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.22);
+  font-weight:800;
+  letter-spacing:.2px;
+}
+.result-pill.win{ border-color: rgba(74,222,128,.35); background: rgba(74,222,128,.10); }
+.result-pill.lose{ border-color: rgba(251,191,36,.35); background: rgba(251,191,36,.10); }
+
+.result-title{
+  font-weight:950;
+  font-size: 22px;
+  letter-spacing:.2px;
+}
+.result-desc{
+  font-size: 13px;
+  color: rgba(255,255,255,.86);
+  line-height:1.55;
+  max-width: 26ch;
+}
+
+.card3d.is-flipped{ transform: rotateY(180deg); }
+
+/* Nút bấm */
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top: 6px;
+  flex-wrap:wrap;
+  justify-content:center;
 }
 
 .btn{
@@ -173,77 +309,15 @@ body{
 .btn:active{transform: translateY(1px)}
 .btn[disabled]{opacity:.55; cursor:not-allowed}
 
-/* Nút Quay hoàn toàn mới: tròn trịa + viền đều */
 .btn-primary{
-  position: relative;
-  width: clamp(160px, 38vw, 190px);
-  height: clamp(160px, 38vw, 190px);
+  min-width: 168px;
   border-radius: 999px;
-
-  border: 1px solid rgba(255,255,255,.16);
-  background:
-    radial-gradient(circle at 30% 25%, rgba(255,255,255,.10), rgba(0,0,0,.72) 62%, rgba(0,0,0,.92) 100%);
-
-  box-shadow:
-    0 20px 70px rgba(0,0,0,.65),
-    0 0 0 8px rgba(255,255,255,.05);
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
+  border:1px solid rgba(110,231,255,.26);
+  background: radial-gradient(circle at 30% 25%, rgba(110,231,255,.18), rgba(155,140,255,.10));
+  box-shadow: 0 18px 55px rgba(0,0,0,.55);
+  font-weight:900;
 }
 
-/* Vòng viền mảnh bên trong nút (đúng tâm, không lệch) */
-.btn-primary::before{
-  content:"";
-  position:absolute;
-  inset: 14%;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 0 20px rgba(110,231,255,.10);
-}
-
-/* Chấm highlight nhỏ (tạo cảm giác “nút bánh xe”) */
-.btn-primary::after{
-  content:"";
-  position:absolute;
-  top: 18%;
-  left: 22%;
-  width: 18%;
-  height: 18%;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(255,255,255,.18), rgba(255,255,255,0));
-  filter: blur(.2px);
-  opacity: .9;
-}
-
-/* Giữ màu xanh chữ Quay + tô đậm */
-#spinBtn .btn-label{
-  font-weight: 950;
-  font-size: 28px;
-  letter-spacing: .2px;
-  color: var(--accent);
-  text-shadow: 0 2px 14px rgba(0,0,0,.60);
-}
-#spinBtn .btn-sub{
-  font-weight: 800;
-  opacity: .96;
-}
-
-@media (max-width: 420px){
-  .btn-primary{
-    width: clamp(150px, 44vw, 178px);
-    height: clamp(150px, 44vw, 178px);
-  }
-  #spinBtn .btn-label{ font-size: 26px; }
-}
-
-.btn-secondary{
-  background: rgba(110,231,255,.08);
-  border-color: rgba(110,231,255,.22);
-}
 .btn-ghost{
   background: transparent;
   border-color: rgba(255,255,255,.14);
@@ -290,8 +364,6 @@ body{
   box-shadow: 0 0 0 3px rgba(110,231,255,.10);
 }
 .field-hint{display:block; font-size:12px; color: var(--bad); margin-top:6px; min-height: 16px}
-
-.actions{display:flex; gap:10px; margin-top: 12px; flex-wrap:wrap}
 
 .result{
   margin-top: 14px;
