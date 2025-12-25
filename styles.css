@@ -21,11 +21,13 @@
 html,body{height:100%}
 body{
   margin:0;
+  -webkit-text-size-adjust: 100%;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   color:var(--text);
-  background: radial-gradient(1100px 700px at 20% 0%, rgba(110,231,255,.14), transparent 60%),
-              radial-gradient(1000px 650px at 100% 20%, rgba(155,140,255,.12), transparent 55%),
-              linear-gradient(180deg, var(--bg0), var(--bg1));
+  background:
+    radial-gradient(1100px 700px at 20% 0%, rgba(110,231,255,.14), transparent 60%),
+    radial-gradient(1000px 650px at 100% 20%, rgba(155,140,255,.12), transparent 55%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
 }
 
 .bg{
@@ -44,6 +46,14 @@ body{
   padding:22px 20px;
   max-width:1100px;
   margin:0 auto;
+  gap:12px;
+}
+
+@media (max-width: 680px){
+  .topbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
 }
 
 .brand{display:flex; gap:14px; align-items:center}
@@ -57,7 +67,7 @@ body{
   font-size:18px;
 }
 .brand-title{font-size:18px; font-weight:700; letter-spacing:.2px}
-.brand-sub{font-size:13px; color:var(--muted)}
+.brand-sub{font-size:13px; color:var(--muted); line-height:1.4}
 
 .pill{
   padding:8px 12px;
@@ -73,7 +83,7 @@ body{
   margin: 0 auto;
   padding: 10px 20px 40px;
   display:grid;
-  grid-template-columns: 1.05fr .95fr;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
   gap:16px;
 }
 
@@ -111,6 +121,7 @@ body{
 #wheel{
   width:min(420px, 82vw);
   height:min(420px, 82vw);
+  aspect-ratio: 1 / 1;
   border-radius:999px;
   background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.10), rgba(255,255,255,.02));
   border:1px solid rgba(255,255,255,.12);
@@ -153,6 +164,12 @@ body{
   justify-content:center;
   gap:6px;
 }
+
+@media (max-width: 420px){
+  .btn-primary{ width: 112px; height:112px; }
+  .btn-label{ font-size:16px; }
+}
+
 .btn-label{font-weight:800; font-size:18px}
 .btn-sub{font-size:12px; color:rgba(255,255,255,.82)}
 
@@ -172,6 +189,10 @@ body{
   grid-template-columns: 1fr 1fr;
   gap:10px;
 }
+@media (max-width: 520px){
+  .wheel-meta{grid-template-columns:1fr}
+}
+
 .meta-row{
   padding: 12px 12px;
   border:1px solid var(--line2);
@@ -183,7 +204,7 @@ body{
 
 .form-card{padding:18px 18px 14px}
 .form-card h2{margin:0 0 8px; font-size:18px}
-.muted{margin:0 0 14px; color:var(--muted); font-size:13px; line-height:1.5}
+.muted{margin:0 0 14px; color:var(--muted); font-size:13px; line-height:1.55}
 
 .field{display:block; margin:12px 0}
 .field-label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
@@ -195,6 +216,7 @@ body{
   background: rgba(0,0,0,.22);
   color: var(--text);
   outline:none;
+  font-size:16px; /* iOS: tránh tự zoom */
 }
 .field input:focus{
   border-color: rgba(110,231,255,.40);
@@ -215,6 +237,7 @@ body{
   min-height: 44px;
 }
 .result b{color: rgba(255,255,255,.95)}
+
 .badge{
   display:inline-block;
   padding: 4px 10px;
@@ -227,18 +250,6 @@ body{
 .badge.good{border-color: rgba(74,222,128,.35); background: rgba(74,222,128,.10)}
 .badge.warn{border-color: rgba(251,191,36,.35); background: rgba(251,191,36,.10)}
 .badge.bad{border-color: rgba(251,113,133,.35); background: rgba(251,113,133,.10)}
-
-.dev{
-  margin-top: 12px;
-  border:1px solid var(--line2);
-  border-radius: 14px;
-  background: rgba(0,0,0,.14);
-  padding: 10px 12px;
-}
-.dev summary{cursor:pointer; color: var(--muted); font-size:12px}
-.dev-grid{margin-top:10px; display:grid; gap:8px}
-.dev-grid .k{display:inline-block; width:110px; color: var(--muted); font-size:12px}
-.dev-grid .v{font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px}
 
 .footnote{
   margin-top: 12px;
