@@ -29,7 +29,7 @@ const prizeText = $("prizeText");
 const resultBox = $("result");
 const envPill = $("envPill");
 
-// Optional dev elements (nếu có trong HTML thì set, không có thì bỏ qua)
+// Optional dev ids (nếu có)
 const endpointText = $("endpointText");
 const spinIdText = $("spinIdText");
 const serverStatusText = $("serverStatusText");
@@ -44,10 +44,9 @@ if (envPill) envPill.textContent = location.hostname.includes("localhost") ? "Lo
 // ====== GAME DATA ======
 const PRIZE_LABEL = "GPT Plus 1 tháng";
 
-// 1 ô prize + 7 ô lose
 const segments = [
   { label: PRIZE_LABEL, kind: "prize" },
-  { label: "Chúc bạn may mắn lần sau", kind: "lose" },
+  { label: "CHAT GPT PLUS 1 THÁNG", kind: "Win" },
   { label: "Chúc bạn may mắn lần sau", kind: "lose" },
   { label: "Chúc bạn may mắn lần sau", kind: "lose" },
   { label: "Chúc bạn may mắn lần sau", kind: "lose" },
@@ -57,9 +56,7 @@ const segments = [
 ];
 
 const prizeIndex = segments.findIndex((s) => s.kind === "prize");
-const loseIndexes = segments
-  .map((s, i) => (s.kind === "lose" ? i : -1))
-  .filter((i) => i >= 0);
+const loseIndexes = segments.map((s, i) => (s.kind === "lose" ? i : -1)).filter((i) => i >= 0);
 
 let currentRotation = 0; // radians
 let spinning = false;
@@ -68,7 +65,6 @@ let spinning = false;
 function resizeCanvasForDPR(canvas, targetCssPx) {
   const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
   const css = Math.max(10, Math.floor(targetCssPx));
-
   canvas.style.width = css + "px";
   canvas.style.height = css + "px";
   canvas.width = Math.round(css * dpr);
@@ -76,14 +72,18 @@ function resizeCanvasForDPR(canvas, targetCssPx) {
   return dpr;
 }
 
-// Lấy size theo CSS layout thực tế để hết lệch trên iOS
 function measureWheelCssSize() {
   const rect = wheelCanvas.getBoundingClientRect();
   const size = Math.floor(Math.min(rect.width || 0, rect.height || 0));
   return size > 0 ? size : Math.min(420, Math.round(window.innerWidth * 0.82));
 }
 
-// ====== DRAW WHEEL (FIX DỨT ĐIỂM) ======
+// ====== DRAW WHEEL ======
+function normalizeRad(r) {
+  const t = Math.PI * 2;
+  return ((r % t) + t) % t;
+}
+
 function drawWheel(rotationRad = 0) {
   const sizeCss = measureWheelCssSize();
   const dpr = resizeCanvasForDPR(wheelCanvas, sizeCss);
@@ -93,14 +93,12 @@ function drawWheel(rotationRad = 0) {
   const cx = w / 2;
   const cy = h / 2;
 
-  // Bán kính tổng
   const r = Math.min(w, h) * 0.46;
 
-  // Hub (vòng đen trong canvas) — chỉnh để cân với nút Quay overlay
-  // (r*0.34~0.38 thường đẹp với button 112–130px trên mobile)
+  // Hub (vòng đen trong canvas) — cân với nút overlay
   const innerR = r * 0.36;
 
-  // Vị trí text trên “vành”
+  // Text radius trong lát
   const textR = innerR + (r - innerR) * 0.72;
 
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -111,7 +109,7 @@ function drawWheel(rotationRad = 0) {
   const n = segments.length;
   const arc = (Math.PI * 2) / n;
 
-  // highlight vòng ngoài
+  // Vòng highlight ngoài
   const ringR1 = r * 1.05;
   const ringR0 = r * 0.88;
   const grad = ctx.createRadialGradient(0, 0, ringR0, 0, 0, ringR1);
@@ -122,24 +120,33 @@ function drawWheel(rotationRad = 0) {
   ctx.fillStyle = grad;
   ctx.fill();
 
-  // helper: luôn wrap cho gọn, không tràn
+  // Prize lines: lấy từ PRIZE_LABEL cho khỏi “mất giải”
+  function prizeLinesFromLabel(label) {
+    const s = String(label || "").trim();
+    // tách mềm: "GPT Plus 1 tháng" -> ["GPT Plus", "1 tháng"]
+    const m = s.match(/^(.*?)(\s+\d+.*)$/);
+    if (m) return [m[1].trim(), m[2].trim()];
+    // fallback
+    return s.length > 10 ? [s.slice(0, Math.ceil(s.length / 2)), s.slice(Math.ceil(s.length / 2))] : [s];
+  }
+
   function labelLines(i) {
-    if (i === prizeIndex) return ["GPT Plus", "1 tháng"];
+    if (i === prizeIndex) return prizeLinesFromLabel(PRIZE_LABEL);
     return ["Chúc bạn", "may mắn", "lần sau"];
   }
 
-  // helper: tính “bề ngang” tối đa của lát tại bán kính textR
-  // chord = 2 * R * sin(arc/2)
+  // max text width (chord) tại radius textR
   function maxTextWidthAtRadius(R) {
     const chord = 2 * R * Math.sin(arc / 2);
-    return chord * 0.86; // chừa padding hai bên
+    return chord * 0.86;
   }
 
   for (let i = 0; i < n; i++) {
     const start = i * arc - Math.PI / 2;
     const end = start + arc;
+    const mid = start + arc / 2;
+    const midN = normalizeRad(mid);
 
-    // vẽ lát
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.arc(0, 0, r, start, end);
@@ -166,27 +173,22 @@ function drawWheel(rotationRad = 0) {
     ctx.stroke();
 
     // ===== TEXT: tangent + auto flip + auto fit =====
-    const mid = start + arc / 2;
     const lines = labelLines(i);
 
     ctx.save();
     ctx.rotate(mid);
-
-    // Đưa bút ra vị trí textR
     ctx.translate(textR, 0);
-
-    // Xoay để chữ nằm theo tiếp tuyến (đọc tự nhiên)
     ctx.rotate(Math.PI / 2);
 
-    // Auto flip cho nửa bên trái để luôn đọc xuôi
-    // Nếu hướng ra ngoài đang nằm bên trái (cos(mid) < 0) => lật 180
-    if (Math.cos(mid) < 0) ctx.rotate(Math.PI);
+    // flip nửa trái để luôn đọc xuôi (điều kiện ổn định hơn cos)
+    if (midN > Math.PI / 2 && midN < (3 * Math.PI) / 2) {
+      ctx.rotate(Math.PI);
+    }
 
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = isPrize ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.90)";
 
-    // Auto-fit font theo maxWidth tại textR
     const maxW = maxTextWidthAtRadius(textR);
 
     let fontPx = Math.round((isPrize ? 13 : 12) * dpr);
@@ -195,11 +197,9 @@ function drawWheel(rotationRad = 0) {
     function setFont(px) {
       ctx.font = `800 ${px}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
     }
-    setFont(fontPx);
 
     const lineGap = Math.round(12.5 * dpr);
 
-    // giảm font cho đến khi dòng dài nhất vừa maxW
     while (fontPx > minFontPx) {
       setFont(fontPx);
       const longest = Math.max(...lines.map((t) => ctx.measureText(t).width));
@@ -216,15 +216,14 @@ function drawWheel(rotationRad = 0) {
     ctx.restore();
   }
 
-  // ===== HUB (vòng đen giữa canvas) — cân với nút "Quay" =====
-  // Base
+  // ===== HUB (vòng đen giữa canvas) =====
   ctx.beginPath();
   ctx.arc(0, 0, innerR, 0, Math.PI * 2);
   ctx.fillStyle = "rgba(6,10,18,0.84)";
   ctx.fill();
 
-  // Inner vignette để tạo cảm giác “lõm” (ăn với button)
-  const hubGrad = ctx.createRadialGradient(-innerR * 0.25, -innerR * 0.30, innerR * 0.10, 0, 0, innerR * 1.05);
+  // vignette nhẹ (KHÔNG dùng xanh)
+  const hubGrad = ctx.createRadialGradient(-innerR * 0.25, -innerR * 0.3, innerR * 0.1, 0, 0, innerR * 1.05);
   hubGrad.addColorStop(0, "rgba(255,255,255,0.08)");
   hubGrad.addColorStop(1, "rgba(0,0,0,0.00)");
   ctx.beginPath();
@@ -232,16 +231,9 @@ function drawWheel(rotationRad = 0) {
   ctx.fillStyle = hubGrad;
   ctx.fill();
 
-  // Viền hub (để hub không “nuốt” chữ/nút)
-  ctx.strokeStyle = "rgba(110,231,255,0.18)";
+  // Viền hub trung tính (nếu muốn bỏ luôn viền: comment 3 dòng dưới)
+  ctx.strokeStyle = "rgba(255,255,255,0.10)";
   ctx.lineWidth = Math.max(1, 1.2 * dpr);
-  ctx.stroke();
-
-  // Vòng mờ ngoài hub tạo “khoảng đệm” thị giác với button overlay
-  ctx.beginPath();
-  ctx.arc(0, 0, innerR * 1.06, 0, Math.PI * 2);
-  ctx.strokeStyle = "rgba(255,255,255,0.06)";
-  ctx.lineWidth = Math.max(1, 2.0 * dpr);
   ctx.stroke();
 }
 
@@ -250,13 +242,7 @@ function setStatus(text, tone = "neutral") {
   if (!statusText) return;
   statusText.textContent = text;
   statusText.style.color =
-    tone === "good"
-      ? "var(--good)"
-      : tone === "warn"
-      ? "var(--warn)"
-      : tone === "bad"
-      ? "var(--bad)"
-      : "var(--text)";
+    tone === "good" ? "var(--good)" : tone === "warn" ? "var(--warn)" : tone === "bad" ? "var(--bad)" : "var(--text)";
 }
 
 function setResult(html) {
@@ -341,11 +327,6 @@ function tickConfetti() {
 }
 
 // ===== SPIN MATH =====
-function normalizeRad(r) {
-  const t = Math.PI * 2;
-  return ((r % t) + t) % t;
-}
-
 function segmentCenterAngle(index) {
   const arc = (Math.PI * 2) / segments.length;
   const start = index * arc - Math.PI / 2;
@@ -359,7 +340,7 @@ function spinToIndex(targetIndex) {
   const arcCenter = segmentCenterAngle(targetIndex);
   const desired = normalizeRad((-Math.PI / 2) - arcCenter);
 
-  const extraTurns = 6 + Math.floor(Math.random() * 3); // 6..8
+  const extraTurns = 6 + Math.floor(Math.random() * 3);
   const base = currentRotation;
   const baseNorm = normalizeRad(base);
 
@@ -438,15 +419,11 @@ async function callSpinAPI({ name, email, note }) {
   let json = null;
   try {
     json = JSON.parse(text);
-  } catch {
-    // ignore
-  }
+  } catch {}
 
   if (!res.ok) {
     const msg =
-      json && (json.detail || json.message || json.error)
-        ? json.detail || json.message || json.error
-        : text;
+      json && (json.detail || json.message || json.error) ? json.detail || json.message || json.error : text;
     throw new Error(`HTTP_${res.status}: ${msg}`);
   }
 
@@ -506,9 +483,7 @@ if (form) {
 
       if (status === "ALREADY_SPUN") {
         setStatus("Đã quay trước đó", "bad");
-        setResult(
-          `${badge("ALREADY_SPUN", "bad")} Email này đã quay rồi. Hệ thống không ghi nhận thêm để tránh gian lận.`
-        );
+        setResult(`${badge("ALREADY_SPUN", "bad")} Email này đã quay rồi. Hệ thống không ghi nhận thêm để tránh gian lận.`);
         return;
       }
 
@@ -518,8 +493,7 @@ if (form) {
         return;
       }
 
-      const targetIndex =
-        status === "WIN" ? prizeIndex : loseIndexes[Math.floor(Math.random() * loseIndexes.length)];
+      const targetIndex = status === "WIN" ? prizeIndex : loseIndexes[Math.floor(Math.random() * loseIndexes.length)];
 
       setStatus("Đang quay…", "warn");
       setResult(`${badge(status, status === "WIN" ? "good" : "warn")} Vòng quay đang dừng ở kết quả…`);
