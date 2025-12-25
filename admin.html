@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin • Minigame Vòng Quay</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Admin-only tweaks: giữ đồng bộ theme, thêm layout bảng */
+    .admin-wrap{max-width:1100px;margin:0 auto;padding:20px}
+    .admin-top{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .admin-card{padding:14px 14px 10px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .row > *{flex: 0 0 auto}
+    .input{min-width:220px}
+    .table{width:100%;border-collapse:separate;border-spacing:0 10px}
+    .table th{font-size:12px;opacity:.8;text-align:left;padding:0 10px}
+    .table td{background:rgba(255,255,255,.06);padding:10px;border-top:1px solid rgba(255,255,255,.10);border-bottom:1px solid rgba(255,255,255,.10)}
+    .table td:first-child{border-left:1px solid rgba(255,255,255,.10);border-top-left-radius:12px;border-bottom-left-radius:12px}
+    .table td:last-child{border-right:1px solid rgba(255,255,255,.10);border-top-right-radius:12px;border-bottom-right-radius:12px}
+    .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.18)}
+    .pill.win{border-color:rgba(34,197,94,.35)}
+    .pill.lose{border-color:rgba(234,179,8,.35)}
+    .pill.already{border-color:rgba(148,163,184,.35)}
+    .muted{opacity:.75}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .small{font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="hero">
+      <div class="hero__title">Admin Dashboard</div>
+      <div class="hero__subtitle muted">Xem lịch sử quay, lọc dữ liệu, export CSV. Dữ liệu đọc qua Edge Function bảo vệ bằng token.</div>
+    </div>
+
+    <div class="card admin-card">
+      <div class="admin-top">
+        <div>
+          <div class="muted small">Admin Token</div>
+          <input id="token" class="input" placeholder="Dán ADMIN_TOKEN vào đây" type="password" />
+        </div>
+
+        <div class="row">
+          <div>
+            <div class="muted small">Search</div>
+            <input id="q" class="input" placeholder="Tên hoặc email..." />
+          </div>
+          <div>
+            <div class="muted small">Status</div>
+            <select id="status" class="input">
+              <option value="">Tất cả</option>
+              <option value="WIN">WIN</option>
+              <option value="LOSE">LOSE</option>
+              <option value="ALREADY_SPUN">ALREADY_SPUN</option>
+            </select>
+          </div>
+          <div>
+            <div class="muted small">Từ (ISO)</div>
+            <input id="from" class="input" placeholder="2025-12-25T00:00:00Z" />
+          </div>
+          <div>
+            <div class="muted small">Đến (ISO)</div>
+            <input id="to" class="input" placeholder="2025-12-25T23:59:59Z" />
+          </div>
+          <div>
+            <div class="muted small">Limit</div>
+            <select id="limit" class="input">
+              <option>25</option>
+              <option selected>50</option>
+              <option>100</option>
+              <option>200</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="btnLoad" class="btn btn--primary">Tải dữ liệu</button>
+          <button id="btnPrev" class="btn">Trang trước</button>
+          <button id="btnNext" class="btn">Trang sau</button>
+          <button id="btnStats" class="btn">Thống kê</button>
+          <button id="btnCsv" class="btn">Export CSV (trang hiện tại)</button>
+          <button id="btnLogout" class="btn btn--danger">Đăng xuất</button>
+        </div>
+      </div>
+
+      <div id="msg" class="muted small" style="margin-top:10px"></div>
+    </div>
+
+    <div class="card admin-card" style="margin-top:14px">
+      <div class="row" style="justify-content:space-between">
+        <div class="muted small">Kết quả</div>
+        <div class="muted small">Total: <span id="total" class="mono">0</span></div>
+      </div>
+
+      <div style="overflow:auto;margin-top:8px">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Prize</th>
+              <th>Note</th>
+              <th>IP</th>
+              <th>UA</th>
+              <th>Spin ID</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="muted small" style="margin-top:14px">
+      Tip: Admin page nằm ở <span class="mono">/admin.html</span>. Không public token.
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
