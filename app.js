@@ -77,27 +77,128 @@ function drawWheel(rotationRad = 0) {
 
   const r = Math.min(w, h) * 0.46;
 
-  // ====== FIX: hub nhỏ lại + chữ đẩy ra mép + auto fit ======
-  const innerR = r * 0.46;      // trước đây ~0.55 => che chữ
-  const textEndX = r * 0.965;   // đẩy chữ ra biết, giảm bị che
+  // Hub (vòng đen giữa) - giảm thêm chút để thoáng
+  const innerR = r * 0.42;
 
-  ctx.setTransform(1,0,0,1,0,0);
-  ctx.clearRect(0,0,w,h);
+  // Vị trí đặt chữ: nằm ở “vành” giữa hub và mép ngoài
+  const textR = innerR + (r - innerR) * 0.62;
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, w, h);
   ctx.translate(cx, cy);
   ctx.rotate(rotationRad);
 
   const n = segments.length;
   const arc = (Math.PI * 2) / n;
 
+  // Vòng highlight ngoài
   const ringR1 = r * 1.05;
   const ringR0 = r * 0.88;
-  const grad = ctx.createRadialGradient(0,0,ringR0, 0,0,ringR1);
+  const grad = ctx.createRadialGradient(0, 0, ringR0, 0, 0, ringR1);
   grad.addColorStop(0, "rgba(255,255,255,0.04)");
   grad.addColorStop(1, "rgba(255,255,255,0.10)");
   ctx.beginPath();
-  ctx.arc(0,0,ringR1,0,Math.PI*2);
+  ctx.arc(0, 0, ringR1, 0, Math.PI * 2);
   ctx.fillStyle = grad;
   ctx.fill();
+
+  // Helper: split label 2 dòng (dứt điểm vấn đề text dài)
+  function labelLines(i) {
+    const isPrize = i === prizeIndex;
+    if (isPrize) return ["GPT Plus", "1 tháng"];
+    return ["Chúc bạn", "may mắn lần sau"];
+  }
+
+  for (let i = 0; i < n; i++) {
+    const start = i * arc - Math.PI / 2;
+    const end = start + arc;
+
+    // Vẽ lát
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, r, start, end);
+    ctx.closePath();
+
+    const isPrize = i === prizeIndex;
+    const fill = isPrize
+      ? ctx.createLinearGradient(-r, -r, r, r)
+      : ctx.createLinearGradient(-r, r, r, -r);
+
+    if (isPrize) {
+      fill.addColorStop(0, "rgba(110,231,255,0.22)");
+      fill.addColorStop(1, "rgba(155,140,255,0.20)");
+    } else {
+      fill.addColorStop(0, "rgba(255,255,255,0.06)");
+      fill.addColorStop(1, "rgba(255,255,255,0.02)");
+    }
+
+    ctx.fillStyle = fill;
+    ctx.fill();
+
+    ctx.strokeStyle = "rgba(255,255,255,0.12)";
+    ctx.lineWidth = Math.max(1, 1.2 * dpr);
+    ctx.stroke();
+
+    // ====== DỨT ĐIỂM: clip vùng donut để chữ không thể đè vào hub ======
+    ctx.save();
+    ctx.beginPath();
+    // cung ngoài
+    ctx.arc(0, 0, r * 0.99, start, end, false);
+    // cung trong (ngược chiều) để tạo vành khuyên
+    ctx.arc(0, 0, innerR * 1.06, end, start, true);
+    ctx.closePath();
+    ctx.clip();
+
+    // Vẽ chữ
+    const mid = start + arc / 2;
+    ctx.rotate(mid);
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = isPrize ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.86)";
+
+    const lines = labelLines(i);
+
+    // font theo dpr + mobile
+    const baseFont = Math.round(12 * dpr);
+    const font = isPrize ? baseFont + 1 : baseFont;
+    ctx.font = `800 ${font}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
+
+    const lineGap = Math.round(13 * dpr);
+    const y0 = -(lines.length - 1) * lineGap / 2;
+
+    // đặt chữ ở textR (theo trục X sau khi rotate)
+    // (0,0) ở tâm; sau rotate(mid), trục X hướng ra mép lát
+    ctx.save();
+    ctx.translate(textR, 0);
+    for (let k = 0; k < lines.length; k++) {
+      ctx.fillText(lines[k], 0, y0 + k * lineGap);
+    }
+    ctx.restore();
+
+    ctx.restore(); // restore clip
+  }
+
+  // ====== Hub (vòng đen giữa) ======
+  ctx.beginPath();
+  ctx.arc(0, 0, innerR, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(8,12,24,0.90)";
+  ctx.fill();
+
+  // viền hub nhẹ
+  ctx.strokeStyle = "rgba(110,231,255,0.16)";
+  ctx.lineWidth = Math.max(1, 1.2 * dpr);
+  ctx.stroke();
+
+  // glow hub
+  const ig = ctx.createRadialGradient(-innerR * 0.35, -innerR * 0.45, innerR * 0.15, 0, 0, innerR * 1.15);
+  ig.addColorStop(0, "rgba(255,255,255,0.10)");
+  ig.addColorStop(1, "rgba(255,255,255,0.00)");
+  ctx.beginPath();
+  ctx.arc(0, 0, innerR, 0, Math.PI * 2);
+  ctx.fillStyle = ig;
+  ctx.fill();
+}
 
   for (let i = 0; i < n; i++) {
     const start = i * arc - Math.PI/2;
