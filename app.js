@@ -33,15 +33,16 @@ envPill.textContent = location.hostname.includes("localhost") ? "Local" : "Produ
 
 const PRIZE_LABEL = "GPT Plus 1 tháng";
 
+// ====== SEGMENTS (đổi toàn bộ ô thua thành 1 câu) ======
 const segments = [
   { label: PRIZE_LABEL, kind: "prize" },
   { label: "Chúc bạn may mắn lần sau", kind: "lose" },
-  { label: "Thử lại ở sự kiện tới", kind: "lose" },
-  { label: "May mắn đang tới gần", kind: "lose" },
-  { label: "Chưa trúng lần này", kind: "lose" },
-  { label: "Cố lên nhé", kind: "lose" },
-  { label: "Hẹn gặp lại", kind: "lose" },
-  { label: "Chúc may mắn", kind: "lose" },
+  { label: "Chúc bạn may mắn lần sau", kind: "lose" },
+  { label: "Chúc bạn may mắn lần sau", kind: "lose" },
+  { label: "Chúc bạn may mắn lần sau", kind: "lose" },
+  { label: "Chúc bạn may mắn lần sau", kind: "lose" },
+  { label: "Chúc bạn may mắn lần sau", kind: "lose" },
+  { label: "Chúc bạn may mắn lần sau", kind: "lose" },
 ];
 
 const prizeIndex = segments.findIndex(s => s.kind === "prize");
@@ -73,7 +74,12 @@ function drawWheel(rotationRad = 0) {
   const w = wheelCanvas.width;
   const h = wheelCanvas.height;
   const cx = w / 2, cy = h / 2;
+
   const r = Math.min(w, h) * 0.46;
+
+  // ====== FIX: hub nhỏ lại + chữ đẩy ra mép + auto fit ======
+  const innerR = r * 0.46;      // trước đây ~0.55 => che chữ
+  const textEndX = r * 0.965;   // đẩy chữ ra biết, giảm bị che
 
   ctx.setTransform(1,0,0,1,0,0);
   ctx.clearRect(0,0,w,h);
@@ -122,29 +128,48 @@ function drawWheel(rotationRad = 0) {
     ctx.lineWidth = Math.max(1, 1.2 * dpr);
     ctx.stroke();
 
+    // ====== TEXT ======
     ctx.save();
     const mid = start + arc / 2;
     ctx.rotate(mid);
 
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
-    ctx.fillStyle = isPrize ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.78)";
-    ctx.font = `600 ${Math.round(14 * dpr)}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
-    const text = isPrize ? "GPT Plus 1 tháng" : "May mắn";
-    ctx.fillText(text, r * 0.92, 0);
+    ctx.fillStyle = isPrize ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.82)";
+
+    const text = segments[i].label;
+
+    // khoảng trống text (tránh đè vào hub)
+    const maxWidth = Math.max(40, textEndX - innerR * 1.08);
+
+    // auto giảm font nếu text dài (đặc biệt PRIZE_LABEL)
+    let fontPx = Math.round(14 * dpr);
+    ctx.font = `700 ${fontPx}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
+
+    while (fontPx > Math.round(10 * dpr) && ctx.measureText(text).width > maxWidth) {
+      fontPx -= 1;
+      ctx.font = `700 ${fontPx}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
+    }
+
+    ctx.fillText(text, textEndX, 0);
     ctx.restore();
   }
 
+  // ====== HUB (vòng đen) - nhỏ lại + có viền nhẹ ======
   ctx.beginPath();
-  ctx.arc(0,0,r*0.55,0,Math.PI*2);
-  ctx.fillStyle = "rgba(8,12,24,0.90)";
+  ctx.arc(0,0,innerR,0,Math.PI*2);
+  ctx.fillStyle = "rgba(8,12,24,0.88)";
   ctx.fill();
 
-  const ig = ctx.createRadialGradient(-r*0.2,-r*0.25, r*0.1, 0,0, r*0.6);
+  ctx.strokeStyle = "rgba(110,231,255,0.18)";
+  ctx.lineWidth = Math.max(1, 1.2 * dpr);
+  ctx.stroke();
+
+  const ig = ctx.createRadialGradient(-innerR*0.35,-innerR*0.45, innerR*0.15, 0,0, innerR*1.15);
   ig.addColorStop(0, "rgba(255,255,255,0.10)");
   ig.addColorStop(1, "rgba(255,255,255,0.00)");
   ctx.beginPath();
-  ctx.arc(0,0,r*0.55,0,Math.PI*2);
+  ctx.arc(0,0,innerR,0,Math.PI*2);
   ctx.fillStyle = ig;
   ctx.fill();
 }
