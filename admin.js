@@ -291,3 +291,20 @@ document.addEventListener("DOMContentLoaded", () => {
   bindEvents();
   setStatus("Sẵn sàng. Nhập Admin Token rồi bấm 'Tải dữ liệu'.", "info");
 });
+function assertIds() {
+  const required = [
+    "adminToken","searchInput","statusSelect","fromISO","toISO","limitSelect",
+    "btnLoad","btnPrev","btnNext","btnStats","btnExport","btnLogout",
+    "statusText","statsBox","resultBody"
+  ];
+  const missing = required.filter(id => !document.getElementById(id));
+  if (missing.length) {
+    alert("Thiếu id trong admin.html: " + missing.join(", "));
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  assertIds();
+  bindEvents();
+  setStatus("Sẵn sàng. Nhập Admin Token rồi bấm 'Tải dữ liệu'.", "info");
+});
