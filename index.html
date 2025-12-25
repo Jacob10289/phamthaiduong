@@ -2,9 +2,9 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="color-scheme" content="dark light" />
-  <title>Minigame Vòng Quay — GPT Plus 1 tháng</title>
+  <title>Minigame — GPT Plus 1 tháng</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
@@ -14,8 +14,8 @@
     <div class="brand">
       <div class="logo">⟡</div>
       <div class="brand-text">
-        <div class="brand-title">Minigame Vòng Quay</div>
-        <div class="brand-sub">Quay số chọn người may mắn nhận <b>GPT Plus 1 tháng</b></div>
+        <div class="brand-title">Minigame</div>
+        <div class="brand-sub">Chọn người may mắn nhận <b>GPT Plus 1 tháng</b></div>
       </div>
     </div>
     <div class="pill" id="envPill">Production</div>
@@ -23,18 +23,8 @@
 
   <main class="wrap">
     <section class="card wheel-card">
-      <div class="wheel-area">
-        <div class="pointer" aria-hidden="true"></div>
-
-        <canvas id="wheel" width="420" height="420" aria-label="Vòng quay"></canvas>
-
-        <div class="wheel-center">
-          <button id="spinBtn" class="btn btn-primary" type="button">
-            <span class="btn-label">Quay</span>
-            <span class="btn-sub" id="spinSub">1 lần / email</span>
-          </button>
-        </div>
-      </div>
+      <!-- Game sẽ được JS render vào đây -->
+      <div class="wheel-area" id="wheelArea"></div>
 
       <div class="wheel-meta">
         <div class="meta-row">
@@ -51,7 +41,7 @@
     <section class="card form-card">
       <h2>Thông tin tham gia</h2>
       <p class="muted">
-        Nhập tên và email. Mỗi email chỉ được quay 1 lần. Nếu trúng, hệ thống sẽ gửi thông báo về Telegram admin.
+        Nhập tên và email. Mỗi email chỉ được chơi 1 lần. Nếu trúng, hệ thống sẽ gửi thông báo về Telegram admin.
       </p>
 
       <form id="form" novalidate>
@@ -72,8 +62,8 @@
           <input id="note" type="text" placeholder="Mã chiến dịch / nguồn traffic…" />
         </label>
 
-        <div class="actions">
-          <button id="submitBtn" class="btn btn-secondary" type="submit">Gửi & Quay</button>
+        <div class="actions form-actions">
+          <button id="submitBtn" class="btn btn-secondary" type="submit">Gửi</button>
           <button id="demoBtn" class="btn btn-ghost" type="button">Demo data</button>
         </div>
 
@@ -83,7 +73,6 @@
       <footer class="footnote">
         <span>©</span> <span id="year"></span>
         <span class="sep">•</span>
-        <!-- ĐỔI TÊN Ở ĐÂY -->
         <span id="brandName">Phạm Thái Dương</span>
       </footer>
     </section>
