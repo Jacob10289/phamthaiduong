@@ -154,53 +154,37 @@ body{
 .btn[disabled]{opacity:.55; cursor:not-allowed}
 
 /* =========================
-   NÚT QUAY: PHÓNG TO + MASK
-   Mục tiêu: che/bọc trọn vòng nhạt xanh quanh chữ Quay
+   NÚT QUAY: TRÒN TRỊA + ĐỀU
+   - Phóng to để che trọn viền nhạt quanh tâm
+   - Không có "mảng đen loang"
    ========================= */
 .btn-primary{
-  /* tăng size theo viewport để iPhone không bị thiếu */
-  width: clamp(150px, 36vw, 178px);
-  height: clamp(150px, 36vw, 178px);
+  width: clamp(150px, 36vw, 176px);
+  height: clamp(150px, 36vw, 176px);
   border-radius: 999px;
 
-  /* viền trung tính */
   border: 1px solid rgba(255,255,255,.14);
 
-  /* nền đen rõ để "đè" vùng nhạt */
   background: radial-gradient(circle at 30% 25%,
-    rgba(255,255,255,.07) 0%,
-    rgba(0,0,0,.58) 58%,
-    rgba(0,0,0,.80) 100%
+    rgba(255,255,255,.06) 0%,
+    rgba(0,0,0,.55) 55%,
+    rgba(0,0,0,.86) 100%
   );
 
-  box-shadow: 0 18px 55px rgba(0,0,0,.55);
+  /* Ring sát nút để "nuốt" viền nhạt quanh tâm (không loang ra ngoài) */
+  --hubRing: clamp(5px, 1.2vw, 8px);
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.55),
+    0 0 0 var(--hubRing) rgba(0,0,0,.72);
 
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   gap:6px;
-
-  position:relative;
-  isolation:isolate;
 }
 
-/* Mask nở ra để che sạch "vòng nhạt" bị lệch */
-.btn-primary::before{
-  content:"";
-  position:absolute;
-  inset:-12px; /* tăng/giảm nếu muốn che nhiều/ít hơn */
-  border-radius:999px;
-  background: radial-gradient(circle,
-    rgba(0,0,0,.78) 0%,
-    rgba(0,0,0,.78) 64%,
-    rgba(0,0,0,0) 76%
-  );
-  pointer-events:none;
-  z-index:-1;
-}
-
-/* Tô đậm + giữ màu xanh biển chữ Quay */
+/* Tô đậm + giữ màu xanh chữ Quay */
 #spinBtn .btn-label{
   font-weight: 950;
   font-size: 24px;
@@ -213,16 +197,14 @@ body{
   opacity: .96;
 }
 
-/* màn rất nhỏ vẫn phải đủ to để che vòng nhạt */
 @media (max-width: 420px){
   .btn-primary{
     width: clamp(145px, 42vw, 168px);
     height: clamp(145px, 42vw, 168px);
+    --hubRing: clamp(4px, 1.4vw, 7px);
   }
-  #spinBtn .btn-label{ font-size:22px; }
+  #spinBtn .btn-label{ font-size: 22px; }
 }
-
-/* ========================= */
 
 .btn-secondary{
   background: rgba(110,231,255,.08);
