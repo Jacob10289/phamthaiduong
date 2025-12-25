@@ -1,8 +1,6 @@
 :root{
   --bg0:#070A12;
   --bg1:#0B1022;
-  --card:#0E142B;
-  --card2:#0C1226;
   --text:#EAF0FF;
   --muted:#AAB4D6;
   --line:rgba(255,255,255,.10);
@@ -10,6 +8,7 @@
   --shadow: 0 20px 80px rgba(0,0,0,.55);
   --radius: 18px;
   --radius2: 14px;
+
   --accent:#6EE7FF;
   --accent2:#9B8CFF;
   --good:#4ADE80;
@@ -33,6 +32,12 @@ body{
     linear-gradient(180deg, var(--bg0), var(--bg1));
 }
 
+/* iOS safe area */
+body{
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
 .bg{
   position:fixed; inset:0;
   background:
@@ -53,7 +58,7 @@ body{
 }
 
 @media (max-width: 680px){
-  .topbar{ flex-direction:column; align-items:flex-start; }
+  .topbar{ flex-direction:column; align-items:flex-start; padding:18px 16px; }
 }
 
 .brand{display:flex; gap:14px; align-items:center}
@@ -66,7 +71,7 @@ body{
   box-shadow: var(--shadow);
   font-size:18px;
 }
-.brand-title{font-size:18px; font-weight:700; letter-spacing:.2px}
+.brand-title{font-size:18px; font-weight:800; letter-spacing:.2px}
 .brand-sub{font-size:13px; color:var(--muted); line-height:1.4}
 
 .pill{
@@ -76,6 +81,7 @@ body{
   background: rgba(255,255,255,.04);
   color: var(--muted);
   font-size:12px;
+  white-space: nowrap;
 }
 
 .wrap{
@@ -86,8 +92,9 @@ body{
   grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
   gap:16px;
 }
+
 @media (max-width: 980px){
-  .wrap{grid-template-columns:1fr}
+  .wrap{grid-template-columns:1fr; padding: 10px 16px 36px;}
 }
 
 .card{
@@ -99,25 +106,25 @@ body{
 }
 
 .wheel-card{padding:18px}
+@media (max-width: 520px){
+  .wheel-card{padding:14px}
+}
 
-/* Khu game (đổi từ wheel sang card) */
+/* khu game */
 .wheel-area{
   position:relative;
   display:grid;
   place-items:center;
-  padding: 18px 0 10px;
+  padding: 10px 0 8px;
 }
-
-/* Ẩn canvas wheel cũ nếu vẫn tồn tại trong HTML */
-#wheel{ display:none !important; }
-.pointer{ display:none !important; }
 
 /* ====== LUCKY CARD GAME ====== */
 .game{
-  width: min(520px, 92vw);
+  width: min(560px, 94vw);
   display:grid;
   gap:14px;
   place-items:center;
+  margin: 0 auto;
 }
 
 .game-head{
@@ -128,10 +135,14 @@ body{
   gap:12px;
 }
 
+@media (max-width: 520px){
+  .game-head{ align-items:flex-start; }
+}
+
 .game-title{
   margin:0;
   font-size:18px;
-  font-weight:850;
+  font-weight:900;
   letter-spacing:.2px;
 }
 .game-sub{
@@ -139,17 +150,22 @@ body{
   color:var(--muted);
   font-size:13px;
   line-height:1.45;
+  max-width: 52ch;
 }
 
 .deck{
   width:100%;
   display:grid;
   place-items:center;
-  padding: 16px 0 6px;
+  padding: 10px 0 4px;
 }
 
+/*
+  Fix “không tương thích thiết bị”: khóa theo cả width + height
+  - width theo vw nhưng cũng không vượt quá chiều cao viewport (svh/dvh).
+*/
 .card3d{
-  width: min(340px, 78vw);
+  width: min(360px, 86vw, calc(70svh * 0.75));
   aspect-ratio: 3 / 4;
   border-radius: 22px;
   position:relative;
@@ -160,7 +176,17 @@ body{
     0 0 0 1px rgba(255,255,255,.10) inset;
 }
 
-/* Mặt trước */
+@supports not (height: 1svh){
+  .card3d{ width: min(360px, 86vw, calc(70vh * 0.75)); }
+}
+
+@media (max-height: 740px){
+  .card3d{ width: min(340px, 84vw, calc(64svh * 0.75)); }
+}
+@media (max-height: 660px){
+  .card3d{ width: min(320px, 82vw, calc(58svh * 0.75)); }
+}
+
 .card-face{
   position:absolute;
   inset:0;
@@ -169,6 +195,7 @@ body{
   overflow:hidden;
 }
 
+/* Mặt trước */
 .card-front{
   background:
     radial-gradient(500px 320px at 30% 20%, rgba(110,231,255,.20), transparent 60%),
@@ -188,7 +215,7 @@ body{
       rgba(255,255,255,.00) 10px 22px
     );
   transform: rotate(10deg);
-  opacity:.35;
+  opacity:.32;
 }
 
 .card-front-inner{
@@ -225,7 +252,7 @@ body{
 
 .card-front-title{
   font-weight:950;
-  font-size: 34px;
+  font-size: clamp(28px, 4.6vw, 36px);
   color: var(--accent);
   text-shadow: 0 10px 30px rgba(0,0,0,.55);
 }
@@ -234,9 +261,10 @@ body{
   font-size: 13px;
   color: rgba(255,255,255,.82);
   line-height:1.55;
+  max-width: 30ch;
 }
 
-/* Mặt sau (kết quả) */
+/* Mặt sau */
 .card-back{
   transform: rotateY(180deg);
   background:
@@ -265,7 +293,7 @@ body{
   border-radius:999px;
   border:1px solid rgba(255,255,255,.16);
   background: rgba(0,0,0,.22);
-  font-weight:800;
+  font-weight:900;
   letter-spacing:.2px;
 }
 .result-pill.win{ border-color: rgba(74,222,128,.35); background: rgba(74,222,128,.10); }
@@ -273,14 +301,14 @@ body{
 
 .result-title{
   font-weight:950;
-  font-size: 22px;
+  font-size: 24px;
   letter-spacing:.2px;
 }
 .result-desc{
   font-size: 13px;
   color: rgba(255,255,255,.86);
   line-height:1.55;
-  max-width: 26ch;
+  max-width: 28ch;
 }
 
 .card3d.is-flipped{ transform: rotateY(180deg); }
@@ -310,18 +338,27 @@ body{
 .btn[disabled]{opacity:.55; cursor:not-allowed}
 
 .btn-primary{
-  min-width: 168px;
+  min-width: 176px;
   border-radius: 999px;
   border:1px solid rgba(110,231,255,.26);
   background: radial-gradient(circle at 30% 25%, rgba(110,231,255,.18), rgba(155,140,255,.10));
   box-shadow: 0 18px 55px rgba(0,0,0,.55);
-  font-weight:900;
+  font-weight:950;
 }
-
+.btn-secondary{
+  background: rgba(110,231,255,.08);
+  border-color: rgba(110,231,255,.22);
+}
 .btn-ghost{
   background: transparent;
   border-color: rgba(255,255,255,.14);
   color: var(--muted);
+}
+
+/* form actions khác game actions */
+.form-actions{
+  justify-content:flex-start;
+  margin-top: 12px;
 }
 
 .wheel-meta{
@@ -341,9 +378,12 @@ body{
   background: rgba(0,0,0,.18);
 }
 .meta-title{font-size:12px; color: var(--muted)}
-.meta-value{font-size:14px; font-weight:700; margin-top:4px}
+.meta-value{font-size:14px; font-weight:800; margin-top:4px}
 
 .form-card{padding:18px 18px 14px}
+@media (max-width: 520px){
+  .form-card{padding:14px}
+}
 .form-card h2{margin:0 0 8px; font-size:18px}
 .muted{margin:0 0 14px; color:var(--muted); font-size:13px; line-height:1.55}
 
