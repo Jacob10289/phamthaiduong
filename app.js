@@ -1,14 +1,11 @@
-/* =========================
-   CONFIG
-========================= */
+// ====== CONFIG ======
 const FUNCTION_URL = "https://wphojcbtmdtiifczfcqd.supabase.co/functions/v1/Spin";
-const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwaG9qY2J0bWR0aWlmY3pmY3FkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTY5NzksImV4cCI6MjA4MjE3Mjk3OX0.Afo6r6HzkapE1TUCGsFMmNXK5HGZUGxyPV79-sJgQzA";
+const ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwaG9qY2J0bWR0aWlmY3pmY3FkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTY5NzksImV4cCI6MjA4MjE3Mjk3OX0.Afo6r6HzkapE1TUCGsFMmNXK5HGZUGxyPV79-sJgQzA";
 
-/* =========================
-   DOM
-========================= */
 const $ = (id) => document.getElementById(id);
 
+// ====== ELEMENTS ======
 const wheelCanvas = $("wheel");
 const ctx = wheelCanvas.getContext("2d");
 
@@ -32,14 +29,22 @@ const prizeText = $("prizeText");
 const resultBox = $("result");
 const envPill = $("envPill");
 
-$("year").textContent = String(new Date().getFullYear());
-envPill.textContent = location.hostname.includes("localhost") ? "Local" : "Production";
+// Optional dev elements (nếu có trong HTML thì set, không có thì bỏ qua)
+const endpointText = $("endpointText");
+const spinIdText = $("spinIdText");
+const serverStatusText = $("serverStatusText");
 
-/* =========================
-   DATA
-========================= */
+// Footer year (nếu có)
+const yearEl = $("year");
+if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+// Env pill
+if (envPill) envPill.textContent = location.hostname.includes("localhost") ? "Local" : "Production";
+
+// ====== GAME DATA ======
 const PRIZE_LABEL = "GPT Plus 1 tháng";
 
+// 1 ô prize + 7 ô lose
 const segments = [
   { label: PRIZE_LABEL, kind: "prize" },
   { label: "Chúc bạn may mắn lần sau", kind: "lose" },
@@ -56,45 +61,29 @@ const loseIndexes = segments
   .map((s, i) => (s.kind === "lose" ? i : -1))
   .filter((i) => i >= 0);
 
-let currentRotation = 0;
+let currentRotation = 0; // radians
 let spinning = false;
 
-/* =========================
-   CANVAS HELPERS
-========================= */
+// ====== CANVAS SIZE / DPR ======
 function resizeCanvasForDPR(canvas, targetCssPx) {
   const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-  canvas.style.width = targetCssPx + "px";
-  canvas.style.height = targetCssPx + "px";
-  canvas.width = Math.round(targetCssPx * dpr);
-  canvas.height = Math.round(targetCssPx * dpr);
+  const css = Math.max(10, Math.floor(targetCssPx));
+
+  canvas.style.width = css + "px";
+  canvas.style.height = css + "px";
+  canvas.width = Math.round(css * dpr);
+  canvas.height = Math.round(css * dpr);
   return dpr;
 }
 
+// Lấy size theo CSS layout thực tế để hết lệch trên iOS
 function measureWheelCssSize() {
-  // Ưu tiên đúng size CSS mà #wheel đang hiển thị
   const rect = wheelCanvas.getBoundingClientRect();
-  const w = rect.width || 0;
-  const h = rect.height || 0;
-  const size = Math.floor(Math.min(w, h));
-  // fallback nếu rect chưa có (mới load)
+  const size = Math.floor(Math.min(rect.width || 0, rect.height || 0));
   return size > 0 ? size : Math.min(420, Math.round(window.innerWidth * 0.82));
 }
 
-function normalizeRad(r) {
-  const t = Math.PI * 2;
-  return ((r % t) + t) % t;
-}
-
-function segmentCenterAngle(index) {
-  const arc = (Math.PI * 2) / segments.length;
-  const start = index * arc - Math.PI / 2;
-  return start + arc / 2;
-}
-
-/* =========================
-   WHEEL DRAW (FIXED)
-========================= */
+// ====== DRAW WHEEL (FIX DỨT ĐIỂM) ======
 function drawWheel(rotationRad = 0) {
   const sizeCss = measureWheelCssSize();
   const dpr = resizeCanvasForDPR(wheelCanvas, sizeCss);
@@ -104,14 +93,15 @@ function drawWheel(rotationRad = 0) {
   const cx = w / 2;
   const cy = h / 2;
 
-  // Bán kính vòng
+  // Bán kính tổng
   const r = Math.min(w, h) * 0.46;
 
-  // Hub nhỏ lại để không che chữ
-  const innerR = r * 0.40;
+  // Hub (vòng đen trong canvas) — chỉnh để cân với nút Quay overlay
+  // (r*0.34~0.38 thường đẹp với button 112–130px trên mobile)
+  const innerR = r * 0.36;
 
-  // Vị trí text trong “vành”
-  const textR = innerR + (r - innerR) * 0.63;
+  // Vị trí text trên “vành”
+  const textR = innerR + (r - innerR) * 0.72;
 
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, w, h);
@@ -121,7 +111,7 @@ function drawWheel(rotationRad = 0) {
   const n = segments.length;
   const arc = (Math.PI * 2) / n;
 
-  // Vòng highlight ngoài
+  // highlight vòng ngoài
   const ringR1 = r * 1.05;
   const ringR0 = r * 0.88;
   const grad = ctx.createRadialGradient(0, 0, ringR0, 0, 0, ringR1);
@@ -132,18 +122,24 @@ function drawWheel(rotationRad = 0) {
   ctx.fillStyle = grad;
   ctx.fill();
 
-  // Label 2 dòng để dứt điểm tràn chữ
+  // helper: luôn wrap cho gọn, không tràn
   function labelLines(i) {
-    const isPrize = i === prizeIndex;
-    if (isPrize) return ["GPT Plus", "1 tháng"];
-    return ["Chúc bạn", "may mắn lần sau"];
+    if (i === prizeIndex) return ["GPT Plus", "1 tháng"];
+    return ["Chúc bạn", "may mắn", "lần sau"];
+  }
+
+  // helper: tính “bề ngang” tối đa của lát tại bán kính textR
+  // chord = 2 * R * sin(arc/2)
+  function maxTextWidthAtRadius(R) {
+    const chord = 2 * R * Math.sin(arc / 2);
+    return chord * 0.86; // chừa padding hai bên
   }
 
   for (let i = 0; i < n; i++) {
     const start = i * arc - Math.PI / 2;
     const end = start + arc;
 
-    // Lát
+    // vẽ lát
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.arc(0, 0, r, start, end);
@@ -169,77 +165,102 @@ function drawWheel(rotationRad = 0) {
     ctx.lineWidth = Math.max(1, 1.2 * dpr);
     ctx.stroke();
 
-    // === CLIP donut để chữ không bao giờ đè vào hub ===
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(0, 0, r * 0.99, start, end, false);
-    ctx.arc(0, 0, innerR * 1.08, end, start, true);
-    ctx.closePath();
-    ctx.clip();
-
-    // Vẽ chữ theo mid
+    // ===== TEXT: tangent + auto flip + auto fit =====
     const mid = start + arc / 2;
+    const lines = labelLines(i);
+
+    ctx.save();
     ctx.rotate(mid);
+
+    // Đưa bút ra vị trí textR
+    ctx.translate(textR, 0);
+
+    // Xoay để chữ nằm theo tiếp tuyến (đọc tự nhiên)
+    ctx.rotate(Math.PI / 2);
+
+    // Auto flip cho nửa bên trái để luôn đọc xuôi
+    // Nếu hướng ra ngoài đang nằm bên trái (cos(mid) < 0) => lật 180
+    if (Math.cos(mid) < 0) ctx.rotate(Math.PI);
 
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillStyle = isPrize ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.88)";
+    ctx.fillStyle = isPrize ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.90)";
 
-    const lines = labelLines(i);
+    // Auto-fit font theo maxWidth tại textR
+    const maxW = maxTextWidthAtRadius(textR);
 
-    const baseFont = Math.round(12 * dpr);
-    const font = isPrize ? baseFont + 1 : baseFont;
-    ctx.font = `800 ${font}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
+    let fontPx = Math.round((isPrize ? 13 : 12) * dpr);
+    const minFontPx = Math.round(9 * dpr);
 
-    const lineGap = Math.round(13 * dpr);
-    const y0 = -(lines.length - 1) * lineGap / 2;
+    function setFont(px) {
+      ctx.font = `800 ${px}px ui-sans-serif, system-ui, -apple-system, Segoe UI`;
+    }
+    setFont(fontPx);
 
-    ctx.save();
-    ctx.translate(textR, 0);
+    const lineGap = Math.round(12.5 * dpr);
+
+    // giảm font cho đến khi dòng dài nhất vừa maxW
+    while (fontPx > minFontPx) {
+      setFont(fontPx);
+      const longest = Math.max(...lines.map((t) => ctx.measureText(t).width));
+      if (longest <= maxW) break;
+      fontPx -= 1;
+    }
+    setFont(fontPx);
+
+    const y0 = -((lines.length - 1) * lineGap) / 2;
     for (let k = 0; k < lines.length; k++) {
       ctx.fillText(lines[k], 0, y0 + k * lineGap);
     }
-    ctx.restore();
 
     ctx.restore();
   }
 
-  // Hub
+  // ===== HUB (vòng đen giữa canvas) — cân với nút "Quay" =====
+  // Base
   ctx.beginPath();
   ctx.arc(0, 0, innerR, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(8,12,24,0.90)";
+  ctx.fillStyle = "rgba(6,10,18,0.84)";
   ctx.fill();
 
-  // Viền hub nhẹ
-  ctx.strokeStyle = "rgba(110,231,255,0.16)";
+  // Inner vignette để tạo cảm giác “lõm” (ăn với button)
+  const hubGrad = ctx.createRadialGradient(-innerR * 0.25, -innerR * 0.30, innerR * 0.10, 0, 0, innerR * 1.05);
+  hubGrad.addColorStop(0, "rgba(255,255,255,0.08)");
+  hubGrad.addColorStop(1, "rgba(0,0,0,0.00)");
+  ctx.beginPath();
+  ctx.arc(0, 0, innerR, 0, Math.PI * 2);
+  ctx.fillStyle = hubGrad;
+  ctx.fill();
+
+  // Viền hub (để hub không “nuốt” chữ/nút)
+  ctx.strokeStyle = "rgba(110,231,255,0.18)";
   ctx.lineWidth = Math.max(1, 1.2 * dpr);
   ctx.stroke();
 
-  // Glow hub
-  const ig = ctx.createRadialGradient(
-    -innerR * 0.35, -innerR * 0.45, innerR * 0.15,
-    0, 0, innerR * 1.15
-  );
-  ig.addColorStop(0, "rgba(255,255,255,0.10)");
-  ig.addColorStop(1, "rgba(255,255,255,0.00)");
+  // Vòng mờ ngoài hub tạo “khoảng đệm” thị giác với button overlay
   ctx.beginPath();
-  ctx.arc(0, 0, innerR, 0, Math.PI * 2);
-  ctx.fillStyle = ig;
-  ctx.fill();
+  ctx.arc(0, 0, innerR * 1.06, 0, Math.PI * 2);
+  ctx.strokeStyle = "rgba(255,255,255,0.06)";
+  ctx.lineWidth = Math.max(1, 2.0 * dpr);
+  ctx.stroke();
 }
 
-/* =========================
-   UI HELPERS
-========================= */
+// ===== UI HELPERS =====
 function setStatus(text, tone = "neutral") {
+  if (!statusText) return;
   statusText.textContent = text;
   statusText.style.color =
-    tone === "good" ? "var(--good)" :
-    tone === "warn" ? "var(--warn)" :
-    tone === "bad"  ? "var(--bad)" : "var(--text)";
+    tone === "good"
+      ? "var(--good)"
+      : tone === "warn"
+      ? "var(--warn)"
+      : tone === "bad"
+      ? "var(--bad)"
+      : "var(--text)";
 }
 
 function setResult(html) {
+  if (!resultBox) return;
   resultBox.innerHTML = html;
 }
 
@@ -248,17 +269,15 @@ function badge(text, kind) {
 }
 
 function setBusy(b) {
-  spinBtn.disabled = b;
-  submitBtn.disabled = b;
-  demoBtn.disabled = b;
-  nameEl.disabled = b;
-  emailEl.disabled = b;
-  noteEl.disabled = b;
+  if (spinBtn) spinBtn.disabled = b;
+  if (submitBtn) submitBtn.disabled = b;
+  if (demoBtn) demoBtn.disabled = b;
+  if (nameEl) nameEl.disabled = b;
+  if (emailEl) emailEl.disabled = b;
+  if (noteEl) noteEl.disabled = b;
 }
 
-/* =========================
-   CONFETTI
-========================= */
+// ===== CONFETTI =====
 let confettiParticles = [];
 let confettiActive = false;
 
@@ -271,6 +290,11 @@ function resizeConfetti() {
   confettiCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 resizeConfetti();
+
+window.addEventListener("resize", () => {
+  drawWheel(currentRotation);
+  resizeConfetti();
+});
 
 function startConfetti() {
   resizeConfetti();
@@ -316,73 +340,18 @@ function tickConfetti() {
   requestAnimationFrame(tickConfetti);
 }
 
-/* =========================
-   FORM VALIDATION
-========================= */
-function normalizeEmail(v) {
-  return String(v || "").trim().toLowerCase();
+// ===== SPIN MATH =====
+function normalizeRad(r) {
+  const t = Math.PI * 2;
+  return ((r % t) + t) % t;
 }
 
-function isValidEmail(v) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+function segmentCenterAngle(index) {
+  const arc = (Math.PI * 2) / segments.length;
+  const start = index * arc - Math.PI / 2;
+  return start + arc / 2;
 }
 
-function validateForm() {
-  let ok = true;
-  nameHint.textContent = "";
-  emailHint.textContent = "";
-
-  const name = String(nameEl.value || "").trim();
-  const email = normalizeEmail(emailEl.value);
-
-  if (!name || name.length < 2) {
-    nameHint.textContent = "Vui lòng nhập họ tên (tối thiểu 2 ký tự).";
-    ok = false;
-  }
-  if (!email || !isValidEmail(email)) {
-    emailHint.textContent = "Email không hợp lệ.";
-    ok = false;
-  }
-  return ok;
-}
-
-/* =========================
-   API
-========================= */
-async function callSpinAPI({ name, email, note }) {
-  const body = {
-    name,
-    identifier: email,
-    note: note || null,
-  };
-
-  const res = await fetch(FUNCTION_URL, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "apikey": ANON_KEY,
-      "authorization": `Bearer ${ANON_KEY}`,
-    },
-    body: JSON.stringify(body),
-  });
-
-  const text = await res.text();
-  let json = null;
-  try { json = JSON.parse(text); } catch { /* ignore */ }
-
-  if (!res.ok) {
-    const msg = (json && (json.detail || json.message || json.error))
-      ? (json.detail || json.message || json.error)
-      : text;
-    throw new Error(`HTTP_${res.status}: ${msg}`);
-  }
-
-  return json;
-}
-
-/* =========================
-   SPIN ANIMATION
-========================= */
 function spinToIndex(targetIndex) {
   if (spinning) return Promise.reject(new Error("SPINNING"));
   spinning = true;
@@ -391,7 +360,6 @@ function spinToIndex(targetIndex) {
   const desired = normalizeRad((-Math.PI / 2) - arcCenter);
 
   const extraTurns = 6 + Math.floor(Math.random() * 3); // 6..8
-
   const base = currentRotation;
   const baseNorm = normalizeRad(base);
 
@@ -403,7 +371,9 @@ function spinToIndex(targetIndex) {
   const startRot = currentRotation;
 
   return new Promise((resolve) => {
-    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
     function frame(now) {
       const t = Math.min(1, (now - startTime) / duration);
       const k = easeOutCubic(t);
@@ -420,104 +390,161 @@ function spinToIndex(targetIndex) {
   });
 }
 
-/* =========================
-   INIT + EVENTS
-========================= */
-function safeRedraw() {
-  try { drawWheel(currentRotation); } catch (e) {
-    console.error("drawWheel error:", e);
-    setStatus("Lỗi hiển thị vòng quay", "bad");
-    setResult(`${badge("JS ERROR", "bad")} Mở console để xem lỗi.`);
-  }
+// ===== FORM / API =====
+function normalizeEmail(v) {
+  return String(v || "").trim().toLowerCase();
 }
 
-safeRedraw();
-prizeText.textContent = PRIZE_LABEL;
+function isValidEmail(v) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+}
+
+function validateForm() {
+  let ok = true;
+  if (nameHint) nameHint.textContent = "";
+  if (emailHint) emailHint.textContent = "";
+
+  const name = String(nameEl?.value || "").trim();
+  const email = normalizeEmail(emailEl?.value);
+
+  if (!name || name.length < 2) {
+    if (nameHint) nameHint.textContent = "Vui lòng nhập họ tên (tối thiểu 2 ký tự).";
+    ok = false;
+  }
+  if (!email || !isValidEmail(email)) {
+    if (emailHint) emailHint.textContent = "Email không hợp lệ.";
+    ok = false;
+  }
+  return ok;
+}
+
+async function callSpinAPI({ name, email, note }) {
+  const body = { name, identifier: email, note: note || null };
+
+  const res = await fetch(FUNCTION_URL, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      apikey: ANON_KEY,
+      authorization: `Bearer ${ANON_KEY}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (endpointText) endpointText.textContent = FUNCTION_URL;
+  if (serverStatusText) serverStatusText.textContent = `${res.status} ${res.statusText}`;
+
+  const text = await res.text();
+  let json = null;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    // ignore
+  }
+
+  if (!res.ok) {
+    const msg =
+      json && (json.detail || json.message || json.error)
+        ? json.detail || json.message || json.error
+        : text;
+    throw new Error(`HTTP_${res.status}: ${msg}`);
+  }
+
+  return json;
+}
+
+// ===== INIT =====
+drawWheel(0);
+if (prizeText) prizeText.textContent = PRIZE_LABEL;
 setStatus("Sẵn sàng");
 setResult(`${badge("READY", "warn")} Nhập thông tin và bấm <b>Quay</b>.`);
 
-window.addEventListener("resize", () => {
-  safeRedraw();
-  resizeConfetti();
-});
+if (demoBtn) {
+  demoBtn.addEventListener("click", () => {
+    if (nameEl) nameEl.value = "Nguyễn Văn A";
+    if (emailEl) emailEl.value = `demo${Math.floor(Math.random() * 10000)}@example.com`;
+    if (noteEl) noteEl.value = "Demo";
+    setResult(`${badge("Demo", "warn")} Đã điền dữ liệu mẫu. Bấm <b>Gửi & Quay</b>.`);
+  });
+}
 
-demoBtn.addEventListener("click", () => {
-  nameEl.value = "Nguyễn Văn A";
-  emailEl.value = `demo${Math.floor(Math.random() * 10000)}@example.com`;
-  noteEl.value = "Demo";
-  setResult(`${badge("Demo", "warn")} Đã điền dữ liệu mẫu. Bấm <b>Gửi & Quay</b>.`);
-});
+if (spinBtn) {
+  spinBtn.addEventListener("click", () => {
+    if (form) form.requestSubmit();
+  });
+}
 
-spinBtn.addEventListener("click", () => {
-  form.requestSubmit();
-});
+if (form) {
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    if (spinning) return;
 
-form.addEventListener("submit", async (ev) => {
-  ev.preventDefault();
-  if (spinning) return;
-
-  if (!ANON_KEY || ANON_KEY.includes("PASTE_YOUR_SUPABASE_ANON_KEY_HERE")) {
-    setResult(`${badge("Cấu hình thiếu", "bad")} Bạn chưa set <b>ANON_KEY</b> trong <code>app.js</code>.`);
-    return;
-  }
-
-  if (!validateForm()) {
-    setResult(`${badge("Thiếu thông tin", "warn")} Vui lòng kiểm tra lại dữ liệu nhập.`);
-    return;
-  }
-
-  const name = String(nameEl.value).trim();
-  const email = normalizeEmail(emailEl.value);
-  const note = String(noteEl.value || "").trim();
-
-  setBusy(true);
-  setStatus("Đang gọi server…", "warn");
-  setResult(`${badge("Đang xử lý", "warn")} Hệ thống đang kiểm tra lượt quay…`);
-
-  try {
-    const resp = await callSpinAPI({ name, email, note });
-    const data = resp?.data || {};
-    const status = data?.status;
-
-    if (status === "ALREADY_SPUN") {
-      setStatus("Đã quay trước đó", "bad");
-      setResult(`${badge("ALREADY_SPUN", "bad")} Email này đã quay rồi. Hệ thống không ghi nhận thêm để tránh gian lận.`);
+    if (!ANON_KEY || ANON_KEY.includes("PASTE_YOUR_SUPABASE_ANON_KEY_HERE")) {
+      setResult(`${badge("Cấu hình thiếu", "bad")} Bạn chưa set <b>ANON_KEY</b> trong <code>app.js</code>.`);
       return;
     }
 
-    if (status !== "WIN" && status !== "LOSE") {
-      setStatus("Phản hồi không hợp lệ", "bad");
-      setResult(`${badge("ERROR", "bad")} Server trả về trạng thái không mong đợi: <b>${String(status)}</b>`);
+    if (!validateForm()) {
+      setResult(`${badge("Thiếu thông tin", "warn")} Vui lòng kiểm tra lại dữ liệu nhập.`);
       return;
     }
 
-    const targetIndex = (status === "WIN")
-      ? prizeIndex
-      : loseIndexes[Math.floor(Math.random() * loseIndexes.length)];
+    const name = String(nameEl.value).trim();
+    const email = normalizeEmail(emailEl.value);
+    const note = String(noteEl?.value || "").trim();
 
-    setStatus("Đang quay…", "warn");
-    setResult(`${badge(status, status === "WIN" ? "good" : "warn")} Vòng quay đang dừng ở kết quả…`);
+    setBusy(true);
+    setStatus("Đang gọi server…", "warn");
+    setResult(`${badge("Đang xử lý", "warn")} Hệ thống đang kiểm tra lượt quay…`);
 
-    await spinToIndex(targetIndex);
+    try {
+      const resp = await callSpinAPI({ name, email, note });
+      const data = resp?.data || {};
+      const status = data?.status;
 
-    if (status === "WIN") {
-      setStatus("Chúc mừng! Bạn đã trúng", "good");
-      startConfetti();
-      setResult(
-        `${badge("WIN", "good")} Chúc mừng <b>${name}</b>! Bạn đã trúng <b>${data?.prize || PRIZE_LABEL}</b>.<br/>
-         <span class="muted">Hệ thống đã gửi thông báo về admin (Telegram) để liên hệ trao thưởng.</span>`
-      );
-    } else {
-      setStatus("Chưa trúng lần này", "warn");
-      setResult(
-        `${badge("LOSE", "warn")} Rất tiếc <b>${name}</b>, bạn chưa trúng lần này.<br/>
-         <span class="muted">Hẹn gặp lại ở sự kiện tiếp theo.</span>`
-      );
+      if (spinIdText) spinIdText.textContent = data?.spin_id || "—";
+
+      if (status === "ALREADY_SPUN") {
+        setStatus("Đã quay trước đó", "bad");
+        setResult(
+          `${badge("ALREADY_SPUN", "bad")} Email này đã quay rồi. Hệ thống không ghi nhận thêm để tránh gian lận.`
+        );
+        return;
+      }
+
+      if (status !== "WIN" && status !== "LOSE") {
+        setStatus("Phản hồi không hợp lệ", "bad");
+        setResult(`${badge("ERROR", "bad")} Server trả về trạng thái không mong đợi: <b>${String(status)}</b>`);
+        return;
+      }
+
+      const targetIndex =
+        status === "WIN" ? prizeIndex : loseIndexes[Math.floor(Math.random() * loseIndexes.length)];
+
+      setStatus("Đang quay…", "warn");
+      setResult(`${badge(status, status === "WIN" ? "good" : "warn")} Vòng quay đang dừng ở kết quả…`);
+
+      await spinToIndex(targetIndex);
+
+      if (status === "WIN") {
+        setStatus("Chúc mừng! Bạn đã trúng", "good");
+        startConfetti();
+        setResult(
+          `${badge("WIN", "good")} Chúc mừng <b>${name}</b>! Bạn đã trúng <b>${data?.prize || PRIZE_LABEL}</b>.<br/>
+           <span class="muted">Hệ thống đã gửi thông báo về admin (Telegram) để liên hệ trao thưởng.</span>`
+        );
+      } else {
+        setStatus("Chưa trúng lần này", "warn");
+        setResult(
+          `${badge("LOSE", "warn")} Rất tiếc <b>${name}</b>, bạn chưa trúng lần này.<br/>
+           <span class="muted">Hẹn gặp lại ở sự kiện tiếp theo.</span>`
+        );
+      }
+    } catch (e) {
+      setStatus("Lỗi server / cấu hình", "bad");
+      setResult(`${badge("ERROR", "bad")} ${String(e.message || e)}`);
+    } finally {
+      setBusy(false);
     }
-  } catch (e) {
-    setStatus("Lỗi server / cấu hình", "bad");
-    setResult(`${badge("ERROR", "bad")} ${String(e.message || e)}`);
-  } finally {
-    setBusy(false);
-  }
-});
+  });
+}
