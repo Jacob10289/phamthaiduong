@@ -99,44 +99,18 @@ body{
   overflow:hidden;
 }
 
-/* =========================
-   WHEEL: FIX CÂN ĐỐI MOBILE
-   ========================= */
-
-.wheel-card{
-  padding:18px;
-}
-
-/* Tạo khung cân đối + đảm bảo wheel không “trôi” theo padding/viewport */
+.wheel-card{padding:18px}
 .wheel-area{
   position:relative;
   display:grid;
   place-items:center;
-  /* chừa đúng khoảng cho pointer, giảm cảm giác lệch */
-  padding: 20px 0 10px;
-  /* chống iOS “nhảy” layout */
-  width: 100%;
+  padding: 18px 0 8px;
 }
 
-/* vòng sáng nền nhẹ để mắt thấy cân */
-.wheel-area::before{
-  content:"";
-  position:absolute;
-  inset: 6px 0 0;
-  width: min(440px, 86vw);
-  aspect-ratio: 1 / 1;
-  border-radius: 999px;
-  background: radial-gradient(circle at 50% 45%,
-    rgba(255,255,255,0.06),
-    rgba(255,255,255,0.00) 60%);
-  pointer-events:none;
-  z-index:0;
-}
-
-/* Pointer: LUÔN GIỮA 100% */
+/* pointer luôn ở giữa */
 .pointer{
   position:absolute;
-  top: 6px;
+  top: 8px;
   left: 50%;
   transform: translateX(-50%);
   width:0; height:0;
@@ -147,22 +121,17 @@ body{
   z-index:4;
 }
 
-/* Wheel: dùng aspect-ratio + block để tránh lệch do baseline/inline */
 #wheel{
-  display:block;
   width: min(420px, 82vw);
-  aspect-ratio: 1 / 1;
-  height: auto; /* để aspect-ratio quyết định */
+  height: min(420px, 82vw);
   border-radius:999px;
   background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.10), rgba(255,255,255,.02));
   border:1px solid rgba(255,255,255,.12);
   box-shadow: 0 18px 60px rgba(0,0,0,.55);
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
+  display:block;              /* tránh baseline lệch của canvas */
+  aspect-ratio: 1 / 1;        /* giữ luôn vuông */
 }
 
-/* Nút giữa: đảm bảo đúng tâm theo #wheel */
 .wheel-center{
   position:absolute;
   inset:0;
@@ -181,18 +150,30 @@ body{
   cursor:pointer;
   transition: transform .06s ease, background .18s ease, border-color .18s ease, opacity .18s ease;
   user-select:none;
+  touch-action: manipulation;
 }
 .btn:hover{background: rgba(255,255,255,.08)}
 .btn:active{transform: translateY(1px)}
 .btn[disabled]{opacity:.55; cursor:not-allowed}
 
+/* ====== NÚT QUAY: bỏ vòng xanh nhạt lệch (GIỮ màu chữ xanh) ====== */
 .btn-primary{
   width: 130px;
   height: 130px;
   border-radius: 999px;
-  border: 1px solid rgba(110,231,255,.28);
-  background: radial-gradient(circle at 30% 25%, rgba(110,231,255,.20), rgba(155,140,255,.14));
-  box-shadow: 0 18px 55px rgba(0,0,0,.55);
+
+  border: 1px solid rgba(255,255,255,.14);
+
+  /* gradient đúng tâm, không tạo "vòng xanh nhạt" lệch */
+  background: radial-gradient(circle at 50% 50%,
+    rgba(12,18,38,.72),
+    rgba(0,0,0,.38)
+  );
+
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.55),
+    inset 0 0 0 1px rgba(255,255,255,.05);
+
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -200,15 +181,22 @@ body{
   gap:6px;
 }
 
+.btn-label{font-weight:800; font-size:18px}
+.btn-sub{font-size:12px; color:rgba(255,255,255,.82)}
+
+/* giữ xanh cho chữ "Quay" */
+.btn-primary .btn-label{
+  color: var(--accent);
+  text-shadow: 0 1px 10px rgba(110,231,255,.12);
+}
+
+.btn-primary:focus{outline:none}
+.btn-primary:focus-visible{outline:none}
+
 @media (max-width: 420px){
   .btn-primary{ width: 112px; height:112px; }
   .btn-label{ font-size:16px; }
-  /* trên màn nhỏ, hạ pointer 1 chút để cân mắt */
-  .pointer{ top: 8px; }
 }
-
-.btn-label{font-weight:800; font-size:18px}
-.btn-sub{font-size:12px; color:rgba(255,255,255,.82)}
 
 .btn-secondary{
   background: rgba(110,231,255,.08);
